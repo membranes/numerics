@@ -5,7 +5,6 @@ import sys
 import torch
 
 
-
 def main():
     """
     Entry Point
@@ -27,7 +26,7 @@ def main():
 
     # Analytics
     src.analytics.interface.Interface(service=service, s3_parameters=s3_parameters).exc()
-    
+
     # Delete Cache Points
     src.functions.cache.Cache().exc()
 
