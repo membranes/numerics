@@ -31,8 +31,7 @@ class Setup:
         self.__configurations = config.Config()
 
         # The prefix in focus within the Amazon S3 bucket in focus.
-        self.__segment = 'numerics'
-        self.__prefix = self.__s3_parameters.path_internal_artefacts + self.__segment + '/'
+        self.__prefix = self.__configurations.numerics_ + '/'
 
     def __clear_prefix(self) -> bool:
         """
@@ -79,7 +78,7 @@ class Setup:
         directories = src.functions.directories.Directories()
         directories.cleanup(path=self.__configurations.warehouse)
 
-        return directories.create(path=os.path.join(self.__configurations.artefacts_, self.__segment))
+        return directories.create(path=self.__configurations.numerics_)
 
     def exc(self) -> bool:
         """
