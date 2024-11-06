@@ -1,7 +1,7 @@
 import logging
 import os
 
-import transformers
+import pandas as pd
 
 import src.elements.s3_parameters as s3p
 import src.elements.service as sr
@@ -35,7 +35,7 @@ class Interface:
         :return:
         """
 
-        src.analytics.architectures.Architectures(
+        strings: pd.DataFrame = src.analytics.architectures.Architectures(
             service=self.__service, s3_parameters=self.__s3_parameters).exc()
 
-
+        self.__logger.info(strings)
