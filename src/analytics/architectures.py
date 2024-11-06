@@ -30,32 +30,29 @@ class Architectures:
                             datefmt='%Y-%m-%d %H:%M:%S')
         self.__logger = logging.getLogger(__name__)
 
-    def __keys(self):
+    def __keys(self) -> list:
         """
 
         :return:
         """
 
-        listings: list = src.s3.prefix.Prefix(service=self.__service, bucket_name=self.__s3_parameters.internal).objects(
-            prefix=self.__prefix)
+        listings: list = src.s3.prefix.Prefix(
+            service=self.__service, bucket_name=self.__s3_parameters.internal).objects(prefix=self.__prefix)
 
         return listings
 
-    def __names(self, keys: list):
+    @staticmethod
+    def __excerpt(keys: list) -> list:
         """
+        Extracts the keys within prime/model directory
 
         :param keys:
         :return:
         """
 
-        # Excluding the bucket prefix
-        pathways = np.strings.replace(a=keys, old=self.__prefix, new='')
+        listings: list = [k for k in keys if k.__contains__('/prime/model')]
 
-        # Next, determining the parent directories
-        splittings = np.char.split(a=pathways, sep='/', maxsplit=1)
-        objects = [splitting[0] for splitting in splittings]
-
-        return np.unique(objects)
+        return listings
 
     def exc(self):
         """
@@ -63,10 +60,8 @@ class Architectures:
         :return:
         """
 
-        # The unique list of fine tuned models
+        # Determining the unique list of fine-tuned models
         keys = self.__keys()
-        names = self.__names(keys=keys)
+        excerpt = self.__excerpt(keys=keys)
 
-        for name in names:
-
-            self.__logger.info(f's3://{self.__s3_parameters.internal}/{self.__s3_parameters.path_internal_artefacts}{name}/prime/model')
+        return excerpt
