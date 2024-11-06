@@ -20,6 +20,6 @@ class Config:
         """
 
         self.warehouse = os.path.join(os.getcwd(), 'warehouse')
-        self.artefacts_ = os.path.join(self.warehouse, 'artefacts')
+        self.numerics_ = os.path.join(self.warehouse, 'numerics')
         self.s3_parameters_template_ = 'https://raw.githubusercontent.com/membranes/configurations/refs/heads/master/data/s3_parameters.yaml'
         self.architectures = ['bert', 'distil', 'roberta', 'electra']
