@@ -1,7 +1,9 @@
 import logging
+import os
 
-import numpy as np
+import pandas as pd
 
+import config
 import src.elements.s3_parameters as s3p
 import src.elements.service as sr
 import src.s3.prefix
@@ -22,6 +24,7 @@ class Architectures:
         self.__service = service
         self.__s3_parameters = s3_parameters
 
+        self.__configurations = config.Config()
         self.__prefix = self.__s3_parameters.path_internal_artefacts
 
         # Logging
@@ -54,7 +57,24 @@ class Architectures:
 
         return listings
 
-    def exc(self):
+    def __strings(self, keys: list[str]) -> pd.DataFrame:
+        """
+
+        :param keys: A list of Amazon S3 keys, i.e., prefix + vertex
+        :return:
+        """
+
+        # A data frame consisting of the S3 keys, and the vertex of each
+        # key, i.e., file name + extension
+        frame = pd.DataFrame(data={'key': keys})
+        frame = frame.assign(vertex=frame['key'].str.rsplit('/', n=1, expand=True)[1])
+
+        # This line will construct the local storage string of each file ...
+        frame = frame.assign(filename= os.path.sep + frame['vertex'])
+
+        return frame
+
+    def exc(self) -> pd.DataFrame:
         """
 
         :return:
@@ -62,6 +82,7 @@ class Architectures:
 
         # Determining the unique list of fine-tuned models
         keys = self.__keys()
-        excerpt = self.__excerpt(keys=keys)
+        keys = self.__excerpt(keys=keys)
+        strings = self.__strings(keys=keys)
 
-        return excerpt
+        return strings
