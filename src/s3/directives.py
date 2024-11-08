@@ -28,4 +28,7 @@ class Directives:
         computation = []
         for src, dst in zip(source, destination):
 
-            self.__unload(src=src, dst=dst)
+            state = self.__unload(src=src, dst=dst)
+            computation.append(state)
+
+        dask.compute(computation, scheduler='processes')
