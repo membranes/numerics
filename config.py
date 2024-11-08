@@ -20,6 +20,11 @@ class Config:
         """
 
         self.warehouse = os.path.join(os.getcwd(), 'warehouse')
+        self.data_ = os.path.join(os.getcwd(), 'data')
         self.numerics_ = os.path.join(self.warehouse, 'numerics')
         self.s3_parameters_template_ = 'https://raw.githubusercontent.com/membranes/configurations/refs/heads/master/data/s3_parameters.yaml'
+
         self.architectures = ['bert', 'distil', 'roberta', 'electra']
+
+        # Each architecture's prime model artefacts are within the {architecture}/prime/model, which is called the
+        self.prime_model_anchor = '/prime/model'
