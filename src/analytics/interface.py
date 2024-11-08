@@ -48,9 +48,6 @@ class Interface:
             service=self.__service, s3_parameters=self.__s3_parameters).exc()
         self.__logger.info('Artefacts:\n%s', paths)
 
-        src.s3.directives.Directives(s3_parameters=self.__s3_parameters).exc(
+        states = src.s3.directives.Directives(s3_parameters=self.__s3_parameters).exc(
             source=paths['source'], destination=paths['destination'])
-
-        # messages = src.s3.egress.Egress(
-        #     service=self.__service, bucket_name=self.__s3_parameters.internal).exc(strings=strings)
-        # self.__logger.info(messages)
+        self.__logger.info(states)
