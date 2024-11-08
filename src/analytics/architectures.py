@@ -44,8 +44,7 @@ class Architectures:
 
         return listings
 
-    @staticmethod
-    def __excerpt(keys: list) -> list:
+    def __excerpt(self, keys: list) -> list:
         """
         Extracts the keys within prime/model directory
 
@@ -53,7 +52,7 @@ class Architectures:
         :return:
         """
 
-        listings: list = [k for k in keys if k.__contains__('/prime/model')]
+        listings: list = [k for k in keys if k.__contains__(self.__configurations.prime_model_anchor)]
 
         return listings
 
@@ -64,13 +63,20 @@ class Architectures:
         :return:
         """
 
-        # A data frame consisting of the S3 keys, and the vertex of each
+        # A data frame consisting of the S3 keys, the vertex of each
         # key, i.e., file name + extension
         frame = pd.DataFrame(data={'key': keys})
         frame = frame.assign(vertex=frame['key'].str.rsplit('/', n=1, expand=True)[1])
 
-        # This line will construct the local storage string of each file ...
-        frame = frame.assign(filename= os.path.sep + frame['vertex'])
+        # And, the local storage string of each file ...
+        # Reducing the hierarchy of directories
+        frame = frame.assign(filename=frame['key'])
+        frame['filename'] = frame['filename'].replace(to_replace=self.__configurations.prime_model_anchor, value='', regex=True)
+
+        # Ascertaining that the appropriate directory separator is in place
+        # Hence, the storage strings
+        frame = frame.assign(filename=frame['filename'].replace(to_replace='/', value=os.path.sep))
+        frame = frame.assign(filename=self.__configurations.data_ + os.path.sep + frame['filename'])
 
         return frame
 
