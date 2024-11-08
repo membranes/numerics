@@ -6,6 +6,7 @@ import config
 import src.analytics.architectures
 import src.elements.s3_parameters as s3p
 import src.elements.service as sr
+import src.s3.egress
 
 
 class Interface:
@@ -36,5 +37,8 @@ class Interface:
 
         strings: pd.DataFrame = src.analytics.architectures.Architectures(
             service=self.__service, s3_parameters=self.__s3_parameters).exc()
+        self.__logger.info('Artefacts:\n%s', strings)
 
-        self.__logger.info(strings)
+        messages = src.s3.egress.Egress(
+            service=self.__service, bucket_name=self.__s3_parameters.internal).exc(strings=strings)
+        self.__logger.info(messages)
