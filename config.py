@@ -10,7 +10,7 @@ class Config:
     def __init__(self) -> None:
         """
         Constructor<br>
-        -----------<br>
+        ------------<br>
 
         Variables denoting a path - including or excluding a filename - have an underscore suffix; this suffix is
         excluded for names such as warehouse, storage, depository, etc.<br><br>
@@ -19,12 +19,17 @@ class Config:
         Amazon S3 (Simple Storage Service) parameters & arguments.
         """
 
-        self.warehouse = os.path.join(os.getcwd(), 'warehouse')
-        self.data_ = os.path.join(os.getcwd(), 'data')
-        self.numerics_ = os.path.join(self.warehouse, 'numerics')
+        # Template
         self.s3_parameters_template_ = 'https://raw.githubusercontent.com/membranes/configurations/refs/heads/master/data/s3_parameters.yaml'
 
-        self.architectures = ['bert', 'distil', 'roberta', 'electra']
+        # Temporary storage area for the artefacts
+        self.data_: str = os.path.join(os.getcwd(), 'data')
+        self.artefacts_: str = os.path.join(self.data_, 'artefacts')
 
-        # Each architecture's prime model artefacts are within the {architecture}/prime/model, which is called the
+        # Temporary storage area for the mathematical & business numerics
+        self.warehouse = os.path.join(os.getcwd(), 'warehouse')
+        self.numerics_ = os.path.join(self.warehouse, 'numerics')
+
+        # Each architecture's prime model artefacts are within the {architecture}/prime/model path
+        self.architectures = ['bert', 'distil', 'roberta', 'electra']
         self.prime_model_anchor = '/prime/model'
