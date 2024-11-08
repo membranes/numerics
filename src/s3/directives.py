@@ -1,10 +1,11 @@
-
+import os
 import dask
 
 import pandas as pd
 import subprocess
 
 import src.elements.s3_parameters as s3p
+import src.functions.directories
 
 
 class Directives:
@@ -13,12 +14,16 @@ class Directives:
 
         self.__s3_parameters = s3_parameters
 
+        self.__directories = src.functions.directories.Directories()
+
     @dask.delayed
     def __unload(self, src: str, dst: str):
 
-        path = f's3://{self.__s3_parameters.internal}/{src}/'
+        self.__directories.create(path=dst)
+        target = dst.replace(os.getcwd() + os.path.sep, '')
 
-        state = subprocess.run(f'aws s3 cp {path} {dst} --recursive', shell=True, check=True)
+        path = f's3://{self.__s3_parameters.internal}/{src}/'
+        state = subprocess.run(f'aws s3 cp {path} {target}/ --recursive', shell=True, check=True)
 
         return state
 
@@ -31,4 +36,6 @@ class Directives:
             state = self.__unload(src=src, dst=dst)
             computation.append(state)
 
-        dask.compute(computation, scheduler='processes')
+        executions = dask.compute(computation, scheduler='processes')[0]
+
+        print(executions)
