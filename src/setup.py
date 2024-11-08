@@ -73,6 +73,7 @@ class Setup:
 
     def __data(self) -> bool:
         """
+        Prepares a temporary directory for ...
 
         :return:
         """
@@ -86,10 +87,12 @@ class Setup:
 
     def __local(self) -> bool:
         """
+        Prepares the local, but temporary, storage repository of results
 
         :return:
         """
 
+        # Clean-up, then re-create
         self.__directories.cleanup(path=self.__configurations.warehouse)
 
 
