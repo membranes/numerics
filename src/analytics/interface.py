@@ -1,12 +1,11 @@
 import logging
-import os
 
 import pandas as pd
 
-import src.elements.s3_parameters as s3p
-import src.elements.service as sr
 import config
 import src.analytics.architectures
+import src.elements.s3_parameters as s3p
+import src.elements.service as sr
 
 
 class Interface:
