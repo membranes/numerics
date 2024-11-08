@@ -1,5 +1,6 @@
 import os
 import dask
+import sys
 
 import pandas as pd
 import subprocess
@@ -17,25 +18,27 @@ class Directives:
         self.__directories = src.functions.directories.Directories()
 
     @dask.delayed
-    def __unload(self, src: str, dst: str):
+    def __unload(self, src: str, dst: str) -> int:
 
         self.__directories.create(path=dst)
         target = dst.replace(os.getcwd() + os.path.sep, '')
 
-        path = f's3://{self.__s3_parameters.internal}/{src}/'
-        state = subprocess.run(f'aws s3 cp {path} {target}/ --recursive', shell=True, check=True)
+        path = f"s3://{self.__s3_parameters.internal}/{src}/"
+        state = subprocess.run(f"aws s3 cp {path} {target}/ --recursive", shell=True, check=True)
 
-        return state
+        return state.returncode
 
     def exc(self, source: pd.Series, destination: pd.Series):
 
 
         computation = []
         for src, dst in zip(source, destination):
-
             state = self.__unload(src=src, dst=dst)
             computation.append(state)
 
-        executions = dask.compute(computation, scheduler='processes')[0]
+        executions: list[int] = dask.compute(computation, scheduler='threads')[0]
 
-        print(executions)
+        if all(executions) == 0:
+            return True
+
+        sys.exit('Artefacts download failures.')
