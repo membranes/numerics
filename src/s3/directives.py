@@ -1,21 +1,31 @@
 
 import dask
 
+import pandas as pd
+import subprocess
+
+import src.elements.s3_parameters as s3p
+
 
 class Directives:
 
-    def __init__(self):
+    def __init__(self, s3_parameters: s3p.S3Parameters):
 
-        pass
+        self.__s3_parameters = s3_parameters
 
-    def __get(self, path: str):
+    @dask.delayed
+    def __unload(self, src: str, dst: str):
 
-        pass
+        path = f's3://{self.__s3_parameters.internal}/{src}/'
 
-    def exc(self, paths):
+        state = subprocess.run(f'aws s3 cp {path} {dst} --recursive', shell=True, check=True)
+
+        return state
+
+    def exc(self, source: pd.Series, destination: pd.Series):
 
 
         computation = []
-        for path in paths:
+        for src, dst in zip(source, destination):
 
-            self.__get(path=path)
+            self.__unload(src=src, dst=dst)
