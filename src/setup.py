@@ -78,12 +78,13 @@ class Setup:
         :return:
         """
 
+        # Probably
         self.__directories.cleanup(path=self.__configurations.artefacts_)
 
-        states = [self.__directories.create(path=os.path.join(self.__configurations.artefacts_, i))
-                  for i in self.__configurations.architectures]
+        # states = [self.__directories.create(path=os.path.join(self.__configurations.artefacts_, i))
+        #           for i in self.__configurations.architectures]
 
-        return all(states)
+        return self.__directories.create(path=self.__configurations.artefacts_)
 
     def __local(self) -> bool:
         """
