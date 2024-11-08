@@ -30,6 +30,8 @@ class Setup:
         self.__s3_parameters: s3p.S3Parameters = s3_parameters
         self.__configurations = config.Config()
 
+        self.__directories = src.functions.directories.Directories()
+
         # The prefix in focus within the Amazon S3 bucket in focus.
         self.__prefix = self.__configurations.numerics_ + '/'
 
@@ -69,16 +71,29 @@ class Setup:
 
         return bucket.create()
 
+    def __data(self) -> bool:
+        """
+
+        :return:
+        """
+
+        self.__directories.cleanup(path=self.__configurations.artefacts_)
+
+        states = [self.__directories.create(path=os.path.join(self.__configurations.artefacts_, i))
+                  for i in self.__configurations.architectures]
+
+        return all(states)
+
     def __local(self) -> bool:
         """
 
         :return:
         """
 
-        directories = src.functions.directories.Directories()
-        directories.cleanup(path=self.__configurations.warehouse)
+        self.__directories.cleanup(path=self.__configurations.warehouse)
 
-        return directories.create(path=self.__configurations.numerics_)
+
+        return self.__directories.create(path=self.__configurations.numerics_)
 
     def exc(self) -> bool:
         """
@@ -86,4 +101,4 @@ class Setup:
         :return:
         """
 
-        return self.__s3() & self.__local()
+        return self.__s3() & self.__local() & self.__data()
