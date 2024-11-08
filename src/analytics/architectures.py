@@ -80,6 +80,20 @@ class Architectures:
 
         return frame
 
+    def __paths(self, keys: list[str]):
+
+        # A data frame consisting of the S3 keys
+        frame = pd.DataFrame(data={'key': keys})
+        frame = frame.assign(key=frame['key'].str.rsplit('/', n=1, expand=True)[0])
+        frame.drop_duplicates(inplace=True)
+
+        # And corresponding local counterparts
+        frame['path'] = frame['key'].copy().replace(to_replace=self.__configurations.prime_model_anchor, value='', regex=True)
+        frame = frame.assign(path=frame['path'].replace(to_replace='/', value=os.path.sep))
+        frame['path'] = self.__configurations.data_ + os.path.sep + frame['path']
+
+        print(frame)
+
     def exc(self) -> pd.DataFrame:
         """
 
@@ -89,6 +103,9 @@ class Architectures:
         # Determining the unique list of fine-tuned models
         keys = self.__keys()
         keys = self.__excerpt(keys=keys)
+
+        self.__paths(keys=keys)
+
         strings = self.__strings(keys=keys)
 
         return strings
