@@ -1,5 +1,6 @@
 """Module interface.py"""
 import logging
+import os
 
 import pandas as pd
 
@@ -8,6 +9,7 @@ import src.analytics.architectures
 import src.elements.s3_parameters as s3p
 import src.elements.service as sr
 import src.s3.egress
+import src.s3.directives
 
 
 class Interface:
@@ -46,8 +48,8 @@ class Interface:
             service=self.__service, s3_parameters=self.__s3_parameters).exc()
         self.__logger.info('Artefacts:\n%s', paths)
 
-        for source, destination in zip(paths.source, paths.destination):
-            print(f'{source}: {destination}')
+        src.s3.directives.Directives(s3_parameters=self.__s3_parameters).exc(
+            source=paths['source'], destination=paths['destination'])
 
         # messages = src.s3.egress.Egress(
         #     service=self.__service, bucket_name=self.__s3_parameters.internal).exc(strings=strings)
