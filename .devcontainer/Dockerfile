@@ -13,6 +13,8 @@ COPY /.devcontainer/requirements.txt /app
 # data: https://www.nltk.org/data.html
 RUN apt update && apt -q -y upgrade && apt -y install sudo && sudo apt -y install graphviz && \
     apt -y install get && apt -y install curl && apt -y install unzip && \
+    curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "/tmp/awscliv2.zip" && \
+    unzip /tmp/awscliv2.zip -d /tmp/ && sudo ./tmp/aws/install && \
     pip install --upgrade pip && \
 	pip install --requirement /app/requirements.txt --no-cache-dir && \
     python -m nltk.downloader -d /opt/conda/nltk_data all
