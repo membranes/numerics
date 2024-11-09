@@ -12,6 +12,7 @@ COPY /.devcontainer/requirements.txt /app
 # installation: https://www.nltk.org/install.html
 # data: https://www.nltk.org/data.html
 RUN apt update && apt -q -y upgrade && apt -y install sudo && sudo apt -y install graphviz && \
+    apt -y install get && apt -y install curl && apt -y install unzip && \
     pip install --upgrade pip && \
 	pip install --requirement /app/requirements.txt --no-cache-dir && \
     python -m nltk.downloader -d /opt/conda/nltk_data all
