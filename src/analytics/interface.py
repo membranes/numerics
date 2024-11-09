@@ -1,6 +1,5 @@
 """Module interface.py"""
 import logging
-import os
 
 import pandas as pd
 
@@ -8,8 +7,8 @@ import config
 import src.analytics.architectures
 import src.elements.s3_parameters as s3p
 import src.elements.service as sr
-import src.s3.egress
 import src.s3.directives
+import src.s3.egress
 
 
 class Interface:
