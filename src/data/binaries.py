@@ -1,3 +1,4 @@
+"""Module binaries.py"""
 import glob
 import logging
 import os
@@ -7,6 +8,12 @@ import config
 
 
 class Binaries:
+    """
+    <b>Notes</b><br>
+    ------<br>
+
+    Unpacks the .bin files of the model artefacts
+    """
 
     def __init__(self):
         """
@@ -22,8 +29,6 @@ class Binaries:
         """
 
         listings = glob.glob(pathname=os.path.join(self.__configurations.artefacts_, '**', '*.bin'), recursive=True)
-
-        logging.info(listings)
 
         for listing in listings:
 
