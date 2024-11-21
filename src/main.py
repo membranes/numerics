@@ -1,3 +1,4 @@
+"""Module main.py"""
 import logging
 import os
 import sys
