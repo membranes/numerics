@@ -4,7 +4,7 @@ Module unload.py
 
 import botocore.exceptions
 
-import src.elements.service as sr
+import boto3
 
 
 class Unload:
@@ -26,13 +26,13 @@ class Unload:
     <br>
     """
 
-    def __init__(self, service: sr.Service):
+    def __init__(self, s3_client: boto3.session.Session.client):
         """
 
-        :param service: A suite of services for interacting with Amazon Web Services.
+        :param s3_client: An S3 (Simple Storage Service) client instance
         """
 
-        self.__s3_client = service.s3_client
+        self.__s3_client = s3_client
 
     def exc(self, bucket_name: str, key_name: str):
         """
