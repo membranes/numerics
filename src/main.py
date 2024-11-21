@@ -2,6 +2,7 @@ import logging
 import os
 import sys
 
+import boto3
 import torch
 
 
@@ -57,7 +58,8 @@ if __name__ == '__main__':
     import src.setup
 
     # S3 S3Parameters, Service Instance
-    s3_parameters = src.s3.s3_parameters.S3Parameters().exc()
-    service = src.functions.service.Service(region_name=s3_parameters.region_name).exc()
+    connector = boto3.session.Session()
+    s3_parameters = src.s3.s3_parameters.S3Parameters(connector=connector).exc()
+    service = src.functions.service.Service(connector=connector, region_name=s3_parameters.region_name).exc()
 
     main()
