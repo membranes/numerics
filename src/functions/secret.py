@@ -22,18 +22,19 @@ class Secret:
 
     """
 
-    def __init__(self) -> None:
-        """
-        Constructor
+    def __init__(self, connector: boto3.session.Session) -> None:
         """
 
-        self.__session = boto3.session.Session()
-        self.__secrets_manager = self.__session.client(service_name='secretsmanager')
+        :param connector: A boto3 session instance, it retrieves the developer's <default> Amazon
+                          Web Services (AWS) profile details, which allows for programmatic interaction with AWS.
+        """
+
+        # self.__session = boto3.session.Session()
+        self.__secrets_manager = connector.client(service_name='secretsmanager')
 
     def __get__value(self, secret_id: str) -> str:
         """
         The reader of a secret key's value.
-
 
         :param secret_id: The identification code of the secret
 
