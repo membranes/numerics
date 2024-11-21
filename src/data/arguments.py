@@ -9,10 +9,17 @@ import config
 class Arguments:
 
     def __init__(self):
+        """
+        Constructor
+        """
 
         self.__configurations = config.Config()
 
     def exc(self):
+        """
+        
+        :return:
+        """
 
         listings = glob.glob(pathname=os.path.join(self.__configurations.artefacts_, '**', '*.bin'), recursive=True)
 
