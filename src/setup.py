@@ -33,7 +33,7 @@ class Setup:
         self.__directories = src.functions.directories.Directories()
 
         # The prefix in focus within the Amazon S3 bucket in focus.
-        self.__prefix = self.__configurations.numerics_ + '/'
+        self.__prefix = os.path.basename(self.__configurations.numerics_) + '/'
 
     def __clear_prefix(self) -> bool:
         """
@@ -80,9 +80,6 @@ class Setup:
 
         # Probably
         self.__directories.cleanup(path=self.__configurations.artefacts_)
-
-        # states = [self.__directories.create(path=os.path.join(self.__configurations.artefacts_, i))
-        #           for i in self.__configurations.architectures]
 
         return self.__directories.create(path=self.__configurations.artefacts_)
 
