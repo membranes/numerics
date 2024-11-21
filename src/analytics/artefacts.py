@@ -9,7 +9,7 @@ import src.elements.service as sr
 import src.s3.prefix
 
 
-class Architectures:
+class Artefacts:
     """
     The artefacts per architecture
     """
