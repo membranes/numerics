@@ -28,5 +28,4 @@ class Config:
         self.numerics_ = os.path.join(self.warehouse, 'numerics')
 
         # Each architecture's prime artefacts are within the {architecture}/prime/ path
-        self.architectures = ['bert', 'distil', 'roberta', 'electra']
         self.prime_ = '/prime/'
