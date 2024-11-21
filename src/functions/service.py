@@ -15,20 +15,17 @@ class Service:
     machine prerequisite.  Re-visit, vis-à-vis cloud runs.
       * https://docs.aws.amazon.com/signin/latest/userguide/command-line-sign-in.html.
 
-
     A S3 resource service
       * https://boto3.amazonaws.com/v1/documentation/api/latest/reference/core/session.html#boto3.session.Session.resource
     """
 
-    def __init__(self, region_name: str):
-        """
-        The constructor.
+    def __init__(self, connector: boto3.session.Session, region_name: str):
         """
 
-        # Profile/Auto-login
-        # This session will retrieve the developer's <default> Amazon Web Services (AWS) profile
-        # details, which allows for programmatic interaction with AWS.
-        connector = boto3.session.Session()
+        :param connector: A boto3 session instance, it retrieves the developer's <default> Amazon
+                          Web Services (AWS) profile details, which allows for programmatic interaction with AWS.
+        :param region_name: Compute region.
+        """
 
         # The S3 resource, S3 client, secrets, etc.
         self.__s3_resource: boto3.session.Session.resource = connector.resource(
