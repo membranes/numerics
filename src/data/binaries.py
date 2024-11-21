@@ -6,7 +6,7 @@ import zipfile
 import config
 
 
-class Arguments:
+class Binaries:
 
     def __init__(self):
         """
@@ -17,7 +17,7 @@ class Arguments:
 
     def exc(self):
         """
-        
+
         :return:
         """
 
