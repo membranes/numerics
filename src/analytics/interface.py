@@ -47,6 +47,6 @@ class Interface:
             service=self.__service, s3_parameters=self.__s3_parameters).exc()
         self.__logger.info(strings)
 
-        # states = src.s3.directives.Directives(s3_parameters=self.__s3_parameters).exc(
-        #     source=paths['source'], destination=paths['destination'])
-        # self.__logger.info(states)
+        states = src.s3.directives.Directives(s3_parameters=self.__s3_parameters).exc(
+            source=strings['source'], destination=strings['destination'])
+        self.__logger.info(states)
