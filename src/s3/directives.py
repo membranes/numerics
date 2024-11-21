@@ -62,4 +62,4 @@ class Directives:
         if all(executions) == 0:
             return True
 
-        sys.exit('Artefacts download failures.')
+        sys.exit('Artefacts download step failure.')
