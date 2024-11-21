@@ -59,44 +59,44 @@ class Artefacts:
 
         return listings
 
-    def __strings(self, paths: np.ndarray):
+    def __strings(self, sources: np.ndarray):
         """
 
-        :param keys: A list of Amazon S3 keys, i.e., prefix + vertex
+        :param sources: An array of Amazon S3 (Simple Storage Service) prefixes
         :return:
         """
 
         # A data frame consisting of the S3 keys ...
-        frame = pd.DataFrame(data={'path': paths})
+        frame = pd.DataFrame(data={'source': sources})
 
         # ... and local storage area.  For the local storage area, ensure that the
         # appropriate directory separator is in place.
-        frame = frame.assign(destination=frame['path'])
+        frame = frame.assign(destination=frame['source'])
         frame = frame.assign(destination=frame['destination'].replace(to_replace='/', value=os.path.sep))
         frame = frame.assign(destination=self.__configurations.data_ + os.path.sep + frame['destination'])
 
         return frame
 
-    def exc(self):
+    def exc(self) -> pd.DataFrame:
         """
+        Determining the unique segments of fine-tuned models
 
         :return:
         """
 
-        # Determining the unique list of fine-tuned models
+        # The keys within the <artefacts> prefix
         keys = self.__keys()
-        self.__logger.info(keys)
 
-        # Focus
+        # Focusing on the keys within the model & metrics paths
         keys = self.__excerpt(keys=keys)
-        self.__logger.info(keys)
 
-        paths = np.array([os.path.dirname(k) for k in keys])
-        paths = np.unique(paths)
-        self.__logger.info(paths)
+        # Hence, the distinct model & metrics sources/paths
+        sources = np.array([os.path.dirname(k) for k in keys])
+        sources = np.unique(sources)
+        self.__logger.info(sources)
 
         # Source & Destination
-        strings = self.__strings(paths=paths)
+        strings = self.__strings(sources=sources)
         self.__logger.info(strings)
 
         return strings
