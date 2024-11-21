@@ -4,7 +4,7 @@ import logging
 import pandas as pd
 
 import config
-import src.analytics.artefacts
+import src.data.artefacts
 import src.elements.s3_parameters as s3p
 import src.elements.service as sr
 import src.s3.directives
@@ -43,7 +43,7 @@ class Interface:
         :return:
         """
 
-        strings: pd.DataFrame = src.analytics.artefacts.Artefacts(
+        strings: pd.DataFrame = src.data.artefacts.Artefacts(
             service=self.__service, s3_parameters=self.__s3_parameters).exc()
         self.__logger.info(strings)
 
