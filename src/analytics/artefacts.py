@@ -2,6 +2,7 @@ import logging
 import os
 
 import pandas as pd
+import numpy as np
 
 import config
 import src.elements.s3_parameters as s3p
@@ -52,49 +53,31 @@ class Artefacts:
         :return:
         """
 
-        listings: list = [k for k in keys if k.__contains__(self.__configurations.prime_model_anchor)]
+        listings: list = [k for k in keys if
+                          k.__contains__(self.__configurations.prime_ + 'model') |
+                          k.__contains__(self.__configurations.prime_ + 'metrics')]
 
         return listings
 
-    def __strings(self, keys: list[str]) -> pd.DataFrame:
+    def __strings(self, paths: np.ndarray):
         """
 
         :param keys: A list of Amazon S3 keys, i.e., prefix + vertex
         :return:
         """
 
-        # A data frame consisting of the S3 keys, the vertex of each
-        # key, i.e., file name + extension
-        frame = pd.DataFrame(data={'key': keys})
-        frame = frame.assign(vertex=frame['key'].str.rsplit('/', n=1, expand=True)[1])
+        # A data frame consisting of the S3 keys ...
+        frame = pd.DataFrame(data={'path': paths})
 
-        # And, the local storage string of each file ...
-        # Reducing the hierarchy of directories
-        frame = frame.assign(filename=frame['key'])
-        frame['filename'] = frame['filename'].replace(to_replace=self.__configurations.prime_model_anchor, value='', regex=True)
-
-        # Ascertaining that the appropriate directory separator is in place
-        # Hence, the storage strings
-        frame = frame.assign(filename=frame['filename'].replace(to_replace='/', value=os.path.sep))
-        frame = frame.assign(filename=self.__configurations.data_ + os.path.sep + frame['filename'])
-
-        return frame
-
-    def __paths(self, keys: list[str]):
-
-        # A data frame consisting of the S3 keys
-        frame = pd.DataFrame(data={'source': keys})
-        frame = frame.assign(source=frame['source'].str.rsplit('/', n=1, expand=True)[0])
-        frame.drop_duplicates(inplace=True)
-
-        # And corresponding local counterparts
-        frame['destination'] = frame['source'].copy().replace(to_replace=self.__configurations.prime_model_anchor, value='', regex=True)
+        # ... and local storage area.  For the local storage area, ensure that the
+        # appropriate directory separator is in place.
+        frame = frame.assign(destination=frame['path'])
         frame = frame.assign(destination=frame['destination'].replace(to_replace='/', value=os.path.sep))
-        frame['destination'] = self.__configurations.data_ + os.path.sep + frame['destination']
+        frame = frame.assign(destination=self.__configurations.data_ + os.path.sep + frame['destination'])
 
         return frame
 
-    def exc(self) -> pd.DataFrame:
+    def exc(self):
         """
 
         :return:
@@ -102,6 +85,18 @@ class Artefacts:
 
         # Determining the unique list of fine-tuned models
         keys = self.__keys()
-        keys = self.__excerpt(keys=keys)
+        self.__logger.info(keys)
 
-        return self.__paths(keys=keys)
+        # Focus
+        keys = self.__excerpt(keys=keys)
+        self.__logger.info(keys)
+
+        paths = np.array([os.path.dirname(k) for k in keys])
+        paths = np.unique(paths)
+        self.__logger.info(paths)
+
+        # Source & Destination
+        strings = self.__strings(paths=paths)
+        self.__logger.info(strings)
+
+        return strings
