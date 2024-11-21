@@ -4,7 +4,7 @@ import logging
 import pandas as pd
 
 import config
-import src.analytics.architectures
+import src.analytics.artefacts
 import src.elements.s3_parameters as s3p
 import src.elements.service as sr
 import src.s3.directives
@@ -43,10 +43,10 @@ class Interface:
         :return:
         """
 
-        paths: pd.DataFrame = src.analytics.architectures.Architectures(
+        strings: pd.DataFrame = src.analytics.artefacts.Artefacts(
             service=self.__service, s3_parameters=self.__s3_parameters).exc()
-        self.__logger.info('Artefacts:\n%s', paths)
+        self.__logger.info(strings)
 
-        states = src.s3.directives.Directives(s3_parameters=self.__s3_parameters).exc(
-            source=paths['source'], destination=paths['destination'])
-        self.__logger.info(states)
+        # states = src.s3.directives.Directives(s3_parameters=self.__s3_parameters).exc(
+        #     source=paths['source'], destination=paths['destination'])
+        # self.__logger.info(states)
