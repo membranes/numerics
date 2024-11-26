@@ -1,16 +1,21 @@
-import config
+"""Module estimates.py"""
 import logging
 import os
 
 import pandas as pd
 
+import config
+
 
 class Estimates:
+    """
+    For estimating/calculating a variety of metrics.
+    """
 
     def __init__(self, architecture: str):
         """
 
-        :param architecture:
+        :param architecture: The best architecture
         """
 
         self.__architecture = architecture
@@ -19,6 +24,10 @@ class Estimates:
         self.__configurations = config.Config()
 
     def __cases(self):
+        """
+
+        :return:
+        """
 
         path = os.path.join(self.__configurations.artefacts_, self.__architecture, self.__configurations.branch)
 
@@ -30,6 +39,10 @@ class Estimates:
         return cases
 
     def exc(self):
+        """
+
+        :return:
+        """
 
         cases = self.__cases()
         logging.info(cases)
