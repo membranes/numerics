@@ -1,4 +1,5 @@
-import  glob
+"""Module """
+import glob
 import logging
 import os
 
@@ -11,6 +12,9 @@ import src.analytics.derivations
 class Architecture:
 
     def __init__(self):
+        """
+        Constructor
+        """
 
         self.__configurations = config.Config()
 
@@ -24,6 +28,11 @@ class Architecture:
         self.__logger = logging.getLogger(__name__)
 
     def __cases(self, tree: str) -> pd.DataFrame:
+        """
+
+        :param tree:
+        :return:
+        """
 
         path = os.path.join(tree, self.__branch)
         cases = pd.read_json(path_or_buf=path, orient='index')
@@ -33,8 +42,8 @@ class Architecture:
     @staticmethod
     def __median_mcc(cases: pd.DataFrame) -> float:
         """
-        
-        :param cases:
+
+        :param cases: Each instance represents a distinct tag; tag = annotation &#x29FA; category.<br>
         :return:
         """
 
@@ -42,17 +51,25 @@ class Architecture:
 
         return derivations.matthews().median()
 
-    def __best(self, data: pd.DataFrame):
+    def __best(self, data: pd.DataFrame) -> str:
+        """
 
-        selection = data.copy().loc[data['median'].idxmax(), :]
+        :param data: Whence the best is selected from.
+        :return:
+        """
 
-        self.__logger.info(type(selection))
+        selection: pd.Series = data.copy().loc[data['median'].idxmax(), :]
+
         self.__logger.info('Best:\n%s', selection)
 
         return selection['architecture']
 
 
-    def exc(self):
+    def exc(self) -> str:
+        """
+
+        :return:
+        """
 
         # The directories within the self.__configurations.artefacts_ directory.  Each directory
         # represents an architecture.
