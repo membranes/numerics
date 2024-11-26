@@ -38,15 +38,16 @@ class Interface:
 
     def exc(self):
         """
-        os.path.join(configurations.artefacts_, 'distil', 'prime', 'model')
 
         :return:
         """
 
+        # Get the artefacts metadata
         strings: pd.DataFrame = src.data.artefacts.Artefacts(
             service=self.__service, s3_parameters=self.__s3_parameters).exc()
         self.__logger.info(strings)
 
+        # Retrieve the artefacts
         states = src.s3.directives.Directives(s3_parameters=self.__s3_parameters).exc(
             source=strings['source'], destination=strings['destination'])
         self.__logger.info(states)
