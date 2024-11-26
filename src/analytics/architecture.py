@@ -10,6 +10,12 @@ import src.analytics.derivations
 
 
 class Architecture:
+    """
+    <b>Class Architecture</b><br>
+    -------------------<br>
+
+    Selects the best architecture, i.e., the best model.<br>
+    """
 
     def __init__(self):
         """
