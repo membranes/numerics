@@ -1,3 +1,4 @@
+"""Module interface.py"""
 import logging
 
 import src.analytics.architecture
@@ -9,8 +10,11 @@ class Interface:
         pass
 
     def exc(self):
+        """
+
+        :return:
+        """
 
         message = src.analytics.architecture.Architecture().exc()
 
         logging.info(message)
-
