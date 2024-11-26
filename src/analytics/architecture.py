@@ -18,9 +18,6 @@ class Architecture:
 
         self.__configurations = config.Config()
 
-        # The directory branch for the fundamental error matrix frequencies
-        self.__branch = os.path.join('prime', 'metrics', 'testing', 'fundamental.json')
-
         # Logging
         logging.basicConfig(level=logging.INFO,
                             format='\n\n%(message)s\n%(asctime)s.%(msecs)03d',
@@ -34,7 +31,7 @@ class Architecture:
         :return:
         """
 
-        path = os.path.join(tree, self.__branch)
+        path = os.path.join(tree, self.__configurations.branch)
         cases = pd.read_json(path_or_buf=path, orient='index')
 
         return cases
