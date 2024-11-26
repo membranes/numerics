@@ -2,6 +2,7 @@
 import logging
 
 import src.analytics.architecture
+import src.analytics.estimates
 
 
 class Interface:
@@ -18,3 +19,5 @@ class Interface:
 
         architecture = src.analytics.architecture.Architecture().exc()
         logging.info(architecture)
+
+        src.analytics.estimates.Estimates(architecture=architecture).exc()
