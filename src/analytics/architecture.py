@@ -30,7 +30,13 @@ class Architecture:
 
         return cases
 
-    def __median_mcc(self, cases: pd.DataFrame) -> float:
+    @staticmethod
+    def __median_mcc(cases: pd.DataFrame) -> float:
+        """
+        
+        :param cases:
+        :return:
+        """
 
         derivations = src.analytics.derivations.Derivations(cases=cases)
 
