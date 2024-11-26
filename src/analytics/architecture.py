@@ -38,7 +38,11 @@ class Architecture:
         """
 
         path = os.path.join(tree, self.__configurations.branch)
-        cases = pd.read_json(path_or_buf=path, orient='index')
+
+        try:
+            cases = pd.read_json(path_or_buf=path, orient='index')
+        except ImportError as err:
+            raise err from err
 
         return cases
 
