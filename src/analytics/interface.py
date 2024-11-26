@@ -9,7 +9,8 @@ class Interface:
     def __init__(self):
         pass
 
-    def exc(self):
+    @staticmethod
+    def exc():
         """
 
         :return:
@@ -17,4 +18,3 @@ class Interface:
 
         architecture = src.analytics.architecture.Architecture().exc()
         logging.info(architecture)
-
