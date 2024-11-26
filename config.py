@@ -23,6 +23,9 @@ class Config:
         self.data_: str = os.path.join(os.getcwd(), 'data')
         self.artefacts_: str = os.path.join(self.data_, 'artefacts')
 
+        # The self.__artefacts_ directory branch for the fundamental error matrix frequencies
+        self.branch = os.path.join('prime', 'metrics', 'testing', 'fundamental.json')
+
         # Temporary storage area for the mathematical & business numerics
         self.warehouse = os.path.join(os.getcwd(), 'warehouse')
         self.numerics_ = os.path.join(self.warehouse, 'numerics')
