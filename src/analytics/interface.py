@@ -15,6 +15,6 @@ class Interface:
         :return:
         """
 
-        message = src.analytics.architecture.Architecture().exc()
+        architecture = src.analytics.architecture.Architecture().exc()
+        logging.info(architecture)
 
-        logging.info(message)
