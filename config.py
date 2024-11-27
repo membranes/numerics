@@ -34,6 +34,6 @@ class Config:
         self.prime_ = '/prime/'
 
         # Categories
-        self.categories = { "B-geo": 'GEO', "B-gpe": 'GPE', "B-org": 'ORG', "B-per": 'PER', "B-tim": 'TIM',
-                            "I-geo": 'GEO', "I-gpe": 'GPE', "I-org": 'ORG', "I-per": 'PER', "I-tim": 'TIM',
-                            "O": 'O'}
+        self.categories = { 'B-geo': 'GEO', 'B-gpe': 'GPE', 'B-org': 'ORG', 'B-per': 'PER', 'B-tim': 'TIM',
+                            'I-geo': 'GEO', 'I-gpe': 'GPE', 'I-org': 'ORG', 'I-per': 'PER', 'I-tim': 'TIM',
+                            'O': 'O'}
