@@ -21,9 +21,4 @@ class Interface:
         architecture = src.analytics.architecture.Architecture().exc()
         logging.info(architecture)
 
-        estimates = src.analytics.estimates.Estimates(architecture=architecture).exc()
-        estimates.reset_index(drop=False, inplace=True)
-        logging.info(estimates)
-
-        estimates = estimates.assign(category=estimates['index'].map(self.__configurations.categories))
-        logging.info(estimates)
+        src.analytics.estimates.Estimates(architecture=architecture).exc()
