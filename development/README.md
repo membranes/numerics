@@ -157,6 +157,34 @@ inspects complexity.
 <br>
 <br>
 
+## References
+
+The categories of the tags, tag = annotation &#x29FA; category, of the excerpt data set 
+
+| code | definition           |
+|:-----|:---------------------|
+| org  | organisation         |
+| per  | person               |
+| tim  | time                 |
+| geo  | geographical entity  |
+| gpe  | geopolitical entity  |
+| O    | other, miscellaneous |
+
+
+Example:
+* [A similar experiment](https://colab.research.google.com/github/NielsRogge/Transformers-Tutorials/blob/master/BERT/Custom_Named_Entity_Recognition_with_BERT_only_first_wordpiece.ipynb)
+
+Data set sources:
+* [dataset](https://www.kaggle.com/datasets/namanj27/ner-dataset)
+* [dataset](https://github.com/AGudden/ner_datasetreference.csv/blob/main/ner_datasetreference.csv)
+
+The underlying, original, data:
+* https://www.clips.uantwerpen.be/conll2003/ner/
+* https://trec.nist.gov/data/reuters/reuters.html
+
+<br>
+<br>
+
 <br>
 <br>
 
