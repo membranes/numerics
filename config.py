@@ -26,9 +26,9 @@ class Config:
         # The self.__artefacts_ directory branch for the fundamental error matrix frequencies
         self.branch = os.path.join('prime', 'metrics', 'testing', 'fundamental.json')
 
-        # Temporary storage area for the mathematical & business numerics
+        # Temporary storage area for the mathematical & business metrics
         self.warehouse = os.path.join(os.getcwd(), 'warehouse')
-        self.numerics_ = os.path.join(self.warehouse, 'numerics')
+        self.card_ = os.path.join(self.warehouse, 'card')
 
         # Each architecture's prime artefacts are within the {architecture}/prime/ path
         self.prime_ = '/prime/'
