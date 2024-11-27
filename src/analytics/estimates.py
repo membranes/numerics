@@ -28,7 +28,8 @@ class Estimates:
     def __cases(self):
         """
 
-        :return:
+        :return: Each instance represents a distinct tag; tag = annotation &#x29FA; category.
+                 The frame must include the error matrix frequencies is tp, tn, fp, & fn.
         """
 
         path = os.path.join(self.__configurations.artefacts_, self.__architecture, self.__configurations.branch)
@@ -42,9 +43,15 @@ class Estimates:
 
     @staticmethod
     def __derivations(cases: pd.DataFrame) -> pd.DataFrame:
+        """
+        Appends a series of metrics to each instance.
+
+        :param cases: Each instance represents a distinct tag; tag = annotation &#x29FA; category.
+                      The frame must include the error matrix frequencies is tp, tn, fp, & fn.
+        :return:
+        """
 
         derivations = src.analytics.derivations.Derivations(cases=cases).exc()
-
         derivations.reset_index(drop=False, inplace=True)
 
         derivations.rename(columns={'index': 'tag'}, inplace=True)
