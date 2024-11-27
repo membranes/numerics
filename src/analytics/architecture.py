@@ -54,9 +54,9 @@ class Architecture:
         :return:
         """
 
-        derivations = src.analytics.derivations.Derivations(cases=cases)
+        matthews: pd.Series = src.analytics.derivations.Derivations(cases=cases).matthews()
 
-        return derivations.matthews().median()
+        return matthews.median()
 
     def __best(self, data: pd.DataFrame) -> str:
         """
