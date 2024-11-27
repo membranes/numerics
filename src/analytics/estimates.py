@@ -6,6 +6,7 @@ import pandas as pd
 
 import config
 import src.analytics.derivations
+import src.analytics.spider
 
 
 class Estimates:
@@ -39,6 +40,17 @@ class Estimates:
 
         return cases
 
+    @staticmethod
+    def __derivations(cases: pd.DataFrame) -> pd.DataFrame:
+
+        derivations = src.analytics.derivations.Derivations(cases=cases).exc()
+
+        derivations.reset_index(drop=False, inplace=True)
+
+        derivations.rename(columns={'index': 'tag'}, inplace=True)
+
+        return derivations
+
     def exc(self):
         """
 
@@ -46,6 +58,11 @@ class Estimates:
         """
 
         cases = self.__cases()
-        derivations = src.analytics.derivations.Derivations(cases=cases).exc()
+        derivations = self.__derivations(cases=cases)
 
-        return derivations
+        # Add a category column
+        derivations = derivations.assign(category=derivations['tag'].map(self.__configurations.categories))
+        logging.info(derivations)
+
+        # Spiders
+        src.analytics.spider.Spider().exc(derivations=derivations)
