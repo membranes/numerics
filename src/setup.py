@@ -33,7 +33,7 @@ class Setup:
         self.__directories = src.functions.directories.Directories()
 
         # The prefix in focus within the Amazon S3 bucket in focus.
-        self.__prefix = os.path.basename(self.__configurations.numerics_) + '/'
+        self.__prefix = os.path.basename(self.__configurations.card_) + '/'
 
     def __clear_prefix(self) -> bool:
         """
@@ -94,7 +94,7 @@ class Setup:
         self.__directories.cleanup(path=self.__configurations.warehouse)
 
 
-        return self.__directories.create(path=self.__configurations.numerics_)
+        return self.__directories.create(path=self.__configurations.card_)
 
     def exc(self) -> bool:
         """
