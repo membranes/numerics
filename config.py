@@ -32,3 +32,8 @@ class Config:
 
         # Each architecture's prime artefacts are within the {architecture}/prime/ path
         self.prime_ = '/prime/'
+
+        # Categories
+        self.categories = { "B-geo": 'GEO', "B-gpe": 'GPE', "B-org": 'ORG', "B-per": 'PER', "B-tim": 'TIM',
+                            "I-geo": 'GEO', "I-gpe": 'GPE', "I-org": 'ORG', "I-per": 'PER', "I-tim": 'TIM',
+                            "O": 'O'}
