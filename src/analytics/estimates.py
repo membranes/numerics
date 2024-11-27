@@ -47,4 +47,5 @@ class Estimates:
 
         cases = self.__cases()
         derivations = src.analytics.derivations.Derivations(cases=cases).exc()
-        logging.info(derivations)
+
+        return derivations
