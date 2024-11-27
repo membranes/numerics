@@ -5,6 +5,7 @@ import os
 import pandas as pd
 
 import config
+import src.analytics.derivations
 
 
 class Estimates:
@@ -45,4 +46,5 @@ class Estimates:
         """
 
         cases = self.__cases()
-        logging.info(cases)
+        derivations = src.analytics.derivations.Derivations(cases=cases).exc()
+        logging.info(derivations)
