@@ -65,4 +65,4 @@ class Estimates:
         logging.info(derivations)
 
         # Spiders
-        src.analytics.spider.Spider().exc(derivations=derivations)
+        src.analytics.spider.Spider().exc(blob=derivations)
