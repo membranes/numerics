@@ -28,6 +28,12 @@ class Spider:
 
 
     def __save(self, nodes: dict, name: str):
+        """
+
+        :param nodes:
+        :param name:
+        :return:
+        """
 
         self.__objects.write(nodes=nodes, path=os.path.join(self.__path, name))
 
@@ -50,5 +56,7 @@ class Spider:
             name = self.__configurations.definition[category]
             logging.info(name)
 
-            dictionary = excerpt.to_dict(orient='tight')
-            logging.info(dictionary)
+            nodes = excerpt.to_dict(orient='tight')
+            logging.info(nodes)
+
+            self.__save(nodes=nodes, name=f'{name}.json')
