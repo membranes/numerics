@@ -12,8 +12,7 @@ class Interface:
 
         self.__configurations = config.Config()
 
-    @staticmethod
-    def exc():
+    def exc(self):
         """
 
         :return:
@@ -26,4 +25,5 @@ class Interface:
         estimates.reset_index(drop=False, inplace=True)
         logging.info(estimates)
 
-
+        estimates = estimates.assign(category=estimates['index'].map(self.__configurations.categories))
+        logging.info(estimates)
