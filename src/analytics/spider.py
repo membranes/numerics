@@ -35,9 +35,16 @@ class Spider:
         :return:
         """
 
-        self.__objects.write(nodes=nodes, path=os.path.join(self.__path, name))
+        message = self.__objects.write(nodes=nodes, path=os.path.join(self.__path, name))
+
+        return message
 
     def exc(self, blob: pd.DataFrame):
+        """
+
+        :param blob:
+        :return:
+        """
 
         derivations = blob.copy()
 
@@ -50,13 +57,17 @@ class Spider:
         # Hence
         for category in categories:
 
-            excerpt: pd.DataFrame = derivations.loc[derivations['category'] == category, self.__names.keys()]
-            excerpt.rename(columns=self.__names, inplace=True)
-
             name = self.__configurations.definition[category]
             logging.info(name)
 
+            # The instances of the category
+            excerpt: pd.DataFrame = derivations.loc[derivations['category'] == category, self.__names.keys()]
+            excerpt.rename(columns=self.__names, inplace=True)
+
+            # The dictionary of the instances
             nodes = excerpt.to_dict(orient='tight')
             logging.info(nodes)
 
-            self.__save(nodes=nodes, name=f'{name}.json')
+            # Save
+            message = self.__save(nodes=nodes, name=f'{name}.json')
+            logging.info(message)
