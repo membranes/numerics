@@ -1,37 +1,43 @@
+"""Module spider.py"""
 import logging
 import os
 
 import pandas as pd
 
 import config
-import src.functions.objects
 import src.functions.directories
+import src.functions.objects
 
 
 class Spider:
+    """
+    Class Spider
+    """
 
     def __init__(self):
+        """
+        Constructor
+        """
 
         self.__configurations = config.Config()
 
-        # The directory
+        # The directory wherein the data files, for the spider graphs, are stored.
         self.__path = os.path.join(self.__configurations.card_, 'spider')
         src.functions.directories.Directories().create(path=self.__path)
 
-        # JSON
+        # An instance for reading & writing JSON (JavaScript Object Notation) files.
         self.__objects = src.functions.objects.Objects()
 
-        # The metrics in focus
+        # The metrics in focus.
         self.__names = {'precision': "Precision", 'sensitivity': "Sensitivity", 'specificity': 'Specificity',
-                 'fscore': 'F Score', 'youden': "Youden's J Statistic", 'balanced_accuracy': 'Balanced Accuracy',
-                 'standard_accuracy': 'Standard Accuracy'}
-
+                        'fscore': 'F Score', 'youden': "Youden's J Statistic", 'balanced_accuracy': 'Balanced Accuracy',
+                        'standard_accuracy': 'Standard Accuracy'}
 
     def __save(self, nodes: dict, name: str):
         """
 
-        :param nodes:
-        :param name:
+        :param nodes: The dictionary of values for the spider graph
+        :param name: The name of the file; filename & extension.
         :return:
         """
 
