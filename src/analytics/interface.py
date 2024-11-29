@@ -8,6 +8,7 @@ import config
 import src.analytics.architecture
 import src.analytics.derivations
 import src.analytics.spider
+import src.analytics.bullet
 
 
 class Interface:
@@ -69,3 +70,4 @@ class Interface:
 
         # Spiders
         src.analytics.spider.Spider().exc(blob=derivations)
+        src.analytics.bullet.Bullet().exc(blob=derivations)
