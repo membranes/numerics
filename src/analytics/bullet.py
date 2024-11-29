@@ -24,6 +24,17 @@ class Bullet:
         # The metrics in focus.
         self.__names = {'fnr': 'False Negative Rate', 'fpr': 'False Positive Rate'}
 
+    def __limits(self):
+
+        # self.__objects.read(uri=os.path.join(self.__configurations.limitations_, 'error.json'))
+
+        frame = pd.read_json(
+            path_or_buf=os.path.join(self.__configurations.limitations_, 'error.json'), orient='records')
+        frame = frame[self.__names.keys()]
+        frame.rename(columns=self.__names, inplace=True)
+
+        return frame
+
     def __save(self, nodes: dict, name: str):
         """
 
@@ -49,7 +60,11 @@ class Bullet:
         categories = derivations['category'].unique()
 
         # The tag & category values are required for data structuring
-        # derivations.set_index(keys=['tag', 'category'], drop=False, inplace=True)
+        derivations.set_index(keys=['tag', 'category'], drop=False, inplace=True)
+
+        # Limits
+        limits = self.__limits()
+        logging.info(limits)
 
         # Hence
         for category in categories:
@@ -63,6 +78,7 @@ class Bullet:
 
             # The dictionary of the instances
             nodes = excerpt.to_dict(orient='split')
+            nodes['target'] = limits.loc[0, nodes['columns']].to_list()
             logging.info(nodes)
 
             # Save
