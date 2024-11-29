@@ -70,7 +70,6 @@ class Bullet:
         for category in categories:
 
             name = self.__configurations.definition[category]
-            logging.info(name)
 
             # The instances of the category
             excerpt: pd.DataFrame = derivations.loc[derivations['category'] == category, self.__names.keys()]
@@ -82,5 +81,5 @@ class Bullet:
             logging.info(nodes)
 
             # Save
-            # message = self.__save(nodes=nodes, name=f'{name}.json')
-            # logging.info(message)
+            message = self.__save(nodes=nodes, name=f'{name}.json')
+            logging.info(message)
