@@ -83,5 +83,5 @@ class Bullet:
             logging.info(nodes)
 
             # Save
-            # message = self.__save(nodes=nodes, name=f'{name}.json')
-            # logging.info(message)
+            message = self.__save(nodes=nodes, name=f'{name}.json')
+            logging.info(message)
