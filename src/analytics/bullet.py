@@ -60,7 +60,7 @@ class Bullet:
         categories = derivations['category'].unique()
 
         # The tag & category values are required for data structuring
-        derivations.set_index(keys=['tag', 'category'], drop=False, inplace=True)
+        derivations.set_index(keys=['tag'], drop=False, inplace=True)
 
         # Limits
         limits = self.__limits()
@@ -74,12 +74,12 @@ class Bullet:
             # The instances of the category
             excerpt: pd.DataFrame = derivations.loc[derivations['category'] == category, self.__names.keys()]
             excerpt.rename(columns=self.__names, inplace=True)
-            excerpt = excerpt.transpose()
+            # excerpt = excerpt.transpose()
             logging.info(excerpt)
 
             # The dictionary of the instances
             nodes = excerpt.to_dict(orient='split')
-            nodes['target'] = limits.loc[0, nodes['index']].to_list()
+            nodes['target'] = limits.loc[0, nodes['columns']].to_list()
             logging.info(nodes)
 
             # Save
