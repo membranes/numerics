@@ -42,6 +42,29 @@ function generateChart(fileNameKey) {
 
     $.getJSON('../../../warehouse/card/bullet/' + fileNameKey + '.json', function (calculations) {
 
+        // Indices
+        const iNegative = calculations.index.indexOf('False Negative Rate');
+        const iPositive = calculations.index.indexOf('False Positive Rate');
+
+        // Categories
+        let categories = calculations.index;
+
+        // Variables
+        var fnr = [],
+            fpr = [];
+
+        // Curves
+        for (let i = 0; i < calculations.data.length; i += 1) {
+            fnr.push({
+                y: calculations.data[i][iNegative],
+                target: calculations.target[iNegative]
+            })
+            fpr.push({
+                y: calculations.data[i][iPositive],
+                target: calculations.target[iPositive]
+            })
+        }
+
 
 
 
