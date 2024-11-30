@@ -76,7 +76,7 @@ class Bullet:
             excerpt.rename(columns=self.__names, inplace=True)
 
             # The dictionary of the instances
-            nodes = excerpt.to_dict(orient='split')
+            nodes = excerpt.to_dict(orient='tight')
             nodes['target'] = limits.loc[0, nodes['columns']].to_list()
             logging.info(nodes)
 
