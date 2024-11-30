@@ -110,8 +110,6 @@ function generateChart(fileNameKey) {
             },
             title: {
                 y: 19,
-                // x: -65,
-                textAlign: 'right',
                 text: '<span style="font-variant: all-small-caps;">false negative rate</span>'
             },
             xAxis: {
@@ -131,9 +129,6 @@ function generateChart(fileNameKey) {
                     to: 1,
                     color: '#bbb'
                 }],
-                // labels: {
-                //     format: '{value}'
-                // },
                 title: null,
                 min: 0,
                 max: 1
@@ -142,7 +137,7 @@ function generateChart(fileNameKey) {
                 data: fnr
             }],
             tooltip: {
-                pointFormat: '<b>{point.y}</b> (with expected maximum at {point.target})'
+                pointFormat: '<b>{point.y:,.3f}</b> (with expected maximum at {point.target:,.3f})'
             }
         });
 
@@ -180,7 +175,7 @@ function generateChart(fileNameKey) {
                 data: fpr
             }],
             tooltip: {
-                pointFormat: '<b>{point.y:,.2f}</b> (with expected maximum at {point.target:,.2f})'
+                pointFormat: '<b>{point.y:,.3f}</b> (with expected maximum at {point.target:,.3f})'
             }
         });
 
