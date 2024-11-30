@@ -1,10 +1,42 @@
 <!DOCTYPE html>
+<!--suppress JSUnresolvedLibraryURL -->
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Title</title>
-</head>
-<body>
+  <!--
+     https://www.w3schools.com/howto/howto_custom_select.asp,
+     https://www.w3schools.com/howto/tryit.asp?filename=tryhow_custom_select,
+     https://www.w3schools.com/css/tryit.asp?filename=trycss_form_button,
+     https://fabriceleven.com/design/clever-way-to-change-the-drop-down-selector-arrow-icon/
+  -->
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../assets/css/generic.css" type="text/css">
 
-</body>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+    <title>Model Metrics</title>
+  </head>
+  <body>
+
+  <div class="grid-container">
+    <div class="grid-item"></div>
+    <div class="grid-item">
+      <label for="option_selector"></label>
+      <select id="option_selector">
+        <!-- <option id="option_selector_title">Please select a ...</option> -->
+      </select>
+      <script src="../assets/js/bullet.js"  type="text/javascript"></script>
+      <div id="container" style="width: 630px; margin: 0 auto"></div>
+    </div>
+    <div class="grid-item"></div>
+  </div>
+
+    <script src="https://code.highcharts.com/highcharts.js" crossorigin="anonymous"></script>
+    <script src="https://code.highcharts.com/highcharts-more.js" crossorigin="anonymous"></script>
+    <script src="https://code.highcharts.com/modules/bullet.js" crossorigin="anonymous"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js" crossorigin="anonymous"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js" crossorigin="anonymous"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js" crossorigin="anonymous"></script>
+  </body>
 </html>
