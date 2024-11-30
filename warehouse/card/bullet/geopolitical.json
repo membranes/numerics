@@ -1,25 +1,19 @@
 {
     "index": [
-        "False Negative Rate",
-        "False Positive Rate"
+        "B-gpe",
+        "I-gpe"
     ],
     "columns": [
-        [
-            "B-gpe",
-            "GPE"
-        ],
-        [
-            "I-gpe",
-            "GPE"
-        ]
+        "False Negative Rate",
+        "False Positive Rate"
     ],
     "data": [
         [
             0.03813559322033899,
-            0.25
+            0.0006816167950378649
         ],
         [
-            0.0006816167950378649,
+            0.25,
             0.0
         ]
     ],
