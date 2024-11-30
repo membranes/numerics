@@ -43,6 +43,7 @@ function generateChart(fileNameKey) {
 
     $.getJSON('../../warehouse/card/bullet/' + fileNameKey + '.json', function (calculations) {
 
+        const maximum = 0.60;
 
         // Indices
         const iNegative = calculations.columns.indexOf('False Negative Rate');
@@ -71,7 +72,7 @@ function generateChart(fileNameKey) {
         Highcharts.setOptions({
             chart: {
                 inverted: true,
-                marginLeft: 135,
+                // marginLeft: 135,
                 type: 'bullet',
                 height: 135
             },
@@ -110,7 +111,7 @@ function generateChart(fileNameKey) {
             },
             title: {
                 y: 19,
-                text: '<span style="font-variant: all-small-caps;">false negative rate</span>'
+                text: '<span style="font-variant: all-small-caps;">false negative rate</span> '
             },
             xAxis: {
                 categories: categories
@@ -131,13 +132,14 @@ function generateChart(fileNameKey) {
                 }],
                 title: null,
                 min: 0,
-                max: 1
+                max: maximum,
+                type: 'linear'
             },
             series: [{
                 data: fnr
             }],
             tooltip: {
-                pointFormat: '<b>{point.y:,.3f}</b> (with expected maximum at {point.target:,.3f})'
+                pointFormat: '<b>{point.y:,.3f}</b> (business maximum limit: {point.target:,.3f})'
             }
         });
 
@@ -148,7 +150,7 @@ function generateChart(fileNameKey) {
             },
             title: {
                 y: 19,
-                text: '<span style="font-variant: small-caps">false positive rate</span>'
+                text: '<span style="font-variant: small-caps">false positive rate</span> '
             },
             xAxis: {
                 categories: categories
@@ -169,13 +171,14 @@ function generateChart(fileNameKey) {
                 }],
                 title: null,
                 min: 0,
-                max: 1
+                max: maximum,
+                type: 'linear'
             },
             series: [{
                 data: fpr
             }],
             tooltip: {
-                pointFormat: '<b>{point.y:,.3f}</b> (with expected maximum at {point.target:,.3f})'
+                pointFormat: '<b>{point.y:,.3f}</b> (business maximum limit: {point.target:,.3f})'
             }
         });
 
