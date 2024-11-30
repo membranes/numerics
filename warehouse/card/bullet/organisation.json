@@ -1,25 +1,19 @@
 {
     "index": [
-        "False Negative Rate",
-        "False Positive Rate"
+        "B-org",
+        "I-org"
     ],
     "columns": [
-        [
-            "B-org",
-            "ORG"
-        ],
-        [
-            "I-org",
-            "ORG"
-        ]
+        "False Negative Rate",
+        "False Positive Rate"
     ],
     "data": [
         [
             0.2852233676975945,
-            0.27192982456140347
+            0.006362889983579589
         ],
         [
-            0.006362889983579589,
+            0.27192982456140347,
             0.00313372845561688
         ]
     ],
