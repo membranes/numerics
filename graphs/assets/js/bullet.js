@@ -68,14 +68,12 @@ function generateChart(fileNameKey) {
             });
         }
 
-
-
         Highcharts.setOptions({
             chart: {
                 inverted: true,
                 marginLeft: 135,
                 type: 'bullet',
-                height: 125
+                height: 135
             },
             title: {
                 text: null
@@ -107,6 +105,15 @@ function generateChart(fileNameKey) {
 
 
         Highcharts.chart('container0001', {
+            chart: {
+                marginTop: 40
+            },
+            title: {
+                y: 19,
+                // x: -65,
+                textAlign: 'right',
+                text: '<span style="font-variant: all-small-caps;">false negative rate</span>'
+            },
             xAxis: {
                 categories: categories
             },
@@ -124,9 +131,9 @@ function generateChart(fileNameKey) {
                     to: 1,
                     color: '#bbb'
                 }],
-                labels: {
-                    format: '{value}'
-                },
+                // labels: {
+                //     format: '{value}'
+                // },
                 title: null,
                 min: 0,
                 max: 1
@@ -141,6 +148,13 @@ function generateChart(fileNameKey) {
 
 
         Highcharts.chart('container0002', {
+            chart: {
+                marginTop: 40
+            },
+            title: {
+                y: 19,
+                text: '<span style="font-variant: small-caps">false positive rate</span>'
+            },
             xAxis: {
                 categories: categories
             },
@@ -158,9 +172,6 @@ function generateChart(fileNameKey) {
                     to: 1,
                     color: '#bbb'
                 }],
-                labels: {
-                    format: '{value}'
-                },
                 title: null,
                 min: 0,
                 max: 1
@@ -169,7 +180,7 @@ function generateChart(fileNameKey) {
                 data: fpr
             }],
             tooltip: {
-                pointFormat: '<b>{point.y}</b> (with expected maximum at {point.target})'
+                pointFormat: '<b>{point.y:,.2f}</b> (with expected maximum at {point.target:,.2f})'
             }
         });
 
