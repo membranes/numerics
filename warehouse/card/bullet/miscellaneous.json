@@ -1,0 +1,24 @@
+{
+    "index": [
+        "False Negative Rate",
+        "False Positive Rate"
+    ],
+    "columns": [
+        [
+            "O",
+            "O"
+        ]
+    ],
+    "data": [
+        [
+            0.010163082013708302
+        ],
+        [
+            0.04381210478771458
+        ]
+    ],
+    "target": [
+        0.05,
+        0.075
+    ]
+}
