@@ -74,12 +74,14 @@ class Bullet:
             # The instances of the category
             excerpt: pd.DataFrame = derivations.loc[derivations['category'] == category, self.__names.keys()]
             excerpt.rename(columns=self.__names, inplace=True)
+            excerpt = excerpt.transpose()
+            logging.info(excerpt)
 
             # The dictionary of the instances
-            nodes = excerpt.to_dict(orient='tight')
-            nodes['target'] = limits.loc[0, nodes['columns']].to_list()
+            nodes = excerpt.to_dict(orient='split')
+            nodes['target'] = limits.loc[0, nodes['index']].to_list()
             logging.info(nodes)
 
             # Save
-            message = self.__save(nodes=nodes, name=f'{name}.json')
-            logging.info(message)
+            # message = self.__save(nodes=nodes, name=f'{name}.json')
+            # logging.info(message)
