@@ -1,25 +1,19 @@
 {
     "index": [
-        "False Negative Rate",
-        "False Positive Rate"
+        "B-tim",
+        "I-tim"
     ],
     "columns": [
-        [
-            "B-tim",
-            "TIM"
-        ],
-        [
-            "I-tim",
-            "TIM"
-        ]
+        "False Negative Rate",
+        "False Positive Rate"
     ],
     "data": [
         [
             0.08921933085501854,
-            0.22619047619047616
+            0.0012979915288974242
         ],
         [
-            0.0012979915288974242,
+            0.22619047619047616,
             0.0007420899952775839
         ]
     ],
