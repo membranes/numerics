@@ -182,6 +182,13 @@ The underlying, original, data:
 * https://www.clips.uantwerpen.be/conll2003/ner/
 * https://trec.nist.gov/data/reuters/reuters.html
 
+Graphing
+
+* [selecting](https://www.w3schools.com/howto/howto_custom_select.asp)
+* [selecting](https://www.w3schools.com/howto/tryit.asp?filename=tryhow_custom_select)
+* [buttons](https://www.w3schools.com/css/tryit.asp?filename=trycss_form_button)
+* [selecting](https://fabriceleven.com/design/clever-way-to-change-the-drop-down-selector-arrow-icon/)
+
 <br>
 <br>
 
