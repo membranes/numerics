@@ -43,7 +43,7 @@ function generateChart(fileNameKey) {
 
     $.getJSON('../../warehouse/card/bullet/' + fileNameKey + '.json', function (calculations) {
 
-        const maximum = 0.60;
+        const maximum = 0.45;
 
         // Indices
         const iNegative = calculations.columns.indexOf('False Negative Rate');
@@ -72,7 +72,6 @@ function generateChart(fileNameKey) {
         Highcharts.setOptions({
             chart: {
                 inverted: true,
-                // marginLeft: 135,
                 type: 'bullet',
                 height: 135
             },
@@ -120,15 +119,15 @@ function generateChart(fileNameKey) {
                 plotBands: [{
                     from: 0,
                     to: 0.1,
-                    color: '#666'
+                    color: '#ffffff'
                 }, {
                     from: 0.1,
-                    to: 0.5,
-                    color: '#999'
+                    to: 0.35,
+                    color: '#dcdcdc'
                 }, {
-                    from: 0.5,
+                    from: 0.35,
                     to: 1,
-                    color: '#bbb'
+                    color: '#d3d3d3'
                 }],
                 title: null,
                 min: 0,
@@ -136,7 +135,9 @@ function generateChart(fileNameKey) {
                 type: 'linear'
             },
             series: [{
-                data: fnr
+                data: fnr,
+                colorByPoint: true,
+                colors: ['#2caffe', '#544fc5']
             }],
             tooltip: {
                 pointFormat: '<b>{point.y:,.3f}</b> (business maximum limit: {point.target:,.3f})'
@@ -159,15 +160,15 @@ function generateChart(fileNameKey) {
                 plotBands: [{
                     from: 0,
                     to: 0.1,
-                    color: '#666'
+                    color: '#ffffff'
                 }, {
                     from: 0.1,
-                    to: 0.5,
-                    color: '#999'
+                    to: 0.35,
+                    color: '#dcdcdc'
                 }, {
-                    from: 0.5,
+                    from: 0.35,
                     to: 1,
-                    color: '#bbb'
+                    color: '#d3d3d3'
                 }],
                 title: null,
                 min: 0,
@@ -175,7 +176,9 @@ function generateChart(fileNameKey) {
                 type: 'linear'
             },
             series: [{
-                data: fpr
+                data: fpr,
+                colorByPoint: true,
+                colors: ['#2caffe', '#544fc5']
             }],
             tooltip: {
                 pointFormat: '<b>{point.y:,.3f}</b> (business maximum limit: {point.target:,.3f})'
