@@ -9,12 +9,25 @@ import src.analytics.architecture
 import src.analytics.derivations
 import src.analytics.spider
 import src.analytics.bullet
+import src.analytics.costs
+import src.elements.s3_parameters as s3p
+import src.elements.service as sr
 
 
 class Interface:
 
-    def __init__(self):
+    def __init__(self, service: sr.Service, s3_parameters: s3p.S3Parameters):
+        """
 
+        :param service: A suite of services for interacting with Amazon Web Services.
+        :param s3_parameters: The overarching S3 (Simple Storage Service) parameters
+                              settings of this project, e.g., region code name, buckets, etc.
+        """
+
+        self.__service = service
+        self.__s3_parameters = s3_parameters
+
+        # Configurations
         self.__configurations = config.Config()
 
         # The architecture name of the best model, ...
@@ -71,3 +84,4 @@ class Interface:
         # Spiders
         src.analytics.spider.Spider().exc(blob=derivations)
         src.analytics.bullet.Bullet().exc(blob=derivations)
+        src.analytics.costs.Costs(service=self.__service, s3_parameters=self.__s3_parameters).exc()
