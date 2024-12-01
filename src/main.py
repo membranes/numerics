@@ -27,7 +27,8 @@ def main():
     logger.info('Device: %s', device)
 
     # Analytics
-    src.data.interface.Interface(service=service, s3_parameters=s3_parameters).exc()
+    # src.data.interface.Interface(service=service, s3_parameters=s3_parameters).exc()
+    src.analytics.interface.Interface(service=service, s3_parameters=s3_parameters).exc()
 
     # Delete Cache Points
     src.functions.cache.Cache().exc()
@@ -52,6 +53,7 @@ if __name__ == '__main__':
     os.environ['HF_HOME']='/tmp'
 
     # Classes
+    import src.analytics.interface
     import src.data.interface
     import src.functions.service
     import src.functions.cache
