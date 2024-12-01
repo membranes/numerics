@@ -29,7 +29,7 @@ class Bullet:
         # self.__objects.read(uri=os.path.join(self.__configurations.limitations_, 'error.json'))
 
         frame = pd.read_json(
-            path_or_buf=os.path.join(self.__configurations.limitations_, 'error.json'), orient='records')
+            path_or_buf=os.path.join(self.__configurations.limitations_, 'error.json'), orient='index')
         frame = frame[self.__names.keys()]
         frame.rename(columns=self.__names, inplace=True)
 
@@ -64,7 +64,6 @@ class Bullet:
 
         # Limits
         limits = self.__limits()
-        logging.info(limits)
 
         # Hence
         for category in categories:
@@ -74,12 +73,10 @@ class Bullet:
             # The instances of the category
             excerpt: pd.DataFrame = derivations.loc[derivations['category'] == category, self.__names.keys()]
             excerpt.rename(columns=self.__names, inplace=True)
-            # excerpt = excerpt.transpose()
-            logging.info(excerpt)
 
             # The dictionary of the instances
             nodes = excerpt.to_dict(orient='split')
-            nodes['target'] = limits.loc[0, nodes['columns']].to_list()
+            nodes['target'] = limits.loc[category, nodes['columns']].to_list()
             logging.info(nodes)
 
             # Save
