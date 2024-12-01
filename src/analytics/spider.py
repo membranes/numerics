@@ -30,7 +30,7 @@ class Spider:
 
         # The metrics in focus.
         self.__names = {'precision': "Precision", 'sensitivity': "Sensitivity", 'specificity': 'Specificity',
-                        'fscore': 'F Score', 'youden': "Youden's J Statistic", 'balanced_accuracy': 'Balanced Accuracy',
+                        'fscore': 'F Score', 'balanced_accuracy': 'Balanced Accuracy',
                         'standard_accuracy': 'Standard Accuracy'}
 
     def __save(self, nodes: dict, name: str):
