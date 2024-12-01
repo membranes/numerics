@@ -23,8 +23,12 @@ class Costs:
 
         self.__rates = np.linspace(start=0, stop=1, num=101)
         self.__rates = self.__rates[1:]
+        self.__rates = self.__rates[..., None]
 
     def __fnr(self):
+        pass
+
+    def __fpr(self):
         pass
 
     def exc(self):
@@ -36,3 +40,18 @@ class Costs:
         frequencies = pd.read_json(
             path_or_buf=f's3://{self.__s3_parameters.configurations}/limits/frequencies.json', orient='index')
         logging.info(frequencies)
+
+        categories = list(frequencies.index)
+
+        for category in categories:
+
+            cost: int = costs.loc['fnr', category]
+
+            numbers = np.multiply(
+                self.__rates, np.expand_dims(frequencies.loc[category, :].to_numpy(), axis=0))
+            factors = cost * (1 + (numbers > 500).astype(int))
+            liabilities = np.multiply(factors, numbers)
+
+            data = pd.DataFrame(data=liabilities, columns=['min', 'max'])
+            data = data.assign(rate=self.__rates)
+            logging.info(data)
