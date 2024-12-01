@@ -1,11 +1,10 @@
-import os
+
 import logging
 
 import pandas as pd
 import numpy as np
 
 import config
-import src.analytics.limits
 import src.elements.service as sr
 import src.elements.s3_parameters as s3p
 
@@ -20,20 +19,23 @@ class Costs:
                               settings of this project, e.g., region code name, buckets, etc.
         """
 
+        self.__service = service
+        self.__s3_parameters = s3_parameters
+
         self.__configurations = config.Config()
 
         self.__rates = np.linspace(start=0, stop=1, num=101)
         self.__rates = self.__rates[1:]
-
-        self.__limits = src.analytics.limits.Limits(service=service, s3_parameters=s3_parameters)
 
     def __fnr(self):
         pass
 
     def exc(self):
 
-        _costs = self.__limits.exc(key_name='limits/costs.json')
-        logging.info(_costs)
+        costs = pd.read_json(
+            path_or_buf=f's3://{self.__s3_parameters.configurations}/limits/costs.json', orient='split')
+        logging.info(costs)
 
-        _frequencies = self.__limits.exc(key_name='limits/frequencies.json')
-        logging.info(_frequencies)
+        frequencies = pd.read_json(
+            path_or_buf=f's3://{self.__s3_parameters.configurations}/limits/frequencies.json', orient='index')
+        logging.info(frequencies)
