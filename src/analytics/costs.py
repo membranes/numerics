@@ -1,25 +1,22 @@
-
+"""Module costs.py"""
 import logging
 
-import pandas as pd
 import numpy as np
+import pandas as pd
 
 import config
-import src.elements.service as sr
 import src.elements.s3_parameters as s3p
 
 
 class Costs:
 
-    def __init__(self, service: sr.Service, s3_parameters: s3p.S3Parameters):
+    def __init__(self, s3_parameters: s3p.S3Parameters):
         """
 
-        :param service: A suite of services for interacting with Amazon Web Services.
         :param s3_parameters: The overarching S3 (Simple Storage Service) parameters
                               settings of this project, e.g., region code name, buckets, etc.
         """
 
-        self.__service = service
         self.__s3_parameters = s3_parameters
 
         self.__configurations = config.Config()
