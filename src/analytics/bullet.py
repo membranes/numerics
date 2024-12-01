@@ -1,3 +1,4 @@
+"""Module bullet.py"""
 import logging
 import os
 
@@ -19,7 +20,6 @@ class Bullet:
     def __init__(self, s3_parameters: s3p.S3Parameters):
         """
 
-
         :param s3_parameters: The overarching S3 (Simple Storage Service) parameters
                               settings of this project, e.g., region code name, buckets, etc.
         """
@@ -39,7 +39,13 @@ class Bullet:
         # The metrics in focus.
         self.__names = {'fnr': 'False Negative Rate', 'fpr': 'False Positive Rate'}
 
-    def __limits(self):
+    def __limits(self) -> pd.DataFrame:
+        """
+        Reads-in the <b>maximum limits</b> of the false negative rate & false positive
+        rate <b>per category of a tag.</b>
+
+        :return: The data frame of rate limits
+        """
 
         frame = pd.read_json(
             path_or_buf=f's3://{self.__s3_parameters.configurations}/limits/error.json', orient='index')
@@ -49,7 +55,7 @@ class Bullet:
 
         return frame
 
-    def __save(self, nodes: dict, name: str):
+    def __save(self, nodes: dict, name: str) -> str:
         """
 
         :param nodes: The dictionary of values for the spider graph
@@ -64,7 +70,8 @@ class Bullet:
     def exc(self, blob: pd.DataFrame):
         """
 
-        :param blob:
+        :param blob: A data frame consisting of error matrix frequencies & metrics, alongside
+                     tags & categories identifiers.
         :return:
         """
 
@@ -91,7 +98,6 @@ class Bullet:
             # The dictionary of the instances
             nodes = excerpt.to_dict(orient='split')
             nodes['target'] = limits.loc[category, nodes['columns']].to_list()
-            logging.info(nodes)
 
             # Save
             message = self.__save(nodes=nodes, name=f'{name}.json')
