@@ -7,11 +7,29 @@ import config
 import src.functions.directories
 import src.functions.objects
 
+import src.elements.s3_parameters as s3p
+import src.elements.service as sr
+
 
 class Bullet:
+    """
+    Description<br>
+    ------------<br>
+    Prepares the data for the <b>False Negative Rate</b> & <b>False Positive Rate</b> bullet graphs.
+    """
 
-    def __init__(self):
+    def __init__(self, service: sr.Service, s3_parameters: s3p.S3Parameters):
+        """
 
+        :param service: A suite of services for interacting with Amazon Web Services.
+        :param s3_parameters: The overarching S3 (Simple Storage Service) parameters
+                              settings of this project, e.g., region code name, buckets, etc.
+        """
+
+        self.__service = service
+        self.__s3_parameters = s3_parameters
+
+        # Configurations
         self.__configurations = config.Config()
 
         # The directory wherein the data files, for the spider graphs, are stored.
@@ -26,10 +44,9 @@ class Bullet:
 
     def __limits(self):
 
-        # self.__objects.read(uri=os.path.join(self.__configurations.limitations_, 'error.json'))
-
         frame = pd.read_json(
-            path_or_buf=os.path.join(self.__configurations.limitations_, 'error.json'), orient='index')
+            path_or_buf=f's3://{self.__s3_parameters.configurations}/limits/error.json', orient='index')
+
         frame = frame[self.__names.keys()]
         frame.rename(columns=self.__names, inplace=True)
 
