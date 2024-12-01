@@ -84,4 +84,4 @@ class Interface:
         # Spiders
         src.analytics.spider.Spider().exc(blob=derivations)
         src.analytics.bullet.Bullet(s3_parameters=self.__s3_parameters).exc(blob=derivations)
-        src.analytics.costs.Costs(service=self.__service, s3_parameters=self.__s3_parameters).exc()
+        src.analytics.costs.Costs(s3_parameters=self.__s3_parameters).exc()
