@@ -10,7 +10,6 @@
         "Sensitivity",
         "Specificity",
         "F Score",
-        "Youden's J Statistic",
         "Balanced Accuracy",
         "Standard Accuracy"
     ],
@@ -20,7 +19,6 @@
             0.9898369179862917,
             0.9561878952122854,
             0.9910862191370198,
-            0.9460248131985771,
             0.9730124065992886,
             0.9848393372241229
         ]
