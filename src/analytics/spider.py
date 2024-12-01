@@ -48,7 +48,8 @@ class Spider:
     def exc(self, blob: pd.DataFrame):
         """
 
-        :param blob:
+        :param blob: A data frame consisting of error matrix frequencies & metrics, alongside
+                     tags & categories identifiers.
         :return:
         """
 
