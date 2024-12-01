@@ -42,7 +42,7 @@ dropdown.on('change', function (e) {
 function generateChart(fileNameKey) {
 
 
-    $.getJSON('https://raw.githubusercontent.com/membranes/numerics/refs/heads/develop/warehouse/card/spider/' + fileNameKey + '.json', function (calculations) {
+    $.getJSON('../../warehouse/card/spider/' + fileNameKey + '.json', function (calculations) {
 
         // https://api.highcharts.com/highstock/tooltip.pointFormat
         // https://jsfiddle.net/gh/get/library/pure/highcharts/highcharts/tree/master/samples/highcharts/demo/bubble
