@@ -1,15 +1,14 @@
 """Module costs.py"""
 import logging
 import os
-import collections
 
+import dask
 import numpy as np
 import pandas as pd
-import dask
 
 import config
-import src.elements.s3_parameters as s3p
 import src.analytics.limits
+import src.elements.s3_parameters as s3p
 import src.functions.objects
 
 
@@ -46,9 +45,12 @@ class Costs:
         :return:
         """
 
+        n_inflection = 500
+
         cost: int = self.__costs.loc['fnr', category]
-        numbers = np.multiply(self.__rates, np.expand_dims(self.__frequencies.loc[category, :].to_numpy(), axis=0))
-        factors = cost * (1 + (numbers > 500).astype(int))
+        numbers = np.multiply(self.__rates,
+                              np.expand_dims(self.__frequencies.loc[category, :].to_numpy(), axis=0))
+        factors = cost * (1 + 0.5*(numbers > n_inflection).astype(int))
         liabilities = np.multiply(factors, numbers)
         matrix = np.concat((self.__rates, liabilities), axis=1)
 
@@ -63,7 +65,8 @@ class Costs:
         """
 
         cost: int = self.__costs.loc['fpr', category]
-        numbers = np.multiply(self.__rates, np.expand_dims(self.__frequencies.loc[category, :].to_numpy(), axis=0))
+        numbers = np.multiply(self.__rates,
+                              np.expand_dims(self.__frequencies.loc[category, :].to_numpy(), axis=0))
         liabilities = cost * numbers
         matrix = np.concat((self.__rates, liabilities), axis=1)
 
@@ -90,6 +93,10 @@ class Costs:
         return self.__objects.write(nodes=nodes, path=path)
 
     def exc(self):
+        """
+
+        :return:
+        """
 
         categories = list(self.__frequencies.index)
 
@@ -103,5 +110,6 @@ class Costs:
             message_fpr = self.__persist(matrix=fpr, metric='fpr', category=category)
 
             computations.append([message_fnr, message_fpr])
+
         calculations = dask.compute(computations, scheduler='threads')[0]
         logging.info(calculations)
