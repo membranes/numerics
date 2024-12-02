@@ -5,6 +5,7 @@ import collections
 
 import numpy as np
 import pandas as pd
+import dask
 
 import config
 import src.elements.s3_parameters as s3p
@@ -37,6 +38,7 @@ class Costs:
         self.__rates = self.__rates[1:]
         self.__rates = self.__rates[..., None]
 
+    @dask.delayed
     def __fnr(self, category: str) -> np.ndarray:
         """
 
@@ -45,15 +47,14 @@ class Costs:
         """
 
         cost: int = self.__costs.loc['fnr', category]
-
-        numbers = np.multiply(
-            self.__rates, np.expand_dims(self.__frequencies.loc[category, :].to_numpy(), axis=0))
+        numbers = np.multiply(self.__rates, np.expand_dims(self.__frequencies.loc[category, :].to_numpy(), axis=0))
         factors = cost * (1 + (numbers > 500).astype(int))
         liabilities = np.multiply(factors, numbers)
         matrix = np.concat((self.__rates, liabilities), axis=1)
 
         return matrix
 
+    @dask.delayed
     def __fpr(self, category: str) -> np.ndarray:
         """
 
@@ -62,13 +63,13 @@ class Costs:
         """
 
         cost: int = self.__costs.loc['fpr', category]
-        numbers = np.multiply(
-            self.__rates, np.expand_dims(self.__frequencies.loc[category, :].to_numpy(), axis=0))
+        numbers = np.multiply(self.__rates, np.expand_dims(self.__frequencies.loc[category, :].to_numpy(), axis=0))
         liabilities = cost * numbers
         matrix = np.concat((self.__rates, liabilities), axis=1)
 
         return matrix
 
+    @dask.delayed
     def __persist(self, matrix: np.ndarray, metric: str, category: str):
         """
 
@@ -78,23 +79,29 @@ class Costs:
         :return:
         """
 
-        # The file name
+        # The file name, and path; path = directory + file name
         name = f'{self.__configurations.definition[category]}.json'
-
-        # path = directory + file name
         path = os.path.join(self.__configurations.numerics_, 'cost', metric, name)
 
         # x: rate, low: ~ minimum cost, high: ~ maximum cost
         data = pd.DataFrame(data=matrix, columns=['x', 'low', 'high'])
         nodes = data.to_dict(orient='tight')
 
-        self.__objects.write(nodes=nodes, path=path)
+        return self.__objects.write(nodes=nodes, path=path)
 
     def exc(self):
 
         categories = list(self.__frequencies.index)
 
+        computations = []
         for category in categories:
 
             fnr = self.__fnr(category=category)
-            self.__persist(matrix=fnr, metric='fnr', category=category)
+            message_fnr = self.__persist(matrix=fnr, metric='fnr', category=category)
+
+            fpr = self.__fpr(category=category)
+            message_fpr = self.__persist(matrix=fpr, metric='fpr', category=category)
+
+            computations.append([message_fnr, message_fpr])
+        calculations = dask.compute(computations, scheduler='threads')[0]
+        logging.info(calculations)
