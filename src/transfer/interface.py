@@ -1,16 +1,18 @@
+"""Module interface.py"""
 import logging
-import glob
 import os
 
 import config
-import src.transfer.dictionary
 import src.elements.s3_parameters as s3p
 import src.elements.service as sr
-import src.functions.directories
 import src.s3.ingress
+import src.transfer.dictionary
 
 
 class Interface:
+    """
+    Class Interface
+    """
 
     def __init__(self, service: sr.Service,  s3_parameters: s3p):
         """
@@ -28,7 +30,12 @@ class Interface:
         self.__dictionary = src.transfer.dictionary.Dictionary()
 
     def exc(self):
+        """
 
+        :return:
+        """
+
+        # The strings for transferring data to Amazon S3 (Simple Storage Service)
         strings = self.__dictionary.exc(
             path=os.path.join(os.getcwd(), 'warehouse'), extension='json', prefix='warehouse')
 
