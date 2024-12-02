@@ -29,6 +29,7 @@ def main():
     # Analytics
     # src.data.interface.Interface(service=service, s3_parameters=s3_parameters).exc()
     src.analytics.interface.Interface(service=service, s3_parameters=s3_parameters).exc()
+    src.transfer.interface.Interface(service=service, s3_parameters=s3_parameters).exc()
 
     # Delete Cache Points
     src.functions.cache.Cache().exc()
@@ -59,6 +60,7 @@ if __name__ == '__main__':
     import src.functions.cache
     import src.s3.s3_parameters
     import src.setup
+    import src.transfer.interface
 
     # S3 S3Parameters, Service Instance
     connector = boto3.session.Session()
