@@ -22,7 +22,7 @@ class Spider:
         self.__configurations = config.Config()
 
         # The directory wherein the data files, for the spider graphs, are stored.
-        self.__path = os.path.join(self.__configurations.warehouse, 'card', 'spider')
+        self.__path = os.path.join(self.__configurations.numerics_, 'card', 'spider')
 
         # An instance for reading & writing JSON (JavaScript Object Notation) files.
         self.__objects = src.functions.objects.Objects()
