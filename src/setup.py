@@ -28,12 +28,15 @@ class Setup:
 
         self.__service: sr.Service = service
         self.__s3_parameters: s3p.S3Parameters = s3_parameters
+        self.__bucket_name = self.__s3_parameters.external
         self.__configurations = config.Config()
 
+        # Directories instance
         self.__directories = src.functions.directories.Directories()
 
         # The prefix in focus within the Amazon S3 bucket in focus.
-        self.__prefix = os.path.basename(self.__configurations.card_) + '/'
+        self.__prefix = (os.path.basename(self.__configurations.warehouse) + '/' +
+                         os.path.basename(self.__configurations.numerics_) + '/')
 
     def __clear_prefix(self) -> bool:
         """
@@ -42,7 +45,7 @@ class Setup:
         """
 
         # An instance for interacting with objects within an Amazon S3 prefix
-        instance = src.s3.prefix.Prefix(service=self.__service, bucket_name=self.__s3_parameters.internal)
+        instance = src.s3.prefix.Prefix(service=self.__service, bucket_name=self.__bucket_name)
 
         # Get the keys therein
         keys: list[str] = instance.objects(prefix=self.__prefix)
@@ -63,7 +66,7 @@ class Setup:
 
         # An instance for interacting with Amazon S3 buckets.
         bucket = src.s3.bucket.Bucket(service=self.__service, location_constraint=self.__s3_parameters.location_constraint,
-                                      bucket_name=self.__s3_parameters.internal)
+                                      bucket_name=self.__bucket_name)
 
         # If the bucket exist, the prefix path is cleared.  Otherwise, the bucket is created.
         if bucket.exists():
@@ -94,7 +97,7 @@ class Setup:
         self.__directories.cleanup(path=self.__configurations.warehouse)
 
 
-        return self.__directories.create(path=self.__configurations.card_)
+        return self.__directories.create(path=self.__configurations.warehouse)
 
     def exc(self) -> bool:
         """
