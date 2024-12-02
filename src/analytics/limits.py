@@ -1,4 +1,6 @@
+"""Module limits.py"""
 import logging
+
 import pandas as pd
 
 import src.elements.s3_parameters as s3p
@@ -32,8 +34,8 @@ class Limits:
     def __get_data(self, filename: str, orient: str):
         """
 
-        :param filename:
-        :param orient:
+        :param filename: The file of interest.
+        :param orient: The read-in orientation.
         :return:
         """
 
@@ -47,8 +49,8 @@ class Limits:
     def exc(self, filename: str, orient: str):
         """
 
-        :param filename:
-        :param orient:
+        :param filename: The file of interest.
+        :param orient: The read-in orientation.
         :return:
         """
 
