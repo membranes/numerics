@@ -27,7 +27,7 @@ def main():
     logger.info('Device: %s', device)
 
     # Analytics
-    # src.data.interface.Interface(service=service, s3_parameters=s3_parameters).exc()
+    src.data.interface.Interface(service=service, s3_parameters=s3_parameters).exc()
     src.analytics.interface.Interface(service=service, s3_parameters=s3_parameters).exc()
     src.transfer.interface.Interface(service=service, s3_parameters=s3_parameters).exc()
 
