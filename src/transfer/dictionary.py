@@ -15,11 +15,10 @@ class Dictionary:
         Constructor
         """
 
-        self.__metadata = {'bullet': 'A metrics data set for false negative rate and false positive rate bullet graphs.',
-                           'spider': 'A spider graphs data set for outlining precision, specificity, sensitivity, f score, '
-                                     'standard accuracy, and balanced accuracy.',
-                           'fnr': 'The data for illustrating possible false negative rate costs at varying rate points.',
-                           'fpr': 'The data for illustrating possible false positive rate costs at varying rate points.'}
+        self.__metadata = {'bullet': {'desc': 'A metrics data set for false negative rate and false positive rate bullet graphs.'},
+                           'spider': {'desc': 'A spider graphs data set for outlining precision, specificity, sensitivity, f score, standard accuracy, and balanced accuracy.'},
+                           'fnr': {'desc': 'The data for illustrating possible false negative rate costs at varying rate points.'},
+                           'fpr': {'desc': 'The data for illustrating possible false positive rate costs at varying rate points.'}}
 
     @staticmethod
     def __local(path: str, extension: str) -> pd.DataFrame:
