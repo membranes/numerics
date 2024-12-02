@@ -12,6 +12,7 @@ import src.analytics.bullet
 import src.analytics.costs
 import src.elements.s3_parameters as s3p
 import src.elements.service as sr
+import src.functions.directories
 
 
 class Interface:
@@ -33,6 +34,19 @@ class Interface:
         # The architecture name of the best model, ...
         self.__architecture: str = src.analytics.architecture.Architecture().exc()
         logging.info('THE ARCHITECTURE: %s', self.__architecture)
+
+    def __storage(self):
+        """
+        Creates all the paths for the graphing data.
+        
+        :return:
+        """
+
+        directories = src.functions.directories.Directories()
+
+        for value in self.__configurations.graphs_:
+
+            directories.create(value)
 
 
     def __cases(self):
