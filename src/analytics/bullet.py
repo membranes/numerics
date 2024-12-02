@@ -5,6 +5,7 @@ import os
 import pandas as pd
 
 import config
+import src.analytics.limits
 import src.elements.s3_parameters as s3p
 import src.functions.directories
 import src.functions.objects
@@ -26,10 +27,8 @@ class Bullet:
 
         self.__s3_parameters = s3_parameters
 
-        # Configurations
+        # Configurations.  The directory wherein the data files, for the spider graphs, are stored.
         self.__configurations = config.Config()
-
-        # The directory wherein the data files, for the spider graphs, are stored.
         self.__path = os.path.join(self.__configurations.warehouse, 'card', 'bullet')
 
         # An instance for reading & writing JSON (JavaScript Object Notation) files.
@@ -46,9 +45,8 @@ class Bullet:
         :return: The data frame of rate limits
         """
 
-        frame = pd.read_json(
-            path_or_buf=f's3://{self.__s3_parameters.configurations}/limits/error.json', orient='index')
-
+        frame = src.analytics.limits.Limits(
+            s3_parameters=self.__s3_parameters).exc(filename='error.json', orient='index')
         frame = frame[self.__names.keys()]
         frame.rename(columns=self.__names, inplace=True)
 
