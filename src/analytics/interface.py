@@ -38,7 +38,7 @@ class Interface:
     def __storage(self):
         """
         Creates all the paths for the graphing data.
-        
+
         :return:
         """
 
@@ -88,10 +88,12 @@ class Interface:
         :return:
         """
 
+        self.__storage()
+
+        # The error matrix frequencies of a case, and their error metrics
+        # derivations.  Additionally, a category column.
         cases = self.__cases()
         derivations = self.__derivations(cases=cases)
-
-        # Add a category column
         derivations = derivations.assign(category=derivations['tag'].map(self.__configurations.categories))
         logging.info(derivations)
 
