@@ -37,7 +37,12 @@ class Costs:
         self.__rates = self.__rates[1:]
         self.__rates = self.__rates[..., None]
 
-    def __fnr(self, category: str):
+    def __fnr(self, category: str) -> np.ndarray:
+        """
+
+        :param category:
+        :return:
+        """
 
         cost: int = self.__costs.loc['fnr', category]
 
@@ -49,7 +54,12 @@ class Costs:
 
         return matrix
 
-    def __fpr(self, category: str):
+    def __fpr(self, category: str) -> np.ndarray:
+        """
+
+        :param category:
+        :return:
+        """
 
         cost: int = self.__costs.loc['fpr', category]
         numbers = np.multiply(
@@ -60,17 +70,25 @@ class Costs:
         return matrix
 
     def __persist(self, matrix: np.ndarray, metric: str, category: str):
+        """
 
+        :param matrix:
+        :param metric:
+        :param category:
+        :return:
+        """
+
+        # The file name
         name = f'{self.__configurations.definition[category]}.json'
+
+        # path = directory + file name
         path = os.path.join(self.__configurations.numerics_, 'cost', metric, name)
 
-        data = pd.DataFrame(data=matrix, columns=['rate', 'min', 'max'])
+        # x: rate, low: ~ minimum cost, high: ~ maximum cost
+        data = pd.DataFrame(data=matrix, columns=['x', 'low', 'high'])
         nodes = data.to_dict(orient='tight')
 
         self.__objects.write(nodes=nodes, path=path)
-
-        # data.to_json(path_or_buf=path, orient='records', index=False)
-
 
     def exc(self):
 
