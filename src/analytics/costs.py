@@ -73,12 +73,12 @@ class Costs:
         return matrix
 
     @dask.delayed
-    def __persist(self, matrix: np.ndarray, metric: str, category: str):
+    def __persist(self, matrix: np.ndarray, metric: str, category: str) -> str:
         """
 
-        :param matrix:
-        :param metric:
-        :param category:
+        :param matrix: Fields rate, ~ minimum cost, ~ maximum cost
+        :param metric: fnr (false negative rate) or fpr (false positive rate)
+        :param category: Category code, e.g., GEO, GPE, etc. (ref. self.definition in config.py)
         :return:
         """
 
