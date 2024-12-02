@@ -1,12 +1,8 @@
 """Module dictionary.py"""
-import logging
 import glob
 import os
 
-import numpy as np
 import pandas as pd
-
-import config
 
 
 class Dictionary:
@@ -16,7 +12,7 @@ class Dictionary:
 
     def __init__(self):
         """
-
+        Constructor
         """
 
         self.__metadata = {'bullet': 'A metrics data set for false negative rate and false positive rate bullet graphs.',
@@ -64,6 +60,5 @@ class Dictionary:
 
         # The metadata dict strings
         frame['metadata'] = frame['section'].map(self.__metadata)
-        logging.info(frame)
 
-        # return frame[['file', 'key', 'metadata']]
+        return frame[['file', 'key', 'metadata']]
