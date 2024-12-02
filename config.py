@@ -33,7 +33,10 @@ class Config:
 
         # Temporary storage area for the mathematical & business metrics
         self.warehouse = os.path.join(os.getcwd(), 'warehouse')
-        self.card_ = os.path.join(self.warehouse, 'card')
+        self.graphs_ = [os.path.join(self.warehouse, 'card', 'bullet'),
+                        os.path.join(self.warehouse, 'card', 'spider'),
+                        os.path.join(self.warehouse, 'cost', 'fnr'),
+                        os.path.join(self.warehouse, 'cost', 'fpr')]
 
         # Each architecture's prime artefacts are within the {architecture}/prime/ path
         self.prime_ = '/prime/'
