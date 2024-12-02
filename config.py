@@ -16,10 +16,8 @@ class Config:
         excluded for names such as warehouse, storage, depository, etc.<br><br>
         """
 
-        root = os.getcwd()
-
         # Limits
-        self.limitations_ = os.path.join(root, 'limitations')
+        self.limitations_ = os.path.join(os.getcwd(), 'limitations')
 
         # Template
         self.s3_parameters_key = 's3_parameters.yaml'
