@@ -33,27 +33,41 @@ class Costs:
         self.__rates = self.__rates[1:]
         self.__rates = self.__rates[..., None]
 
-    def __fnr(self):
-        pass
+    def __fnr(self, category: str):
 
-    def __fpr(self):
+        cost: int = self.__costs.loc['fnr', category]
+
+        numbers = np.multiply(
+            self.__rates, np.expand_dims(self.__frequencies.loc[category, :].to_numpy(), axis=0))
+        factors = cost * (1 + (numbers > 500).astype(int))
+        liabilities = np.multiply(factors, numbers)
+        matrix = np.concat((self.__rates, liabilities), axis=1)
+        logging.info(matrix)
+
+        # data = pd.DataFrame(data=liabilities, columns=['min', 'max'])
+        # data = data.assign(rate=self.__rates)
+
+    def __fpr(self, category: str):
+
+        cost: int = self.__costs.loc['fpr', category]
+        numbers = np.multiply(
+            self.__rates, np.expand_dims(self.__frequencies.loc[category, :].to_numpy(), axis=0))
+        liabilities = cost * numbers
+        matrix = np.concat((self.__rates, liabilities), axis=1)
+        logging.info(matrix)
+
+        # data = pd.DataFrame(data=liabilities, columns=['min', 'max'])
+        # data = data.assign(rate=self.__rates)
+
+    def __persist(self, data: pd.DataFrame):
         pass
 
     def exc(self):
-
-
 
         categories = list(self.__frequencies.index)
 
         for category in categories:
 
-            cost: int = self.__costs.loc['fnr', category]
+            self.__fnr(category=category)
 
-            numbers = np.multiply(
-                self.__rates, np.expand_dims(self.__frequencies.loc[category, :].to_numpy(), axis=0))
-            factors = cost * (1 + (numbers > 500).astype(int))
-            liabilities = np.multiply(factors, numbers)
 
-            data = pd.DataFrame(data=liabilities, columns=['min', 'max'])
-            data = data.assign(rate=self.__rates)
-            logging.info(data)
