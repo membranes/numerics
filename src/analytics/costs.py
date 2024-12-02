@@ -6,6 +6,7 @@ import pandas as pd
 
 import config
 import src.elements.s3_parameters as s3p
+import src.analytics.limits
 
 
 class Costs:
@@ -19,8 +20,13 @@ class Costs:
 
         self.__s3_parameters = s3_parameters
 
+        # Limits instance
+        self.__limits = src.analytics.limits.Limits(s3_parameters=self.__s3_parameters)
+
+        # Configurations
         self.__configurations = config.Config()
 
+        # Rates
         self.__rates = np.linspace(start=0, stop=1, num=101)
         self.__rates = self.__rates[1:]
         self.__rates = self.__rates[..., None]
@@ -33,12 +39,14 @@ class Costs:
 
     def exc(self):
 
-        costs = pd.read_json(
-            path_or_buf=f's3://{self.__s3_parameters.configurations}/limits/costs.json', orient='split')
+        # costs = pd.read_json(
+        #     path_or_buf=f's3://{self.__s3_parameters.configurations}/limits/costs.json', orient='split')
+        costs = self.__limits.exc(filename='costs.json', orient='split')
         logging.info(costs)
 
-        frequencies = pd.read_json(
-            path_or_buf=f's3://{self.__s3_parameters.configurations}/limits/frequencies.json', orient='index')
+        # frequencies = pd.read_json(
+        #     path_or_buf=f's3://{self.__s3_parameters.configurations}/limits/frequencies.json', orient='index')
+        frequencies = self.__limits.exc(filename='frequencies.json', orient='index')
         logging.info(frequencies)
 
         categories = list(frequencies.index)
