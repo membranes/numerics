@@ -1,5 +1,7 @@
 """Module costs.py"""
 import logging
+import os
+import collections
 
 import numpy as np
 import pandas as pd
@@ -7,6 +9,7 @@ import pandas as pd
 import config
 import src.elements.s3_parameters as s3p
 import src.analytics.limits
+import src.functions.objects
 
 
 class Costs:
@@ -20,13 +23,14 @@ class Costs:
 
         self.__s3_parameters = s3_parameters
 
+        # Configurations
+        self.__configurations = config.Config()
+        self.__objects = src.functions.objects.Objects()
+
         # Limits instance
         self.__limits = src.analytics.limits.Limits(s3_parameters=self.__s3_parameters)
         self.__costs = self.__limits.exc(filename='costs.json', orient='split')
         self.__frequencies = self.__limits.exc(filename='frequencies.json', orient='index')
-
-        # Configurations
-        self.__configurations = config.Config()
 
         # Rates
         self.__rates = np.linspace(start=0, stop=1, num=101)
@@ -42,10 +46,8 @@ class Costs:
         factors = cost * (1 + (numbers > 500).astype(int))
         liabilities = np.multiply(factors, numbers)
         matrix = np.concat((self.__rates, liabilities), axis=1)
-        logging.info(matrix)
 
-        # data = pd.DataFrame(data=liabilities, columns=['min', 'max'])
-        # data = data.assign(rate=self.__rates)
+        return matrix
 
     def __fpr(self, category: str):
 
@@ -54,13 +56,21 @@ class Costs:
             self.__rates, np.expand_dims(self.__frequencies.loc[category, :].to_numpy(), axis=0))
         liabilities = cost * numbers
         matrix = np.concat((self.__rates, liabilities), axis=1)
-        logging.info(matrix)
 
-        # data = pd.DataFrame(data=liabilities, columns=['min', 'max'])
-        # data = data.assign(rate=self.__rates)
+        return matrix
 
-    def __persist(self, data: pd.DataFrame):
-        pass
+    def __persist(self, matrix: np.ndarray, metric: str, category: str):
+
+        name = f'{self.__configurations.definition[category]}.json'
+        path = os.path.join(self.__configurations.numerics_, 'cost', metric, name)
+
+        data = pd.DataFrame(data=matrix, columns=['rate', 'min', 'max'])
+        nodes = data.to_dict(orient='tight')
+
+        self.__objects.write(nodes=nodes, path=path)
+
+        # data.to_json(path_or_buf=path, orient='records', index=False)
+
 
     def exc(self):
 
@@ -68,6 +78,5 @@ class Costs:
 
         for category in categories:
 
-            self.__fnr(category=category)
-
-
+            fnr = self.__fnr(category=category)
+            self.__persist(matrix=fnr, metric='fnr', category=category)
