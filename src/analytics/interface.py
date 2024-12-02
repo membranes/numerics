@@ -6,16 +6,19 @@ import pandas as pd
 
 import config
 import src.analytics.architecture
-import src.analytics.derivations
-import src.analytics.spider
 import src.analytics.bullet
 import src.analytics.costs
+import src.analytics.derivations
+import src.analytics.spider
 import src.elements.s3_parameters as s3p
 import src.elements.service as sr
 import src.functions.directories
 
 
 class Interface:
+    """
+    Class Interface
+    """
 
     def __init__(self, service: sr.Service, s3_parameters: s3p.S3Parameters):
         """
@@ -45,9 +48,7 @@ class Interface:
         directories = src.functions.directories.Directories()
 
         for value in self.__configurations.graphs_:
-
             directories.create(value)
-
 
     def __cases(self):
         """
