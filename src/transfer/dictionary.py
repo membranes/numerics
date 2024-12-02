@@ -15,10 +15,15 @@ class Dictionary:
         Constructor
         """
 
-        self.__metadata = {'bullet': {'desc': 'A metrics data set for false negative rate and false positive rate bullet graphs.'},
-                           'spider': {'desc': 'A spider graphs data set for outlining precision, specificity, sensitivity, f score, standard accuracy, and balanced accuracy.'},
-                           'fnr': {'desc': 'The data for illustrating possible false negative rate costs at varying rate points.'},
-                           'fpr': {'desc': 'The data for illustrating possible false positive rate costs at varying rate points.'}}
+        _spider = ('A spider graphs data set for outlining precision, specificity, sensitivity, f score, '
+                   'standard accuracy, and balanced accuracy.')
+
+        # Metadata
+        self.__metadata = {
+            'bullet': {'desc': 'A metrics data set for false negative rate and false positive rate bullet graphs.'},
+            'spider': {'desc': _spider},
+            'fnr': {'desc': 'The data for illustrating possible false negative rate costs at varying rate points.'},
+            'fpr': {'desc': 'The data for illustrating possible false positive rate costs at varying rate points.'}}
 
     @staticmethod
     def __local(path: str, extension: str) -> pd.DataFrame:
@@ -32,7 +37,7 @@ class Dictionary:
         splitter = os.path.basename(path) + os.path.sep
 
         # The list of files within the path directory, including its child directories.
-        files: list[str] = glob.glob(pathname=os.path.join(path, '**',  f'*.{extension}'),
+        files: list[str] = glob.glob(pathname=os.path.join(path, '**', f'*.{extension}'),
                                      recursive=True)
 
         details: list[dict] = [
