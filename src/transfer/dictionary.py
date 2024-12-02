@@ -7,7 +7,7 @@ import pandas as pd
 
 class Dictionary:
     """
-    Class KeyStrings
+    Class Dictionary
     """
 
     def __init__(self):
