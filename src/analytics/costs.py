@@ -22,6 +22,8 @@ class Costs:
 
         # Limits instance
         self.__limits = src.analytics.limits.Limits(s3_parameters=self.__s3_parameters)
+        self.__costs = self.__limits.exc(filename='costs.json', orient='split')
+        self.__frequencies = self.__limits.exc(filename='frequencies.json', orient='index')
 
         # Configurations
         self.__configurations = config.Config()
@@ -39,24 +41,16 @@ class Costs:
 
     def exc(self):
 
-        # costs = pd.read_json(
-        #     path_or_buf=f's3://{self.__s3_parameters.configurations}/limits/costs.json', orient='split')
-        costs = self.__limits.exc(filename='costs.json', orient='split')
-        logging.info(costs)
 
-        # frequencies = pd.read_json(
-        #     path_or_buf=f's3://{self.__s3_parameters.configurations}/limits/frequencies.json', orient='index')
-        frequencies = self.__limits.exc(filename='frequencies.json', orient='index')
-        logging.info(frequencies)
 
-        categories = list(frequencies.index)
+        categories = list(self.__frequencies.index)
 
         for category in categories:
 
-            cost: int = costs.loc['fnr', category]
+            cost: int = self.__costs.loc['fnr', category]
 
             numbers = np.multiply(
-                self.__rates, np.expand_dims(frequencies.loc[category, :].to_numpy(), axis=0))
+                self.__rates, np.expand_dims(self.__frequencies.loc[category, :].to_numpy(), axis=0))
             factors = cost * (1 + (numbers > 500).astype(int))
             liabilities = np.multiply(factors, numbers)
 
