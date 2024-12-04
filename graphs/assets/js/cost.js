@@ -63,9 +63,8 @@ function generateChart(fileNameKey) {
             },
             subtitle: {
                 text:
-                    "Source: " +
-                    '<a href="github.com/membranes"' +
-                    'target="_blank">Annual missed entity range[..., ...] | Cost per missed entity: ...</a>'
+                    '~ # of Missed Entities per Annum: [..., ...]<br>' +
+                    'Cost per Missed Entity: ...'
                 // align: 'right'
             },
             xAxis: {
@@ -137,9 +136,8 @@ function generateChart(fileNameKey) {
             },
             subtitle: {
                 text:
-                    "Source: " +
-                    '<a href="github.com/membranes"' +
-                    'target="_blank">Annual missed entity range[..., ...] | Cost per missed entity: ...</a>'
+                    '~ # of Missed Entities per Annum: [..., ...]<br>' +
+                    'Cost per Missed Entity: ...'
                 // align: 'right'
             },
             xAxis: {
