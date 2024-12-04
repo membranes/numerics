@@ -40,7 +40,7 @@ dropdown.on('change', function (e) {
 function generateChart(fileNameKey) {
 
     $.getJSON('../../warehouse/numerics/cost/fnr/' + fileNameKey + '.json', function (calculations) {
-        
+
 
     }).fail(function () {
         console.log("Missing");
@@ -50,8 +50,7 @@ function generateChart(fileNameKey) {
 
     $.getJSON('../../warehouse/numerics/cost/fpr/' + fileNameKey + '.json', function (calculations) {
 
-
-
+        
     }).fail(function () {
         console.log("Missing");
         $('#container0002').empty();
