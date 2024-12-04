@@ -1,0 +1,8 @@
+[
+  {"desc": "geographic", "name": "Geographic Entities"},
+  {"desc": "geopolitical", "name": "Geopolitical Entities"},
+  {"desc": "miscellaneous", "name": "Miscellaneous"},
+  {"desc": "organisation", "name": "Organisation"},
+  {"desc": "person", "name": "Person"},
+  {"desc": "time", "name": "Time"}
+]
