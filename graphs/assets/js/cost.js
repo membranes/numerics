@@ -39,6 +39,15 @@ dropdown.on('change', function (e) {
 // Graphs/s
 function generateChart(fileNameKey) {
 
+    $.getJSON('../../warehouse/numerics/cost/fnr/' + fileNameKey + '.json', function (calculations) {
+
+
+
+    }).fail(function () {
+        console.log("Missing");
+        $('#container0001').empty();
+    });
+
 
 
 }
