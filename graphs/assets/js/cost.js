@@ -50,25 +50,29 @@ function generateChart(fileNameKey) {
                     type: "x",
                 },
                 scrollablePlotArea: {
-                    minWidth: 600,
+                    // minWidth: 600,
                     scrollPositionX: 1,
                 },
             },
+            credits: {
+                enabled: false
+            },
             title: {
-                text: "Temperature variation by day",
-                align: "left",
+                text: "Approximate Cost Boundaries<br>by false negative rates<br>"
+                // align: 'right'
             },
             subtitle: {
                 text:
                     "Source: " +
                     '<a href="github.com/membranes"' +
-                    'target="_blank">entity detection ...</a>',
-                align: "left",
+                    'target="_blank">Annual missed entity range[..., ...] | Cost per missed entity: ...</a>'
+                // align: 'right'
             },
             xAxis: {
                 // type: "datetime"
             },
             yAxis: {
+                type: 'logarithmic',
                 title: {
                     text: null,
                 },
@@ -120,25 +124,29 @@ function generateChart(fileNameKey) {
                     type: "x",
                 },
                 scrollablePlotArea: {
-                    minWidth: 600,
+                    // minWidth: 600,
                     scrollPositionX: 1,
                 },
             },
+            credits: {
+                enabled: false
+            },
             title: {
-                text: "Temperature variation by day",
-                align: "left",
+                text: "Approximate Cost Boundaries<br>by false positive rates<br>",
+                // align: 'right'
             },
             subtitle: {
                 text:
                     "Source: " +
                     '<a href="github.com/membranes"' +
-                    'target="_blank">entity detection ...</a>',
-                align: "left",
+                    'target="_blank">Annual missed entity range[..., ...] | Cost per missed entity: ...</a>'
+                // align: 'right'
             },
             xAxis: {
                 // type: "datetime"
             },
             yAxis: {
+                type: 'logarithmic',
                 title: {
                     text: null,
                 },
