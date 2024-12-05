@@ -50,25 +50,21 @@ function generateChart(fileNameKey) {
                     type: "x",
                 },
                 scrollablePlotArea: {
-                    // minWidth: 600,
                     scrollPositionX: 1,
-                },
+                }
             },
             credits: {
                 enabled: false
             },
             title: {
-                text: "Approximate Annual Cost Boundaries<br>by false negative rates<br>"
-                // align: 'right'
+                text: "By false negative rates<br>"
             },
             subtitle: {
                 text:
                     '~ # of Missed Entities per Annum: [..., ...]<br>' +
                     'Cost per Missed Entity: ...'
-                // align: 'right'
             },
             xAxis: {
-                // type: "datetime"
             },
             yAxis: {
                 type: 'logarithmic',
@@ -79,8 +75,9 @@ function generateChart(fileNameKey) {
             tooltip: {
                 crosshairs: true,
                 shared: true,
-                valueSuffix: "£"
-                // xDateFormat: "%A, %b %e"
+                valueSuffix: "£",
+                headerFormat: '<b>FNR: {point.x:,.3f}</b><br>',
+                pointFormat: '<b>Est. Cost Range</b> (£): <b>[{point.low:,.2f}, {point.high:,.2f}]</b><br>'
             },
             legend: {
                 enabled: false,
@@ -123,7 +120,6 @@ function generateChart(fileNameKey) {
                     type: "x",
                 },
                 scrollablePlotArea: {
-                    // minWidth: 600,
                     scrollPositionX: 1,
                 },
             },
@@ -131,17 +127,15 @@ function generateChart(fileNameKey) {
                 enabled: false
             },
             title: {
-                text: "Approximate Annual Cost Boundaries<br>by false positive rates<br>",
-                // align: 'right'
+                text: "By false positive rates<br>"
             },
             subtitle: {
                 text:
                     '~ # of Missed Entities per Annum: [..., ...]<br>' +
-                    'Cost per Missed Entity: ...'
-                // align: 'right'
+                    'Cost per Missed Entity: ...<br>'
             },
             xAxis: {
-                // type: "datetime"
+
             },
             yAxis: {
                 type: 'logarithmic',
@@ -154,8 +148,7 @@ function generateChart(fileNameKey) {
                 shared: true,
                 valueSuffix: "£",
                 headerFormat: '<b>FPR: {point.x:,.3f}</b><br>',
-                pointFormat: '<b>Est. Cost Range</b> (£): <b>[{point.low:,.2f}, {point.high:,.2f}]<b></b>'
-                // xDateFormat: "%A, %b %e"
+                pointFormat: '<b>Est. Cost Range</b> (£): <b>[{point.low:,.2f}, {point.high:,.2f}]</b><br>'
             },
             legend: {
                 enabled: false,
