@@ -58,7 +58,7 @@ function generateChart(fileNameKey) {
                 enabled: false
             },
             title: {
-                text: "Approximate Cost Boundaries<br>by false negative rates<br>"
+                text: "Approximate Annual Cost Boundaries<br>by false negative rates<br>"
                 // align: 'right'
             },
             subtitle: {
@@ -131,7 +131,7 @@ function generateChart(fileNameKey) {
                 enabled: false
             },
             title: {
-                text: "Approximate Cost Boundaries<br>by false positive rates<br>",
+                text: "Approximate Annual Cost Boundaries<br>by false positive rates<br>",
                 // align: 'right'
             },
             subtitle: {
@@ -152,7 +152,9 @@ function generateChart(fileNameKey) {
             tooltip: {
                 crosshairs: true,
                 shared: true,
-                valueSuffix: "£"
+                valueSuffix: "£",
+                headerFormat: '<b>FPR: {point.x:,.3f}</b><br>',
+                pointFormat: '<b>Est. Cost Range</b> (£): <b>[{point.low:,.2f}, {point.high:,.2f}]<b></b>'
                 // xDateFormat: "%A, %b %e"
             },
             legend: {
