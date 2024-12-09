@@ -290,7 +290,7 @@ exclude-too-few-public-methods=
 ignored-parents=
 
 # Maximum number of arguments for function / method.
-max-args=5
+max-args=7
 
 # Maximum number of attributes for a class (see R0902).
 max-attributes=7
@@ -299,7 +299,7 @@ max-attributes=7
 max-bool-expr=5
 
 # Maximum number of branch for function / method body.
-max-branches=12
+max-branches=8
 
 # Maximum number of locals for function / method body.
 max-locals=15
@@ -311,16 +311,16 @@ max-parents=7
 max-positional-arguments=5
 
 # Maximum number of public methods for a class (see R0904).
-max-public-methods=20
+max-public-methods=13
 
 # Maximum number of return / yield for function / method body.
 max-returns=6
 
 # Maximum number of statements in function / method body.
-max-statements=50
+max-statements=16
 
 # Minimum number of public methods for a class (see R0903).
-min-public-methods=2
+min-public-methods=1
 
 
 [EXCEPTIONS]
@@ -345,10 +345,10 @@ indent-after-paren=4
 indent-string='    '
 
 # Maximum number of characters on a single line.
-max-line-length=100
+max-line-length=127
 
 # Maximum number of lines in a module.
-max-module-lines=1000
+max-module-lines=135
 
 # Allow the body of a class to be on the same line as the declaration if body
 # contains single statement.
@@ -438,7 +438,8 @@ disable=raw-checker-failed,
         deprecated-pragma,
         use-symbolic-message-instead,
         use-implicit-booleaness-not-comparison-to-string,
-        use-implicit-booleaness-not-comparison-to-zero
+        use-implicit-booleaness-not-comparison-to-zero,
+        possibly-used-before-assignment
 
 # Enable the message, report, category or checker with the given id(s). You can
 # either give multiple identifier separated by comma (,) or put this option
@@ -457,9 +458,9 @@ timeout-methods=requests.api.delete,requests.api.get,requests.api.head,requests.
 [MISCELLANEOUS]
 
 # List of note tags to take in consideration, separated by a comma.
-notes=FIXME,
-      XXX,
-      TODO
+notes=REDESIGN,
+      IN PROGRESS,
+      PENDING
 
 # Regular expression of note tags to take in consideration.
 notes-rgx=
