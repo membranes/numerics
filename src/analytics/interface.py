@@ -12,6 +12,7 @@ import src.analytics.derivations
 import src.analytics.spider
 import src.elements.s3_parameters as s3p
 import src.functions.directories
+import src.functions.objects
 
 
 class Interface:
@@ -50,19 +51,17 @@ class Interface:
         for value in self.__configurations.graphs_:
             directories.create(value)
 
-    def __cases(self):
+    def __cases(self) -> pd.DataFrame:
         """
 
         :return: Each instance represents a distinct tag; tag = annotation &#x29FA; category.
                  The frame must include the error matrix frequencies is tp, tn, fp, & fn.
         """
 
-        path = os.path.join(self.__configurations.artefacts_, self.__architecture, self.__configurations.branch)
+        path = os.path.join(
+            self.__configurations.artefacts_, self.__architecture, self.__configurations.branch)
 
-        try:
-            cases = pd.read_json(path_or_buf=path, orient='index')
-        except ImportError as err:
-            raise err from err
+        cases = src.functions.objects.Objects().frame(path=path, orient='index')
 
         return cases
 
