@@ -1,5 +1,6 @@
 transformers==4.45.2
 accelerate
+gradio
 ray[data,train,tune,serve]
 bayesian-optimization>=1.5.1
 optuna
