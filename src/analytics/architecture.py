@@ -25,6 +25,8 @@ class Architecture:
 
         self.__configurations = config.Config()
 
+        self.__objects = src.functions.objects.Objects()
+
         # Logging
         logging.basicConfig(level=logging.INFO,
                             format='\n\n%(message)s\n%(asctime)s.%(msecs)03d',
@@ -39,11 +41,7 @@ class Architecture:
         """
 
         path = os.path.join(tree, self.__configurations.branch)
-
-        try:
-            cases = pd.read_json(path_or_buf=path, orient='index')
-        except ImportError as err:
-            raise err from err
+        cases = self.__objects.frame(path=path, orient='index')
 
         return cases
 
@@ -80,7 +78,7 @@ class Architecture:
         """
 
         path = os.path.join(self.__configurations.numerics_, 'best', 'architecture.json')
-        message = src.functions.objects.Objects().write(nodes={'name': best}, path=path)
+        message = self.__objects.write(nodes={'name': best}, path=path)
 
         self.__logger.info(message)
 
