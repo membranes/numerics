@@ -34,6 +34,9 @@ class Interface:
         # Configurations
         self.__configurations = config.Config()
 
+        # Prepare storage
+        self.__storage()
+
         # The architecture name of the best model, ...
         self.__architecture: str = src.analytics.architecture.Architecture().exc()
         logging.info('THE ARCHITECTURE: %s', self.__architecture)
@@ -87,8 +90,6 @@ class Interface:
 
         :return:
         """
-
-        self.__storage()
 
         # The error matrix frequencies of a case, and their error metrics
         # derivations.  Additionally, a category column.
