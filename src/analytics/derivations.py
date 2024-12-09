@@ -91,10 +91,10 @@ class Derivations:
 
         numerator = self.cases.tp.multiply(self.cases.tn) - self.cases.fp.multiply(self.cases.fn)
 
-        pcp = (self.cases.tp + self.cases.fp)
-        tcp = (self.cases.tp + self.cases.fn)
-        tcn = (self.cases.fp + self.cases.tn)
-        pcn = (self.cases.fn + self.cases.tn)
+        pcp = self.cases.tp + self.cases.fp
+        tcp = self.cases.tp + self.cases.fn
+        tcn = self.cases.fp + self.cases.tn
+        pcn = self.cases.fn + self.cases.tn
         denominator = pcp.multiply(tcp).multiply(tcn).multiply(pcn).pow(0.5)
 
         return numerator.truediv(denominator)
