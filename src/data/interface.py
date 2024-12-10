@@ -3,7 +3,6 @@ import logging
 
 import pandas as pd
 
-import config
 import src.data.artefacts
 import src.elements.s3_parameters as s3p
 import src.elements.service as sr
@@ -26,9 +25,6 @@ class Interface:
 
         self.__service = service
         self.__s3_parameters = s3_parameters
-
-        # Configurations
-        self.__configurations = config.Config()
 
         # Logging
         logging.basicConfig(level=logging.INFO,
