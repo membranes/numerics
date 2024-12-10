@@ -55,8 +55,8 @@ class Artefacts:
         """
 
         listings: list = [k for k in keys if
-                          k.contains(self.__configurations.prime_ + 'model') |
-                          k.contains(self.__configurations.prime_ + 'metrics')]
+                          k.__contains__(self.__configurations.prime_ + 'model') |
+                          k.__contains__(self.__configurations.prime_ + 'metrics')]
 
         return listings
 
