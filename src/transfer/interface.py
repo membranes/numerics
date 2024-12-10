@@ -2,7 +2,6 @@
 import logging
 import os
 
-import config
 import src.elements.s3_parameters as s3p
 import src.elements.service as sr
 import src.s3.ingress
@@ -26,7 +25,6 @@ class Interface:
         self.__s3_parameters: s3p.S3Parameters = s3_parameters
 
         # Instances
-        self.__configurations = config.Config()
         self.__dictionary = src.transfer.dictionary.Dictionary()
 
     def exc(self):

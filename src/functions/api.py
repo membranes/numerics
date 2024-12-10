@@ -1,7 +1,6 @@
 """Module api.py"""
 import sys
 
-import yaml
 import requests
 
 
@@ -13,7 +12,7 @@ class API:
     def __init__(self):
         pass
 
-    def __call__(self, url: str) -> dict:
+    def __call__(self, url: str) -> str:
         """
 
         :param url: An online data source URL (Uniform Resource Locator)
@@ -30,6 +29,6 @@ class API:
 
         if response.status_code == 200:
             content = response.content.decode(encoding='utf-8')
-            return yaml.safe_load(content)
+            return content
 
         sys.exit(response.status_code)

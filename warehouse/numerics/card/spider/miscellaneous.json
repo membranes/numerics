@@ -1,0 +1,33 @@
+{
+    "index": [
+        [
+            "O",
+            "O"
+        ]
+    ],
+    "columns": [
+        "Precision",
+        "Sensitivity",
+        "Specificity",
+        "F Score",
+        "Balanced Accuracy",
+        "Standard Accuracy"
+    ],
+    "data": [
+        [
+            0.9923386778295553,
+            0.9898369179862917,
+            0.9561878952122854,
+            0.9910862191370198,
+            0.9730124065992886,
+            0.9848393372241229
+        ]
+    ],
+    "index_names": [
+        "tag",
+        "category"
+    ],
+    "column_names": [
+        null
+    ]
+}

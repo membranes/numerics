@@ -6,7 +6,7 @@
  * 2. Prevent iOS text size adjust after orientation change, without disabling user zoom.
  */
 html {
-    font-family: Vollkorn, Gafata, Roboto, serif, sans-serif; /* 1 */
+    font-family: Inter, Montserrat, Vollkorn, Gafata, Roboto, serif, sans-serif; /* 1 */
     -ms-text-size-adjust: 100%; /* 2 */
     -webkit-text-size-adjust: 100%; /* 2 */
 }
@@ -293,6 +293,8 @@ button {
 button,
 select {
     text-transform: none;
+    border-width: 0;
+    font-family: Inter, Montserrat, Vollkorn, serif;
 }
 
 /**

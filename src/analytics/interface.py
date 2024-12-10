@@ -11,8 +11,8 @@ import src.analytics.costs
 import src.analytics.derivations
 import src.analytics.spider
 import src.elements.s3_parameters as s3p
-import src.elements.service as sr
 import src.functions.directories
+import src.functions.objects
 
 
 class Interface:
@@ -20,19 +20,20 @@ class Interface:
     Class Interface
     """
 
-    def __init__(self, service: sr.Service, s3_parameters: s3p.S3Parameters):
+    def __init__(self, s3_parameters: s3p.S3Parameters):
         """
 
-        :param service: A suite of services for interacting with Amazon Web Services.
         :param s3_parameters: The overarching S3 (Simple Storage Service) parameters
                               settings of this project, e.g., region code name, buckets, etc.
         """
 
-        self.__service = service
         self.__s3_parameters = s3_parameters
 
         # Configurations
         self.__configurations = config.Config()
+
+        # Prepare storage
+        self.__storage()
 
         # The architecture name of the best model, ...
         self.__architecture: str = src.analytics.architecture.Architecture().exc()
@@ -50,19 +51,17 @@ class Interface:
         for value in self.__configurations.graphs_:
             directories.create(value)
 
-    def __cases(self):
+    def __cases(self) -> pd.DataFrame:
         """
 
         :return: Each instance represents a distinct tag; tag = annotation &#x29FA; category.
                  The frame must include the error matrix frequencies is tp, tn, fp, & fn.
         """
 
-        path = os.path.join(self.__configurations.artefacts_, self.__architecture, self.__configurations.branch)
+        path = os.path.join(
+            self.__configurations.artefacts_, self.__architecture, self.__configurations.branch)
 
-        try:
-            cases = pd.read_json(path_or_buf=path, orient='index')
-        except ImportError as err:
-            raise err from err
+        cases = src.functions.objects.Objects().frame(path=path, orient='index')
 
         return cases
 
@@ -87,8 +86,6 @@ class Interface:
 
         :return:
         """
-
-        self.__storage()
 
         # The error matrix frequencies of a case, and their error metrics
         # derivations.  Additionally, a category column.

@@ -3,6 +3,7 @@ Module objects.py
 """
 import json
 import pathlib
+import pandas as pd
 
 import src.functions.api
 
@@ -51,8 +52,9 @@ class Objects:
         """
 
         instance = src.functions.api.API()
+        content = instance(url=url)
 
-        return instance(url=url)
+        return json.loads(content)
 
     @staticmethod
     def read(uri: str) -> dict:
@@ -67,3 +69,19 @@ class Objects:
                 return json.load(fp=disk)
         except ImportError as err:
             raise err from err
+
+    @staticmethod
+    def frame(path: str, orient: str) -> pd.DataFrame:
+        """
+
+        :param path:
+        :param orient:
+        :return:
+        """
+
+        try:
+            cases = pd.read_json(path_or_buf=path, orient=orient)
+        except ImportError as err:
+            raise err from err
+
+        return cases

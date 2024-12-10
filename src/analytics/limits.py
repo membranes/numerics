@@ -1,5 +1,4 @@
 """Module limits.py"""
-import logging
 
 import pandas as pd
 
@@ -24,12 +23,6 @@ class Limits:
 
         # The Amazon S3 (Simple Storage Service) path.
         self.__path = f's3://{self.__s3_parameters.configurations}/limits/'
-
-        # Logging
-        logging.basicConfig(level=logging.INFO,
-                            format='\n\n%(message)s\n%(asctime)s.%(msecs)03d',
-                            datefmt='%Y-%m-%d %H:%M:%S')
-        self.__logger = logging.getLogger(__name__)
 
     def __get_data(self, filename: str, orient: str):
         """

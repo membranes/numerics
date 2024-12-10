@@ -19,7 +19,7 @@ class Dictionary:
                    'standard accuracy, and balanced accuracy.')
 
         # Metadata
-        self.__metadata = {
+        self.__metadata = {'best': {'desc': 'The architecture name of the best model.'},
             'bullet': {'desc': 'A metrics data set for false negative rate and false positive rate bullet graphs.'},
             'spider': {'desc': _spider},
             'fnr': {'desc': 'The data for illustrating possible false negative rate costs at varying rate points.'},

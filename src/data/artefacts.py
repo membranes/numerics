@@ -1,3 +1,4 @@
+"""Module artefacts.py"""
 import logging
 import os
 

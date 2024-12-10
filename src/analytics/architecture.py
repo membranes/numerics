@@ -7,6 +7,7 @@ import pandas as pd
 
 import config
 import src.analytics.derivations
+import src.functions.objects
 
 
 class Architecture:
@@ -24,6 +25,8 @@ class Architecture:
 
         self.__configurations = config.Config()
 
+        self.__objects = src.functions.objects.Objects()
+
         # Logging
         logging.basicConfig(level=logging.INFO,
                             format='\n\n%(message)s\n%(asctime)s.%(msecs)03d',
@@ -38,11 +41,7 @@ class Architecture:
         """
 
         path = os.path.join(tree, self.__configurations.branch)
-
-        try:
-            cases = pd.read_json(path_or_buf=path, orient='index')
-        except ImportError as err:
-            raise err from err
+        cases = self.__objects.frame(path=path, orient='index')
 
         return cases
 
@@ -71,6 +70,18 @@ class Architecture:
 
         return selection['architecture']
 
+    def __save(self, best: str):
+        """
+
+        :param best:
+        :return:
+        """
+
+        path = os.path.join(self.__configurations.numerics_, 'best', 'architecture.json')
+        message = self.__objects.write(nodes={'name': best}, path=path)
+
+        self.__logger.info(message)
+
 
     def exc(self) -> str:
         """
@@ -85,14 +96,14 @@ class Architecture:
         # Each tree/architecture has a testing/fundamental.json dictionary
         computations = []
         for tree in trees:
-
             cases = self.__cases(tree=tree)
-
             values = {"median": self.__median_mcc(cases=cases),
                       "architecture": os.path.basename(tree)}
-
             computations.append(values)
 
         data = pd.DataFrame.from_records(computations)
+        best = self.__best(data=data)
 
-        return self.__best(data=data)
+        self.__save(best=best)
+
+        return best

@@ -29,8 +29,9 @@ class Serial:
         """
 
         instance = src.functions.api.API()
+        content = instance(url=url)
 
-        return instance(url=url)
+        return yaml.safe_load(content)
 
     @staticmethod
     def read(uri: str) -> dict:

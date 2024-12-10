@@ -13,6 +13,9 @@ import src.functions.objects
 
 
 class Costs:
+    """
+    Class Costs
+    """
 
     def __init__(self, s3_parameters: s3p.S3Parameters):
         """
