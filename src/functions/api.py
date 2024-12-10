@@ -1,7 +1,6 @@
 """Module api.py"""
 import sys
 
-import yaml
 import requests
 
 
