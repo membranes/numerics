@@ -1,3 +1,4 @@
+"""Module artefacts.py"""
 import logging
 import os
 
@@ -54,8 +55,8 @@ class Artefacts:
         """
 
         listings: list = [k for k in keys if
-                          k.__contains__(self.__configurations.prime_ + 'model') |
-                          k.__contains__(self.__configurations.prime_ + 'metrics')]
+                          k.contains(self.__configurations.prime_ + 'model') |
+                          k.contains(self.__configurations.prime_ + 'metrics')]
 
         return listings
 
