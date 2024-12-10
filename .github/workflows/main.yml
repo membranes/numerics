@@ -89,22 +89,22 @@ jobs:
           echo "============================= pylint session starts =============================="
           
           printf "\n Package src/analytics"
-          pylint --rcfile pylintrc src/analytics
+          pylint --rcfile .pylintrc src/analytics
           
           printf "\n Package src/data"
-          pylint --rcfile pylintrc src/data
+          pylint --rcfile .pylintrc src/data
           
           printf "\n Package src/elements"
-          pylint --rcfile pylintrc src/elements
+          pylint --rcfile .pylintrc src/elements
           
           printf "\n Package src/functions"
-          pylint --rcfile pylintrc src/functions
+          pylint --rcfile .pylintrc src/functions
           
           printf "\n Package src/s3"
-          pylint --rcfile pylintrc src/s3
+          pylint --rcfile .pylintrc src/s3
           
           printf "\n Package src/transfer"
-          pylint --rcfile pylintrc src/transfer
+          pylint --rcfile .pylintrc src/transfer
 
       - name: Test with pytest
         run: |
