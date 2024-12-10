@@ -1,5 +1,4 @@
 """Module egress.py"""
-import logging
 import pathlib
 
 import boto3
@@ -24,12 +23,6 @@ class Egress:
 
         self.__s3_client: boto3.session.Session.client = service.s3_client
         self.__bucket_name = bucket_name
-
-        # Logging
-        logging.basicConfig(level=logging.INFO,
-                            format='\n\n%(message)s\n%(asctime)s.%(msecs)03d',
-                            datefmt='%Y-%m-%d %H:%M:%S')
-        self.__logger = logging.getLogger(__name__)
 
     @dask.delayed
     def __egress(self, key: str, filename: str) -> str:
