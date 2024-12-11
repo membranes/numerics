@@ -15,11 +15,13 @@ class Dictionary:
         Constructor
         """
 
-        _spider = ('A spider graphs data set for outlining precision, specificity, sensitivity, f score, '
+        _spider = ('A spider graph data set for outlining precision, specificity, sensitivity, f score, '
                    'standard accuracy, and balanced accuracy.')
 
         # Metadata
-        self.__metadata = {'best': {'desc': 'The architecture name of the best model.'},
+        self.__metadata = {
+            'best': {'desc': 'The architecture name of the best model.'},
+            'model': {'desc': 'The details of the best model; for inference.'},
             'bullet': {'desc': 'A metrics data set for false negative rate and false positive rate bullet graphs.'},
             'spider': {'desc': _spider},
             'fnr': {'desc': 'The data for illustrating possible false negative rate costs at varying rate points.'},
