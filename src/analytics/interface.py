@@ -41,7 +41,7 @@ class Interface:
 
     def __storage(self):
         """
-        Creates all the paths for the graphing data.
+        Creates all the paths for the graphing & serving data.
 
         :return:
         """
