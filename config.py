@@ -32,7 +32,7 @@ class Config:
         # Temporary storage area for the mathematical & business metrics
         self.warehouse = os.path.join(os.getcwd(), 'warehouse')
         self.numerics_ = os.path.join(self.warehouse, 'numerics')
-        self.graphs_ = [os.path.join(self.numerics_, 'best'),
+        self.graphs_ = [os.path.join(self.numerics_, 'best', 'model'),
                         os.path.join(self.numerics_, 'card', 'bullet'),
                         os.path.join(self.numerics_, 'card', 'spider'),
                         os.path.join(self.numerics_, 'cost', 'fnr'),
