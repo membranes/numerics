@@ -1,9 +1,12 @@
-
+"""Module cost_false_positive_rate.py"""
 import numpy as np
 import pandas as pd
 
 
 class CostFalsePositiveRate:
+    """
+    False Positive Rate Cost
+    """
 
     def __init__(self, rates: np.ndarray, costs: pd.DataFrame, frequencies: pd.DataFrame):
         """
@@ -17,7 +20,7 @@ class CostFalsePositiveRate:
         self.__costs = costs
         self.__frequencies = frequencies
 
-    def __estimates(self, cost: int, boundaries: pd.DataFrame) -> np.ndarray:
+    def __estimates_fpr(self, cost: int, boundaries: pd.DataFrame) -> np.ndarray:
         """
 
         :param cost:
@@ -52,12 +55,16 @@ class CostFalsePositiveRate:
         :return:
         """
 
+        # False Negative Rate Cost per Category
         cost: int = self.__costs.loc['fpr', category]
+
+        # The approximate minimum & maximum ...
         boundaries = self.__frequencies.loc[category, :]
 
-        estimates = self.__estimates(cost=cost, boundaries=boundaries)
+        # Hence
+        estimates = self.__estimates_fpr(cost=cost, boundaries=boundaries)
         nodes = self.__nodes(estimates=estimates)
-        nodes['cost'] = cost
+        nodes['cost'] = int(cost)
         nodes['approximate_annual_frequencies'] = boundaries.to_numpy().tolist()
 
         return nodes
