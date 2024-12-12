@@ -24,15 +24,15 @@ class CostFalseNegativeRate:
         self.__frequencies = frequencies
 
 
-    def __estimates(self, category: str) -> np.ndarray:
+
+
+    def __estimates(self, category: str, cost: int, boundaries: pd.DataFrame) -> np.ndarray:
 
         n_inflection = 500
 
-        cost: int = self.__costs.loc['fnr', category]
-
         # Possible missed classifications range per rate value of a static annual frequency range
-        numbers = np.multiply(self.__rates,
-                              np.expand_dims(self.__frequencies.loc[category, :].to_numpy(), axis=0))
+        numbers = np.multiply(
+            self.__rates, np.expand_dims(boundaries.to_numpy(), axis=0))
 
         # Hence
         factors = cost * (1 + 0.5*(numbers > n_inflection).astype(int))
@@ -41,13 +41,21 @@ class CostFalseNegativeRate:
 
         return estimates
 
-    def __structure(self, estimates: np.ndarray):
+    def __nodes(self, estimates: np.ndarray):
 
         # x: rate, low: ~ minimum cost, high: ~ maximum cost
         data = pd.DataFrame(data=estimates, columns=['x', 'low', 'high'])
         nodes = data.to_dict(orient='tight')
 
+        return nodes
+
     def exc(self, category: str):
 
-        estimates = self.__estimates(category=category)
-        self.__structure(estimates=estimates)
+        cost: int = self.__costs.loc['fnr', category]
+        boundaries: pd.DataFrame = self.__frequencies.loc[category, :]
+
+        estimates = self.__estimates(category=category, cost=cost, boundaries=boundaries)
+        nodes = self.__nodes(estimates=estimates)
+
+        nodes['cost'] = cost
+        nodes['approximate_annual_frequencies'] = boundaries
