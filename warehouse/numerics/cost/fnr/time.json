@@ -613,5 +613,10 @@
     ],
     "column_names": [
         null
+    ],
+    "cost": 65,
+    "approximate_annual_frequencies": [
+        750,
+        1150
     ]
 }
