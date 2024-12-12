@@ -26,7 +26,7 @@ class CostFalseNegativeRate:
         self.__costs = costs
         self.__frequencies = frequencies
 
-    def __estimates(self, cost: int, boundaries: pd.DataFrame) -> np.ndarray:
+    def __estimates_fnr(self, cost: int, boundaries: pd.DataFrame) -> np.ndarray:
         """
 
         :param cost:
@@ -74,9 +74,10 @@ class CostFalseNegativeRate:
         # The approximate minimum & maximum ...
         boundaries: pd.DataFrame = self.__frequencies.loc[category, :]
 
-        estimates = self.__estimates(cost=cost, boundaries=boundaries)
+        # Hence
+        estimates = self.__estimates_fnr(cost=cost, boundaries=boundaries)
         nodes = self.__nodes(estimates=estimates)
-        nodes['cost'] = cost
+        nodes['cost'] = int(cost)
         nodes['approximate_annual_frequencies'] = boundaries.to_numpy().tolist()
 
         return nodes
