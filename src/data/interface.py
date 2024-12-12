@@ -44,6 +44,7 @@ class Interface:
         self.__logger.info(strings)
 
         # Retrieve the artefacts
-        states = src.s3.directives.Directives(s3_parameters=self.__s3_parameters).exc(
+        message: bool = src.s3.directives.Directives(s3_parameters=self.__s3_parameters).exc(
             source=strings['source'], destination=strings['destination'])
-        self.__logger.info(states)
+
+        return message
