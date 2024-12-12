@@ -1,4 +1,4 @@
-"""Module costs.py"""
+"""Module cost.py"""
 import logging
 import os
 
