@@ -48,7 +48,7 @@ class CostFalseNegativeRate:
         return estimates
 
     @staticmethod
-    def __nodes(estimates: np.ndarray):
+    def __nodes(estimates: np.ndarray) -> dict:
         """
 
         :param estimates:
