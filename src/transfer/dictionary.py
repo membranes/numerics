@@ -1,5 +1,6 @@
 """Module dictionary.py"""
 import glob
+import logging
 import os
 
 import pandas as pd
@@ -50,7 +51,7 @@ class Dictionary:
 
         return pd.DataFrame.from_records(details)
 
-    def exc(self, path: str, extension: str, prefix: str):
+    def exc(self, path: str, extension: str, prefix: str) -> pd.DataFrame:
         """
 
         :param path: The path wherein the files of interest lie
@@ -58,6 +59,8 @@ class Dictionary:
         :param prefix: The Amazon S3 (Simple Storage Service) where the files of path are heading
         :return:
         """
+
+        logging.info(path)
 
         local: pd.DataFrame = self.__local(path=path, extension=extension)
 
