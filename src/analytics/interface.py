@@ -13,6 +13,7 @@ import src.analytics.spider
 import src.elements.s3_parameters as s3p
 import src.functions.directories
 import src.functions.objects
+import src.analytics.limits
 
 
 class Interface:
@@ -88,6 +89,12 @@ class Interface:
 
         logging.info('The best model, named by architecture: %s', self.__architecture)
 
+
+        # Limits instance
+        limits = src.analytics.limits.Limits(s3_parameters=self.__s3_parameters)
+        costs: pd.DataFrame = limits.exc(filename='costs.json', orient='split')
+        frequencies: pd.DataFrame = limits.exc(filename='frequencies.json', orient='index')
+
         # The error matrix frequencies of a case, and their error metrics
         # derivations.  Additionally, a category column.
         cases = self.__cases()
@@ -98,6 +105,6 @@ class Interface:
         # Spiders
         src.analytics.spider.Spider().exc(blob=derivations)
         src.analytics.bullet.Bullet(s3_parameters=self.__s3_parameters).exc(blob=derivations)
-        src.analytics.cost.Cost(s3_parameters=self.__s3_parameters).exc()
+        src.analytics.cost.Cost(costs=costs, frequencies=frequencies).exc()
 
         return self.__architecture
