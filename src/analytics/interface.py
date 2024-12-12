@@ -37,7 +37,6 @@ class Interface:
 
         # The architecture name of the best model, ...
         self.__architecture: str = src.analytics.architecture.Architecture().exc()
-        logging.info('THE ARCHITECTURE: %s', self.__architecture)
 
     def __storage(self):
         """
@@ -81,11 +80,13 @@ class Interface:
 
         return derivations
 
-    def exc(self):
+    def exc(self) -> str:
         """
 
         :return:
         """
+
+        logging.info('The best model, named by architecture: %s', self.__architecture)
 
         # The error matrix frequencies of a case, and their error metrics
         # derivations.  Additionally, a category column.
@@ -98,3 +99,5 @@ class Interface:
         src.analytics.spider.Spider().exc(blob=derivations)
         src.analytics.bullet.Bullet(s3_parameters=self.__s3_parameters).exc(blob=derivations)
         src.analytics.costs.Costs(s3_parameters=self.__s3_parameters).exc()
+
+        return self.__architecture
