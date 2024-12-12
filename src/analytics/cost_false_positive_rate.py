@@ -17,7 +17,7 @@ class CostFalsePositiveRate:
         self.__costs = costs
         self.__frequencies = frequencies
 
-    def __estimates(self, cost: int, boundaries: pd.DataFrame):
+    def __estimates(self, cost: int, boundaries: pd.DataFrame) -> np.ndarray:
         """
 
         :param cost:
@@ -25,15 +25,14 @@ class CostFalsePositiveRate:
         :return:
         """
 
-        numbers = np.multiply(self.__rates,
-                              np.expand_dims(boundaries.to_numpy(), axis=0))
-        liabilities = cost * numbers
-        matrix = np.concat((self.__rates, liabilities), axis=1)
+        numbers: np.ndarray = np.multiply(self.__rates, np.expand_dims(boundaries.to_numpy(), axis=0))
+        liabilities: np.ndarray = cost * numbers
+        estimates = np.concat((self.__rates, liabilities), axis=1)
 
-        return matrix
+        return estimates
 
     @staticmethod
-    def __nodes(estimates: np.ndarray):
+    def __nodes(estimates: np.ndarray) -> dict:
         """
 
         :param estimates:
