@@ -51,8 +51,12 @@ class Costs:
         n_inflection = 500
 
         cost: int = self.__costs.loc['fnr', category]
+
+        # Possible missed classifications range per rate value of a static annual frequency range
         numbers = np.multiply(self.__rates,
                               np.expand_dims(self.__frequencies.loc[category, :].to_numpy(), axis=0))
+
+        # Hence
         factors = cost * (1 + 0.5*(numbers > n_inflection).astype(int))
         liabilities = np.multiply(factors, numbers)
         matrix = np.concat((self.__rates, liabilities), axis=1)
