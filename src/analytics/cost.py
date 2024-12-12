@@ -10,6 +10,8 @@ import config
 import src.analytics.limits
 import src.elements.s3_parameters as s3p
 import src.functions.objects
+import src.analytics.cost_false_negative_rate as cfn
+import src.analytics.cost_false_positive_rate as cfp
 
 
 class Cost:
@@ -32,13 +34,13 @@ class Cost:
 
         # Limits instance
         self.__limits = src.analytics.limits.Limits(s3_parameters=self.__s3_parameters)
-        self.__costs = self.__limits.exc(filename='costs.json', orient='split')
-        self.__frequencies = self.__limits.exc(filename='frequencies.json', orient='index')
+        self.__costs: pd.DataFrame = self.__limits.exc(filename='costs.json', orient='split')
+        self.__frequencies: pd.DataFrame = self.__limits.exc(filename='frequencies.json', orient='index')
 
         # Rates
-        self.__rates = np.linspace(start=0, stop=1, num=101)
-        self.__rates = self.__rates[1:]
-        self.__rates = self.__rates[..., None]
+        self.__rates: np.ndarray = np.linspace(start=0, stop=1, num=101)
+        self.__rates: np.ndarray = self.__rates[1:]
+        self.__rates: np.ndarray = self.__rates[..., None]
 
     @dask.delayed
     def __fnr(self, category: str) -> np.ndarray:
@@ -48,21 +50,6 @@ class Cost:
         :return:
         """
 
-        n_inflection = 500
-
-        cost: int = self.__costs.loc['fnr', category]
-
-        # Possible missed classifications range per rate value of a static annual frequency range
-        numbers = np.multiply(self.__rates,
-                              np.expand_dims(self.__frequencies.loc[category, :].to_numpy(), axis=0))
-
-        # Hence
-        factors = cost * (1 + 0.5*(numbers > n_inflection).astype(int))
-        liabilities = np.multiply(factors, numbers)
-        matrix = np.concat((self.__rates, liabilities), axis=1)
-
-        return matrix
-
     @dask.delayed
     def __fpr(self, category: str) -> np.ndarray:
         """
@@ -71,19 +58,11 @@ class Cost:
         :return:
         """
 
-        cost: int = self.__costs.loc['fpr', category]
-        numbers = np.multiply(self.__rates,
-                              np.expand_dims(self.__frequencies.loc[category, :].to_numpy(), axis=0))
-        liabilities = cost * numbers
-        matrix = np.concat((self.__rates, liabilities), axis=1)
-
-        return matrix
-
     @dask.delayed
-    def __persist(self, matrix: np.ndarray, metric: str, category: str) -> str:
+    def __persist(self, nodes: dict, metric: str, category: str) -> str:
         """
 
-        :param matrix: Fields rate, ~ minimum cost, ~ maximum cost
+        :param nodes: The graph data.
         :param metric: fnr (false negative rate) or fpr (false positive rate)
         :param category: Category code, e.g., GEO, GPE, etc. (ref. self.definition in config.py)
         :return:
@@ -93,10 +72,6 @@ class Cost:
         name = f'{self.__configurations.definition[category]}.json'
         path = os.path.join(self.__configurations.numerics_, 'cost', metric, name)
 
-        # x: rate, low: ~ minimum cost, high: ~ maximum cost
-        data = pd.DataFrame(data=matrix, columns=['x', 'low', 'high'])
-        nodes = data.to_dict(orient='tight')
-
         return self.__objects.write(nodes=nodes, path=path)
 
     def exc(self):
@@ -105,15 +80,20 @@ class Cost:
         :return:
         """
 
-        categories = list(self.__frequencies.index)
+        _fnr = cfn.CostFalseNegativeRate(rates=self.__rates, costs=self.__costs, frequencies=self.__frequencies)
+        _fpr = cfp.CostFalsePositiveRate(rates=self.__rates, costs=self.__costs, frequencies=self.__frequencies)
 
+        categories = list(self.__frequencies.index)
         computations = []
         for category in categories:
 
-            fnr = self.__fnr(category=category)
+            # fnr = self.__fnr(category=category)
+            fnr = dask.delayed(_fnr)(category)
             message_fnr = self.__persist(matrix=fnr, metric='fnr', category=category)
 
-            fpr = self.__fpr(category=category)
+            # fpr = self.__fpr(category=category)
+            fpr = dask.delayed(_fpr)(category)
+
             message_fpr = self.__persist(matrix=fpr, metric='fpr', category=category)
 
             computations.append([message_fnr, message_fpr])
