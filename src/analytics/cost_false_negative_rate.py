@@ -1,9 +1,12 @@
-
+"""Module cost_false_negative.py"""
 import numpy as np
 import pandas as pd
 
 
 class CostFalseNegativeRate:
+    """
+    False Negative Rate Cost
+    """
 
     def __init__(self, rates: np.ndarray, costs: pd.DataFrame, frequencies: pd.DataFrame):
         """
@@ -23,7 +26,13 @@ class CostFalseNegativeRate:
         self.__costs = costs
         self.__frequencies = frequencies
 
-    def __estimates(self, category: str, cost: int, boundaries: pd.DataFrame) -> np.ndarray:
+    def __estimates(self, cost: int, boundaries: pd.DataFrame) -> np.ndarray:
+        """
+
+        :param cost:
+        :param boundaries:
+        :return:
+        """
 
         n_inflection = 500
 
@@ -53,7 +62,7 @@ class CostFalseNegativeRate:
 
     def exc(self, category: str):
         """
-        
+
         :param category:
         :return:
         """
@@ -61,7 +70,7 @@ class CostFalseNegativeRate:
         cost: int = self.__costs.loc['fnr', category]
         boundaries: pd.DataFrame = self.__frequencies.loc[category, :]
 
-        estimates = self.__estimates(category=category, cost=cost, boundaries=boundaries)
+        estimates = self.__estimates(cost=cost, boundaries=boundaries)
         nodes = self.__nodes(estimates=estimates)
 
         nodes['cost'] = cost
