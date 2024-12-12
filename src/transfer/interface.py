@@ -29,19 +29,17 @@ class Interface:
         # Instances
         self.__dictionary = src.transfer.dictionary.Dictionary()
 
-    def exc(self, architecture: str):
+    def exc(self):
         """
 
-        :param architecture:
         :return:
         """
 
         # The strings for transferring data to Amazon S3 (Simple Storage Service)
         strings: pd.DataFrame = self.__dictionary.exc(
             path=os.path.join(os.getcwd(), 'warehouse'), extension='json', prefix='warehouse')
-        logging.info(strings)
 
         # Transfer
-        # messages = src.s3.ingress.Ingress(
-        #     service=self.__service, bucket_name=self.__s3_parameters.external).exc(strings=strings)
-        # logging.info(messages)
+        messages = src.s3.ingress.Ingress(
+            service=self.__service, bucket_name=self.__s3_parameters.external).exc(strings=strings)
+        logging.info(messages)
