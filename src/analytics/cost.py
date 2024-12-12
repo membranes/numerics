@@ -12,7 +12,7 @@ import src.elements.s3_parameters as s3p
 import src.functions.objects
 
 
-class Costs:
+class Cost:
     """
     Class Costs
     """
