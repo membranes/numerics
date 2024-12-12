@@ -61,20 +61,22 @@ class CostFalseNegativeRate:
 
         return nodes
 
-    def exc(self, category: str):
+    def exc(self, category: str) -> dict:
         """
 
         :param category:
         :return:
         """
 
+        # False Negative Rate Cost per Category
         cost: int = self.__costs.loc['fnr', category]
+
+        # The approximate minimum & maximum ...
         boundaries: pd.DataFrame = self.__frequencies.loc[category, :]
 
         estimates = self.__estimates(cost=cost, boundaries=boundaries)
         nodes = self.__nodes(estimates=estimates)
-
         nodes['cost'] = cost
-        nodes['approximate_annual_frequencies'] = boundaries
+        nodes['approximate_annual_frequencies'] = boundaries.to_numpy().tolist()
 
         return nodes
