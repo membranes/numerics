@@ -7,7 +7,7 @@ import pandas as pd
 import config
 import src.analytics.architecture
 import src.analytics.bullet
-import src.analytics.costs
+import src.analytics.cost
 import src.analytics.derivations
 import src.analytics.spider
 import src.elements.s3_parameters as s3p
@@ -98,6 +98,6 @@ class Interface:
         # Spiders
         src.analytics.spider.Spider().exc(blob=derivations)
         src.analytics.bullet.Bullet(s3_parameters=self.__s3_parameters).exc(blob=derivations)
-        src.analytics.costs.Costs(s3_parameters=self.__s3_parameters).exc()
+        src.analytics.cost.Cost(s3_parameters=self.__s3_parameters).exc()
 
         return self.__architecture
