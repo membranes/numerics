@@ -1,5 +1,5 @@
-# Pytorch
-FROM pytorch/pytorch:2.4.1-cuda12.4-cudnn9-runtime
+# Base Image
+FROM python:3.12.8-bookworm
 
 
 # Temporary
@@ -25,8 +25,7 @@ RUN groupadd --system automata --gid $GID && \
     unzip /tmp/awscliv2.zip -d /tmp/ && cd /tmp && sudo ./aws/install && cd ~ && \
     pip install --upgrade pip && \
     pip install --requirement /app/requirements.txt --no-cache-dir && \
-    python -m nltk.downloader -d /opt/conda/nltk_data all && \
-    mkdir /app/warehouse
+    mkdir /app/warehouse && mkdir /app/data
 
 
 # Specific COPY
@@ -35,7 +34,7 @@ COPY config.py /app/config.py
 
 
 # Port
-EXPOSE 8000
+EXPOSE 8050
 
 
 # Create mountpoint

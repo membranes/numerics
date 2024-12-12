@@ -7,12 +7,13 @@ import pandas as pd
 import config
 import src.analytics.architecture
 import src.analytics.bullet
-import src.analytics.costs
+import src.analytics.cost
 import src.analytics.derivations
 import src.analytics.spider
 import src.elements.s3_parameters as s3p
 import src.functions.directories
 import src.functions.objects
+import src.analytics.limits
 
 
 class Interface:
@@ -37,11 +38,10 @@ class Interface:
 
         # The architecture name of the best model, ...
         self.__architecture: str = src.analytics.architecture.Architecture().exc()
-        logging.info('THE ARCHITECTURE: %s', self.__architecture)
 
     def __storage(self):
         """
-        Creates all the paths for the graphing data.
+        Creates all the paths for the graphing & serving data.
 
         :return:
         """
@@ -81,11 +81,19 @@ class Interface:
 
         return derivations
 
-    def exc(self):
+    def exc(self) -> str:
         """
 
         :return:
         """
+
+        logging.info('The best model, named by architecture: %s', self.__architecture)
+
+
+        # Limits instance
+        limits = src.analytics.limits.Limits(s3_parameters=self.__s3_parameters)
+        costs: pd.DataFrame = limits.exc(filename='costs.json', orient='split')
+        frequencies: pd.DataFrame = limits.exc(filename='frequencies.json', orient='index')
 
         # The error matrix frequencies of a case, and their error metrics
         # derivations.  Additionally, a category column.
@@ -97,4 +105,6 @@ class Interface:
         # Spiders
         src.analytics.spider.Spider().exc(blob=derivations)
         src.analytics.bullet.Bullet(s3_parameters=self.__s3_parameters).exc(blob=derivations)
-        src.analytics.costs.Costs(s3_parameters=self.__s3_parameters).exc()
+        src.analytics.cost.Cost(costs=costs, frequencies=frequencies).exc()
+
+        return self.__architecture

@@ -1,10 +1,10 @@
 """Module main.py"""
+import datetime
 import logging
 import os
 import sys
 
 import boto3
-import torch
 
 
 def main():
@@ -15,16 +15,13 @@ def main():
     """
 
     logger: logging.Logger = logging.getLogger(__name__)
+    logger.info('Starting: %s', datetime.datetime.now().isoformat(timespec='microseconds'))
 
     # Set up
     setup: bool = src.setup.Setup(service=service, s3_parameters=s3_parameters).exc()
     if not setup:
         src.functions.cache.Cache().exc()
         sys.exit('No Executions')
-
-    # Device Selection: Setting a graphics processing unit as the default device
-    device = 'cuda' if torch.cuda.is_available() else 'cpu'
-    logger.info('Device: %s', device)
 
     # Analytics
     src.data.interface.Interface(service=service, s3_parameters=s3_parameters).exc()
@@ -46,12 +43,6 @@ if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO,
                         format='\n\n%(message)s\n%(asctime)s.%(msecs)03d',
                         datefmt='%Y-%m-%d %H:%M:%S')
-
-    # Activate graphics processing units
-    os.environ['CUDA_VISIBLE_DEVICES']='0'
-    os.environ['TOKENIZERS_PARALLELISM']='true'
-    os.environ['RAY_USAGE_STATS_ENABLED']='0'
-    os.environ['HF_HOME']='/tmp'
 
     # Classes
     import src.analytics.interface

@@ -2,6 +2,8 @@
 import logging
 import os
 
+import pandas as pd
+
 import src.elements.s3_parameters as s3p
 import src.elements.service as sr
 import src.s3.ingress
@@ -34,8 +36,8 @@ class Interface:
         """
 
         # The strings for transferring data to Amazon S3 (Simple Storage Service)
-        strings = self.__dictionary.exc(
-            path=os.path.join(os.getcwd(), 'warehouse'), extension='json', prefix='warehouse')
+        strings: pd.DataFrame = self.__dictionary.exc(
+            path=os.path.join(os.getcwd(), 'warehouse'), extension='*', prefix='warehouse')
 
         # Transfer
         messages = src.s3.ingress.Ingress(

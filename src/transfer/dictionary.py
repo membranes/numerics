@@ -1,5 +1,6 @@
 """Module dictionary.py"""
 import glob
+import logging
 import os
 
 import pandas as pd
@@ -15,11 +16,13 @@ class Dictionary:
         Constructor
         """
 
-        _spider = ('A spider graphs data set for outlining precision, specificity, sensitivity, f score, '
+        _spider = ('A spider graph data set for outlining precision, specificity, sensitivity, f score, '
                    'standard accuracy, and balanced accuracy.')
 
         # Metadata
-        self.__metadata = {'best': {'desc': 'The architecture name of the best model.'},
+        self.__metadata = {
+            'best': {'desc': 'The architecture name of the best model.'},
+            'model': {'desc': 'The details of the best model; for inference.'},
             'bullet': {'desc': 'A metrics data set for false negative rate and false positive rate bullet graphs.'},
             'spider': {'desc': _spider},
             'fnr': {'desc': 'The data for illustrating possible false negative rate costs at varying rate points.'},
@@ -48,7 +51,7 @@ class Dictionary:
 
         return pd.DataFrame.from_records(details)
 
-    def exc(self, path: str, extension: str, prefix: str):
+    def exc(self, path: str, extension: str, prefix: str) -> pd.DataFrame:
         """
 
         :param path: The path wherein the files of interest lie
@@ -56,6 +59,8 @@ class Dictionary:
         :param prefix: The Amazon S3 (Simple Storage Service) where the files of path are heading
         :return:
         """
+
+        logging.info(path)
 
         local: pd.DataFrame = self.__local(path=path, extension=extension)
 

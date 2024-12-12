@@ -2,6 +2,7 @@
 import glob
 import logging
 import os
+import shutil
 
 import pandas as pd
 
@@ -23,15 +24,12 @@ class Architecture:
         Constructor
         """
 
+        # Configurations
         self.__configurations = config.Config()
+        self.__storage = os.path.join(self.__configurations.numerics_, 'best')
 
+        # A JSON (JavaScript Object Notation) read & write instance
         self.__objects = src.functions.objects.Objects()
-
-        # Logging
-        logging.basicConfig(level=logging.INFO,
-                            format='\n\n%(message)s\n%(asctime)s.%(msecs)03d',
-                            datefmt='%Y-%m-%d %H:%M:%S')
-        self.__logger = logging.getLogger(__name__)
 
     def __cases(self, tree: str) -> pd.DataFrame:
         """
@@ -41,9 +39,8 @@ class Architecture:
         """
 
         path = os.path.join(tree, self.__configurations.branch)
-        cases = self.__objects.frame(path=path, orient='index')
 
-        return cases
+        return self.__objects.frame(path=path, orient='index')
 
     @staticmethod
     def __median_mcc(cases: pd.DataFrame) -> float:
@@ -57,7 +54,8 @@ class Architecture:
 
         return matthews.median()
 
-    def __best(self, data: pd.DataFrame) -> str:
+    @staticmethod
+    def __architecture(data: pd.DataFrame) -> str:
         """
 
         :param data: Whence the best is selected from.
@@ -66,22 +64,35 @@ class Architecture:
 
         selection: pd.Series = data.copy().loc[data['median'].idxmax(), :]
 
-        self.__logger.info('Best:\n%s', selection)
-
         return selection['architecture']
 
-    def __save(self, best: str):
+    def __get_artefacts_of_best(self, architecture: str):
         """
 
-        :param best:
+        :param architecture:
         :return:
         """
 
-        path = os.path.join(self.__configurations.numerics_, 'best', 'architecture.json')
-        message = self.__objects.write(nodes={'name': best}, path=path)
+        __src = os.path.join(os.getcwd(), 'data', 'artefacts', architecture, 'prime', 'model')
+        __dst = os.path.join(self.__storage, 'model')
 
-        self.__logger.info(message)
+        try:
+            message = shutil.copytree(
+                src=__src, dst=__dst, symlinks=False, ignore_dangling_symlinks=True, dirs_exist_ok=True)
+        except RuntimeError as err:
+            raise err from err
+        logging.info(message)
 
+    def __save(self, architecture: str):
+        """
+
+        :param architecture:
+        :return:
+        """
+
+        path = os.path.join(self.__storage, 'architecture.json')
+        message = self.__objects.write(nodes={'name': architecture}, path=path)
+        logging.info(message)
 
     def exc(self) -> str:
         """
@@ -102,8 +113,9 @@ class Architecture:
             computations.append(values)
 
         data = pd.DataFrame.from_records(computations)
-        best = self.__best(data=data)
+        architecture = self.__architecture(data=data)
 
-        self.__save(best=best)
+        self.__save(architecture=architecture)
+        self.__get_artefacts_of_best(architecture=architecture)
 
-        return best
+        return architecture
