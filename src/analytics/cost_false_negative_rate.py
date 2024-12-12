@@ -23,9 +23,6 @@ class CostFalseNegativeRate:
         self.__costs = costs
         self.__frequencies = frequencies
 
-
-
-
     def __estimates(self, category: str, cost: int, boundaries: pd.DataFrame) -> np.ndarray:
 
         n_inflection = 500
@@ -42,6 +39,11 @@ class CostFalseNegativeRate:
         return estimates
 
     def __nodes(self, estimates: np.ndarray):
+        """
+
+        :param estimates:
+        :return:
+        """
 
         # x: rate, low: ~ minimum cost, high: ~ maximum cost
         data = pd.DataFrame(data=estimates, columns=['x', 'low', 'high'])
@@ -50,6 +52,11 @@ class CostFalseNegativeRate:
         return nodes
 
     def exc(self, category: str):
+        """
+        
+        :param category:
+        :return:
+        """
 
         cost: int = self.__costs.loc['fnr', category]
         boundaries: pd.DataFrame = self.__frequencies.loc[category, :]
@@ -59,3 +66,5 @@ class CostFalseNegativeRate:
 
         nodes['cost'] = cost
         nodes['approximate_annual_frequencies'] = boundaries
+
+        return nodes
