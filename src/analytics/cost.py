@@ -43,20 +43,28 @@ class Cost:
         self.__rates: np.ndarray = self.__rates[..., None]
 
     @dask.delayed
-    def __fnr(self, category: str) -> np.ndarray:
+    def __fnr(self, category: str) -> dict:
         """
 
         :param category:
         :return:
         """
+
+        item = cfn.CostFalseNegativeRate(rates=self.__rates, costs=self.__costs, frequencies=self.__frequencies)
+
+        return item.exc(category=category)
 
     @dask.delayed
-    def __fpr(self, category: str) -> np.ndarray:
+    def __fpr(self, category: str) -> dict:
         """
 
         :param category:
         :return:
         """
+
+        item = cfp.CostFalsePositiveRate(rates=self.__rates, costs=self.__costs, frequencies=self.__frequencies)
+
+        return item.exc(category=category)
 
     @dask.delayed
     def __persist(self, nodes: dict, metric: str, category: str) -> str:
@@ -80,21 +88,15 @@ class Cost:
         :return:
         """
 
-        _fnr = cfn.CostFalseNegativeRate(rates=self.__rates, costs=self.__costs, frequencies=self.__frequencies)
-        _fpr = cfp.CostFalsePositiveRate(rates=self.__rates, costs=self.__costs, frequencies=self.__frequencies)
-
         categories = list(self.__frequencies.index)
         computations = []
         for category in categories:
 
-            # fnr = self.__fnr(category=category)
-            fnr = dask.delayed(_fnr)(category)
-            message_fnr = self.__persist(matrix=fnr, metric='fnr', category=category)
+            fnr = self.__fnr(category=category)
+            message_fnr = self.__persist(nodes=fnr, metric='fnr', category=category)
 
-            # fpr = self.__fpr(category=category)
-            fpr = dask.delayed(_fpr)(category)
-
-            message_fpr = self.__persist(matrix=fpr, metric='fpr', category=category)
+            fpr = self.__fpr(category=category)
+            message_fpr = self.__persist(nodes=fpr, metric='fpr', category=category)
 
             computations.append([message_fnr, message_fpr])
 
