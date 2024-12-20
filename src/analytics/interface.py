@@ -9,11 +9,12 @@ import src.analytics.architecture
 import src.analytics.bullet
 import src.analytics.cost
 import src.analytics.derivations
+import src.analytics.limits
 import src.analytics.spider
+import src.elements.limits as lm
 import src.elements.s3_parameters as s3p
 import src.functions.directories
 import src.functions.objects
-import src.analytics.limits
 
 
 class Interface:
@@ -32,8 +33,6 @@ class Interface:
 
         # Configurations
         self.__configurations = config.Config()
-
-        # Prepare storage
         self.__storage()
 
         # The architecture name of the best model, ...
@@ -60,7 +59,6 @@ class Interface:
 
         path = os.path.join(
             self.__configurations.artefacts_, self.__architecture, self.__configurations.branch)
-
         cases = src.functions.objects.Objects().frame(path=path, orient='index')
 
         return cases
@@ -90,21 +88,19 @@ class Interface:
         logging.info('The best model, named by architecture: %s', self.__architecture)
 
 
-        # Limits instance
-        limits = src.analytics.limits.Limits(s3_parameters=self.__s3_parameters)
-        costs: pd.DataFrame = limits.exc(filename='costs.json', orient='split')
-        frequencies: pd.DataFrame = limits.exc(filename='frequencies.json', orient='index')
+        # Limits
+        limits: lm.Limits = src.analytics.limits.Limits(s3_parameters=self.__s3_parameters).exc()
+
 
         # The error matrix frequencies of a case, and their error metrics
         # derivations.  Additionally, a category column.
         cases = self.__cases()
         derivations = self.__derivations(cases=cases)
         derivations = derivations.assign(category=derivations['tag'].map(self.__configurations.categories))
-        logging.info(derivations)
 
         # Spiders
         src.analytics.spider.Spider().exc(blob=derivations)
-        src.analytics.bullet.Bullet(s3_parameters=self.__s3_parameters).exc(blob=derivations)
-        src.analytics.cost.Cost(costs=costs, frequencies=frequencies).exc()
+        src.analytics.bullet.Bullet(error=limits.error).exc(blob=derivations)
+        src.analytics.cost.Cost(costs=limits.costs, frequencies=limits.frequencies).exc()
 
         return self.__architecture
