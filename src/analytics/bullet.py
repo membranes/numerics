@@ -71,11 +71,12 @@ class Bullet:
 
         return message
 
-    def exc(self, blob: pd.DataFrame):
+    def exc(self, blob: pd.DataFrame, definitions: dict):
         """
 
         :param blob: A data frame consisting of error matrix frequencies & metrics, alongside
                      tags & categories identifiers.
+        :param definitions:
         :return:
         """
 
@@ -91,7 +92,7 @@ class Bullet:
         computations = []
         for category in categories:
 
-            name = self.__configurations.definition[category]
+            name = definitions[category]
             excerpt: pd.DataFrame = derivations.loc[derivations['category'] == category, self.__names.keys()]
             message = self.__build(excerpt=excerpt, name=name, category=category)
             computations.append(message)
