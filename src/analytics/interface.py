@@ -61,10 +61,23 @@ class Interface:
 
         return numbers
 
-    def exc(self, derivations: pd.DataFrame) -> None:
+    @staticmethod
+    def __definitions(tags: pd.DataFrame) -> dict:
+        """
+
+        :param tags:
+        :return:
+        """
+
+        values = tags[['category', 'category_name']].set_index(keys='category').to_dict(orient='dict')
+
+        return values['category_name']
+
+    def exc(self, derivations: pd.DataFrame, tags: pd.DataFrame) -> None:
         """
 
         :param derivations:
+        :param tags:
         :return:
         """
 
@@ -74,7 +87,10 @@ class Interface:
         # Numbers
         numbers = self.__numbers(limits=limits)
 
+        # Definitions
+        definitions = self.__definitions(tags=tags)
+
         # Spiders
-        src.analytics.spider.Spider().exc(blob=derivations)
-        src.analytics.bullet.Bullet(error=limits.error).exc(blob=derivations)
-        src.analytics.cost.Cost(costs=limits.costs, numbers=numbers).exc()
+        src.analytics.spider.Spider().exc(blob=derivations, definitions=definitions)
+        src.analytics.bullet.Bullet(error=limits.error).exc(blob=derivations, definitions=definitions)
+        src.analytics.cost.Cost(costs=limits.costs, numbers=numbers).exc(definitions=definitions)
