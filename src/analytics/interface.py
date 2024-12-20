@@ -1,6 +1,4 @@
 """Module interface.py"""
-import logging
-
 import numpy as np
 import pandas as pd
 
@@ -87,7 +85,7 @@ class Interface:
         # Numbers
         numbers = self.__numbers(limits=limits)
 
-        # Definitions
+        # Definitions: Whereby key === category code, value === category code definition
         definitions = self.__definitions(tags=tags)
 
         # Spiders
