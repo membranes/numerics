@@ -1,16 +1,14 @@
-
-import typing
+"""Module best.py"""
 import logging
 import os
+
 import pandas as pd
 
 import config
+import src.analytics.derivations
 import src.data.architecture
 import src.elements.best as bs
-
 import src.functions.objects
-
-import src.analytics.derivations
 
 
 class Best:
@@ -63,21 +61,16 @@ class Best:
     def exc(self, tags: pd.DataFrame) -> bs.Best:
         """
 
+        :param tags: A dta frame summarising the projects tags, alongside each tag's annotation and category details.
         :return:
         """
 
-        # The error matrix frequencies of a case/category
-        cases = self.__cases()
-
-        # ... and their error metrics derivations.
-        derivations = self.__derivations(cases=cases)
-        logging.info(derivations)
-
         # A category column.
         values = tags[['tag', 'category']].set_index(keys='tag').to_dict(orient='dict')
-        logging.info(values['category'])
 
+        # The error matrix frequencies per case/category; and their error metrics derivations.
+        cases = self.__cases()
+        derivations = self.__derivations(cases=cases)
         derivations = derivations.assign(category=derivations['tag'].map(values['category']))
-        logging.info(derivations)
 
         return bs.Best(architecture=self.__architecture, derivations=derivations)
