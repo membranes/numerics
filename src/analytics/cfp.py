@@ -1,9 +1,9 @@
-"""Module cost_false_positive_rate.py"""
+"""Module cfp.py"""
 import numpy as np
 import pandas as pd
 
 
-class CostFalsePositiveRate:
+class CFP:
     """
     False Positive Rate Cost
     """
