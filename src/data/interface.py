@@ -12,7 +12,10 @@ import src.s3.egress
 
 class Interface:
     """
-    Class Interface
+    Notes<br>
+    ------<br>
+
+    The data, i.e., models artefacts, retrieval interface.
     """
 
     def __init__(self, service: sr.Service, s3_parameters: s3p.S3Parameters):
