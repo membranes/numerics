@@ -17,15 +17,15 @@ class Cost:
     Class Costs
     """
 
-    def __init__(self, costs: pd.DataFrame, frequencies: pd.DataFrame):
+    def __init__(self, costs: pd.DataFrame, numbers: pd.DataFrame):
         """
 
         :param costs
-        :param frequencies
+        :param numbers
         """
 
         self.__costs = costs
-        self.__frequencies = frequencies
+        self.__numbers = numbers
 
         # Configurations
         self.__configurations = config.Config()
@@ -36,8 +36,8 @@ class Cost:
         self.__rates: np.ndarray = (self.__rates[1:])[..., None]
 
         # Instances
-        self.__cfn = src.analytics.cfn.CFN(rates=self.__rates, costs=self.__costs, frequencies=self.__frequencies)
-        self.__cfp = src.analytics.cfp.CFP(rates=self.__rates, costs=self.__costs, frequencies=self.__frequencies)
+        self.__cfn = src.analytics.cfn.CFN(rates=self.__rates, costs=self.__costs, numbers=self.__numbers)
+        self.__cfp = src.analytics.cfp.CFP(rates=self.__rates, costs=self.__costs, numbers=self.__numbers)
 
     @dask.delayed
     def __fnr(self, category: str) -> dict:
@@ -81,7 +81,7 @@ class Cost:
         :return:
         """
 
-        categories = list(self.__frequencies.index)
+        categories = list(self.__numbers.index)
         computations = []
         for category in categories:
 
