@@ -7,7 +7,9 @@ import pandas as pd
 import config
 import src.data.architecture
 import src.elements.best as bs
+
 import src.functions.objects
+
 import src.analytics.derivations
 
 
@@ -21,6 +23,7 @@ class Best:
         Constructor
         """
 
+        # Configurations
         self.__configurations = config.Config()
 
         # The architecture name of the best model, ...
@@ -57,7 +60,7 @@ class Best:
 
         return derivations
 
-    def exc(self) -> bs.Best:
+    def exc(self, tags: pd.DataFrame) -> bs.Best:
         """
 
         :return:
@@ -68,8 +71,13 @@ class Best:
 
         # ... and their error metrics derivations.
         derivations = self.__derivations(cases=cases)
+        logging.info(derivations)
 
         # A category column.
-        derivations = derivations.assign(category=derivations['tag'].map(self.__configurations.categories))
+        values = tags[['tag', 'category']].set_index(keys='tag').to_dict(orient='dict')
+        logging.info(values['category'])
+
+        derivations = derivations.assign(category=derivations['tag'].map(values['category']))
+        logging.info(derivations)
 
         return bs.Best(architecture=self.__architecture, derivations=derivations)
