@@ -64,11 +64,12 @@ class Spider:
 
         return message
 
-    def exc(self, blob: pd.DataFrame):
+    def exc(self, blob: pd.DataFrame, definitions: dict):
         """
 
         :param blob: A data frame consisting of error matrix frequencies & metrics, alongside
                      tags & categories identifiers.
+        :param definitions:
         :return:
         """
 
@@ -84,15 +85,9 @@ class Spider:
         computations = []
         for category in categories:
 
-            # Category name
-            name = self.__configurations.definition[category]
-
-            # The instances of the category
+            name = definitions[category]
             excerpt: pd.DataFrame = derivations.loc[derivations['category'] == category, self.__names.keys()]
-
-            # Save
             message = self.__build(excerpt=excerpt, name=name)
-
             computations.append(message)
 
         messages = dask.compute(computations, scheduler='threads')[0]
