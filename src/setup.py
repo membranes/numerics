@@ -95,9 +95,13 @@ class Setup:
 
         # Clean-up, then re-create
         self.__directories.cleanup(path=self.__configurations.warehouse)
+        self.__directories.create(path=self.__configurations.warehouse)
 
+        successful = []
+        for value in self.__configurations.graphs_:
+            successful.append(self.__directories.create(value))
 
-        return self.__directories.create(path=self.__configurations.warehouse)
+        return all(successful)
 
     def exc(self) -> bool:
         """
