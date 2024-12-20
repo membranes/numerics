@@ -1,8 +1,9 @@
 """Module limits.py"""
-
+import typing
 import pandas as pd
 
 import src.elements.s3_parameters as s3p
+import src.elements.limits as lm
 
 
 class Limits:
@@ -39,12 +40,15 @@ class Limits:
 
         return frame
 
-    def exc(self, filename: str, orient: str):
+    def exc(self) -> lm.Limits:
         """
 
-        :param filename: The file of interest.
-        :param orient: The read-in orientation.
         :return:
         """
 
-        return self.__get_data(filename=filename, orient=orient)
+        costs: pd.DataFrame = self.__get_data(filename='costs.json', orient='split')
+        frequencies: pd.DataFrame = self.__get_data(filename='frequencies.json', orient='index')
+        error: pd.DataFrame = self.__get_data(filename='error.json', orient='index')
+        dispatches: pd.DataFrame = self.__get_data(filename='dispatches.json', orient='split')
+
+        return lm.Limits(costs=costs, frequencies=frequencies, error=error, dispatches=dispatches)
