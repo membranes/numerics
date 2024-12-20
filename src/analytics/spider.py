@@ -47,8 +47,12 @@ class Spider:
 
     @dask.delayed
     def __build(self, excerpt: pd.DataFrame, name: str):
+        """
 
-        # The instances of the category
+        :param excerpt:
+        :param name:
+        :return:
+        """
 
         excerpt.rename(columns=self.__names, inplace=True)
 
