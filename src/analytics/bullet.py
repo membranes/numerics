@@ -2,8 +2,8 @@
 import logging
 import os
 
-import pandas as pd
 import dask
+import pandas as pd
 
 import config
 import src.functions.directories
@@ -76,7 +76,7 @@ class Bullet:
 
         :param blob: A data frame consisting of error matrix frequencies & metrics, alongside
                      tags & categories identifiers.
-        :param definitions:
+        :param definitions: A dict wherein key === category code, value === category code definition
         :return:
         """
 
