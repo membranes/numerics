@@ -77,6 +77,7 @@ class Cost:
     def exc(self, definitions: dict):
         """
 
+        :param definitions: A dict wherein key === category code, value === category code definition
         :return:
         """
 
