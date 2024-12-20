@@ -3,6 +3,7 @@ import logging
 import os
 
 import pandas as pd
+import dask
 
 import config
 import src.functions.directories
@@ -44,6 +45,21 @@ class Spider:
 
         return message
 
+    @dask.delayed
+    def __build(self, excerpt: pd.DataFrame, name: str):
+
+        # The instances of the category
+
+        excerpt.rename(columns=self.__names, inplace=True)
+
+        # The dictionary of the instances
+        nodes = excerpt.to_dict(orient='tight')
+
+        # Save
+        message = self.__save(nodes=nodes, name=f'{name}.json')
+
+        return message
+
     def exc(self, blob: pd.DataFrame):
         """
 
@@ -61,19 +77,19 @@ class Spider:
         derivations.set_index(keys=['tag', 'category'], drop=False, inplace=True)
 
         # Hence
+        computations = []
         for category in categories:
 
+            # Category name
             name = self.__configurations.definition[category]
-            logging.info(name)
 
             # The instances of the category
             excerpt: pd.DataFrame = derivations.loc[derivations['category'] == category, self.__names.keys()]
-            excerpt.rename(columns=self.__names, inplace=True)
-
-            # The dictionary of the instances
-            nodes = excerpt.to_dict(orient='tight')
-            logging.info(nodes)
 
             # Save
-            message = self.__save(nodes=nodes, name=f'{name}.json')
-            logging.info(message)
+            message = self.__build(excerpt=excerpt, name=name)
+
+            computations.append(message)
+
+        calculations = dask.compute(computations, scheduler='threads')[0]
+        logging.info(calculations)
