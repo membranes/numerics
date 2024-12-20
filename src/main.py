@@ -23,9 +23,15 @@ def main():
         src.functions.cache.Cache().exc()
         sys.exit('No Executions')
 
-    # Analytics
+    # Data
     src.data.interface.Interface(service=service, s3_parameters=s3_parameters).exc()
-    src.analytics.interface.Interface(s3_parameters=s3_parameters).exc()
+    tags = src.data.tags.Tags(s3_parameters=s3_parameters).exc()
+
+    # Analytics
+    best = src.analytics.best.Best().exc(tags=tags)
+    src.analytics.interface.Interface(s3_parameters=s3_parameters).exc(derivations=best.derivations, tags=tags)
+
+    # Transfer
     src.transfer.interface.Interface(service=service, s3_parameters=s3_parameters).exc()
 
     # Delete Cache Points
@@ -45,8 +51,10 @@ if __name__ == '__main__':
                         datefmt='%Y-%m-%d %H:%M:%S')
 
     # Classes
+    import src.analytics.best
     import src.analytics.interface
     import src.data.interface
+    import src.data.tags
     import src.functions.service
     import src.functions.cache
     import src.s3.s3_parameters
