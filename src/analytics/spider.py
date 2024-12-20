@@ -95,5 +95,5 @@ class Spider:
 
             computations.append(message)
 
-        calculations = dask.compute(computations, scheduler='threads')[0]
-        logging.info(calculations)
+        messages = dask.compute(computations, scheduler='threads')[0]
+        logging.info(messages)
