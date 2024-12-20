@@ -1,7 +1,7 @@
 {
     "index": [
-        "B-org",
-        "I-org"
+        "B-ORG",
+        "I-ORG"
     ],
     "columns": [
         "False Negative Rate",
