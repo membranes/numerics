@@ -1,9 +1,8 @@
 """Module limits.py"""
-import typing
 import pandas as pd
 
-import src.elements.s3_parameters as s3p
 import src.elements.limits as lm
+import src.elements.s3_parameters as s3p
 
 
 class Limits:
