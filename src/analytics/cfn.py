@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 
 
-class CostFalseNegativeRate:
+class CFN:
     """
     False Negative Rate Cost
     """
