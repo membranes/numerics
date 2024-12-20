@@ -2,6 +2,7 @@
 import logging
 import os
 
+import numpy as np
 import pandas as pd
 
 import config
@@ -87,12 +88,16 @@ class Interface:
 
         logging.info('The best model, named by architecture: %s', self.__architecture)
 
-
         # Limits
         limits: lm.Limits = src.analytics.limits.Limits(s3_parameters=self.__s3_parameters).exc()
 
+        # The boundaries array is a (1 X 2) vector
+        boundaries: np.ndarray = limits.dispatches.product(axis=1).values[None, ...]
+        numbers = limits.frequencies.copy()
+        numbers['minimum'] = boundaries.min() * numbers['minimum']
+        numbers['maximum'] = boundaries.min() * numbers['maximum']
 
-        # The error matrix frequencies of a case, and their error metrics
+        # The error matrix frequencies of a case/category, and their error metrics
         # derivations.  Additionally, a category column.
         cases = self.__cases()
         derivations = self.__derivations(cases=cases)
@@ -101,6 +106,6 @@ class Interface:
         # Spiders
         src.analytics.spider.Spider().exc(blob=derivations)
         src.analytics.bullet.Bullet(error=limits.error).exc(blob=derivations)
-        src.analytics.cost.Cost(costs=limits.costs, frequencies=limits.frequencies).exc()
+        src.analytics.cost.Cost(costs=limits.costs, numbers=numbers).exc()
 
         return self.__architecture
