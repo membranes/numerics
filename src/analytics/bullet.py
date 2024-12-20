@@ -3,6 +3,7 @@ import logging
 import os
 
 import pandas as pd
+import dask
 
 import config
 import src.functions.directories
@@ -19,7 +20,7 @@ class Bullet:
     def __init__(self, error: pd.DataFrame):
         """
 
-        :param
+        :param error:
         """
 
         # The metrics in focus.
@@ -49,6 +50,27 @@ class Bullet:
 
         return message
 
+    @dask.delayed
+    def __build(self, excerpt: pd.DataFrame, name: str, category: str):
+        """
+
+        :param excerpt:
+        :param name:
+        :param category:
+        :return:
+        """
+
+        excerpt.rename(columns=self.__names, inplace=True)
+
+        # The dictionary of the instances
+        nodes = excerpt.to_dict(orient='split')
+        nodes['target'] = self.__error.loc[category, nodes['columns']].to_list()
+
+        # Save
+        message = self.__save(nodes=nodes, name=f'{name}.json')
+
+        return message
+
     def exc(self, blob: pd.DataFrame):
         """
 
@@ -66,18 +88,13 @@ class Bullet:
         derivations.set_index(keys=['tag'], drop=False, inplace=True)
 
         # Hence
+        computations = []
         for category in categories:
 
             name = self.__configurations.definition[category]
-
-            # The instances of the category
             excerpt: pd.DataFrame = derivations.loc[derivations['category'] == category, self.__names.keys()]
-            excerpt.rename(columns=self.__names, inplace=True)
+            message = self.__build(excerpt=excerpt, name=name, category=category)
+            computations.append(message)
 
-            # The dictionary of the instances
-            nodes = excerpt.to_dict(orient='split')
-            nodes['target'] = self.__error.loc[category, nodes['columns']].to_list()
-
-            # Save
-            message = self.__save(nodes=nodes, name=f'{name}.json')
-            logging.info(message)
+        messages = dask.compute(computations, scheduler='threads')[0]
+        logging.info(messages)
