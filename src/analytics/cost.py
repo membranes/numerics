@@ -60,22 +60,21 @@ class Cost:
         return self.__cfp.exc(category=category)
 
     @dask.delayed
-    def __persist(self, nodes: dict, metric: str, category: str) -> str:
+    def __persist(self, nodes: dict, metric: str, name: str) -> str:
         """
 
         :param nodes: The graph data.
         :param metric: fnr (false negative rate) or fpr (false positive rate)
-        :param category: Category code, e.g., GEO, GPE, etc. (refer to definition in config.py)
+        :param name:
         :return:
         """
 
         # The file name, and path; path = directory + file name
-        name = f'{self.__configurations.definition[category]}.json'
-        path = os.path.join(self.__configurations.numerics_, 'cost', metric, name)
+        path = os.path.join(self.__configurations.numerics_, 'cost', metric, f'{name}.json')
 
         return self.__objects.write(nodes=nodes, path=path)
 
-    def exc(self):
+    def exc(self, definitions: dict):
         """
 
         :return:
@@ -86,9 +85,9 @@ class Cost:
         for category in categories:
 
             fnr = self.__fnr(category=category)
-            _fnr = self.__persist(nodes=fnr, metric='fnr', category=category)
+            _fnr = self.__persist(nodes=fnr, metric='fnr', name=definitions[category])
             fpr = self.__fpr(category=category)
-            _fpr = self.__persist(nodes=fpr, metric='fpr', category=category)
+            _fpr = self.__persist(nodes=fpr, metric='fpr', name=definitions[category])
 
             computations.append([_fnr, _fpr])
 
