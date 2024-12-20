@@ -40,12 +40,3 @@ class Config:
 
         # Each architecture's prime artefacts are within the {architecture}/prime/ path
         self.prime_ = '/prime/'
-
-        # tag: category code
-        self.categories = { 'B-geo': 'GEO', 'B-gpe': 'GPE', 'B-org': 'ORG', 'B-per': 'PER', 'B-tim': 'TIM',
-                            'I-geo': 'GEO', 'I-gpe': 'GPE', 'I-org': 'ORG', 'I-per': 'PER', 'I-tim': 'TIM',
-                            'O': 'O'}
-
-        # category code: category definition
-        self.definition = { 'GEO': 'geographic', 'GPE': 'geopolitical', 'ORG': 'organisation', 'PER': 'person', 'TIM': 'time',
-                            'O': 'miscellaneous'}
