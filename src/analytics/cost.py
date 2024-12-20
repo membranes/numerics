@@ -7,8 +7,8 @@ import numpy as np
 import pandas as pd
 
 import config
-import src.analytics.cost_false_negative_rate as cfn
-import src.analytics.cost_false_positive_rate as cfp
+import src.analytics.cfn
+import src.analytics.cfp
 import src.functions.objects
 
 
@@ -36,8 +36,8 @@ class Cost:
         self.__rates: np.ndarray = (self.__rates[1:])[..., None]
 
         # Instances
-        self.__cfn = cfn.CostFalseNegativeRate(rates=self.__rates, costs=self.__costs, frequencies=self.__frequencies)
-        self.__cfp = cfp.CostFalsePositiveRate(rates=self.__rates, costs=self.__costs, frequencies=self.__frequencies)
+        self.__cfn = src.analytics.cfn.CFN(rates=self.__rates, costs=self.__costs, frequencies=self.__frequencies)
+        self.__cfp = src.analytics.cfp.CFP(rates=self.__rates, costs=self.__costs, frequencies=self.__frequencies)
 
     @dask.delayed
     def __fnr(self, category: str) -> dict:
@@ -46,8 +46,6 @@ class Cost:
         :param category:
         :return:
         """
-
-        # item = cfn.CostFalseNegativeRate(rates=self.__rates, costs=self.__costs, frequencies=self.__frequencies)
 
         return self.__cfn.exc(category=category)
 
@@ -59,8 +57,6 @@ class Cost:
         :return:
         """
 
-        # item = cfp.CostFalsePositiveRate(rates=self.__rates, costs=self.__costs, frequencies=self.__frequencies)
-
         return self.__cfp.exc(category=category)
 
     @dask.delayed
@@ -69,7 +65,7 @@ class Cost:
 
         :param nodes: The graph data.
         :param metric: fnr (false negative rate) or fpr (false positive rate)
-        :param category: Category code, e.g., GEO, GPE, etc. (ref. self.definition in config.py)
+        :param category: Category code, e.g., GEO, GPE, etc. (refer to definition in config.py)
         :return:
         """
 
