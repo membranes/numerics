@@ -55,7 +55,9 @@ function generateChart(fileNameKey) {
                 },
                 scrollablePlotArea: {
                     scrollPositionX: 1,
-                }
+                },
+                height: 330,
+                marginBottom: 100
             },
             credits: {
                 enabled: false
@@ -66,10 +68,6 @@ function generateChart(fileNameKey) {
             subtitle: {
                 useHTML: true,
                 text:
-                    '<div style="margin-bottom: -15px;">The approximate # of occurences/annum of </div><br>' +
-                    '<div style="margin-bottom: -15px;">' + fileNameKey + ' words: <b>[' +
-                    Math.min(...latest).toLocaleString('en') + ',  ' +
-                    Math.max(...latest).toLocaleString('en') + '] words</b></div><br>' +
                     'Cost per missed word: £' + Highcharts.numberFormat(calculations.cost, 2)
             },
             xAxis: {
@@ -80,6 +78,7 @@ function generateChart(fileNameKey) {
                 title: {
                     text: null,
                 },
+                min: 1000
             },
             tooltip: {
                 crosshairs: true,
@@ -135,6 +134,7 @@ function generateChart(fileNameKey) {
                 scrollablePlotArea: {
                     scrollPositionX: 1,
                 },
+                height: 330
             },
             credits: {
                 enabled: false
@@ -145,10 +145,6 @@ function generateChart(fileNameKey) {
             subtitle: {
                 useHTML: true,
                 text:
-                    '<div style="margin-bottom: -15px;">The approximate # of occurences/annum of </div><br>' +
-                    '<div style="margin-bottom: -15px;">' + fileNameKey + ' words: <b>[' +
-                    Math.min(...latest).toLocaleString('en') + ',  ' +
-                    Math.max(...latest).toLocaleString('en') + '] words</b></div><br>' +
                     'Cost per missed word: £' + Highcharts.numberFormat(calculations.cost, 2)
             },
             xAxis: {
@@ -159,6 +155,7 @@ function generateChart(fileNameKey) {
                 title: {
                     text: null,
                 },
+                min: 1000
             },
             tooltip: {
                 crosshairs: true,
@@ -187,7 +184,16 @@ function generateChart(fileNameKey) {
                     },
                     data: data
                 }
-            ]
+            ],
+            caption: {
+                align: 'center',
+                y: 25,
+                text:
+                    '<div style="margin-bottom: -15px;"><b>NOTES:</b> The approximate # of occurrences/annum of </div>' +
+                    '<div style="margin-bottom: -15px;">' + fileNameKey + ' words: <b>[' +
+                    Math.min(...latest).toLocaleString('en') + ',  ' +
+                    Math.max(...latest).toLocaleString('en') + '] words</b></div><br>'
+            }
         });
 
 
