@@ -66,7 +66,8 @@ class Cost:
         """
 
         excerpt = self.__blob.loc[self.__blob['category'] == category, ['tag', 'fpr']].set_index(keys='tag')
-        # logging.info(excerpt.to_dict(orient='dict'))
+        estimates = excerpt.to_dict(orient='dict')['fpr']
+        upper = self.__limits.error.loc[category, 'fpr']
 
         return self.__cfp.exc(category=category)
 
