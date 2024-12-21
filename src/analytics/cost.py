@@ -51,8 +51,9 @@ class Cost:
         :return:
         """
 
-        excerpt = self.__blob[self.__blob['category'] == category, ['tag', 'fnr']].set_index(keys='tag')
-        logging.info(excerpt.to_dict(orient='index'))
+        excerpt = self.__blob.loc[self.__blob['category'] == category, ['tag', 'fnr']].set_index(keys='tag')
+        estimates = excerpt.to_dict(orient='dict')['fnr']
+        upper = self.__limits.error.loc[category, 'fnr']
 
         return self.__cfn.exc(category=category)
 
@@ -64,8 +65,8 @@ class Cost:
         :return:
         """
 
-        excerpt = self.__blob[self.__blob['category'] == category, ['tag', 'fpr']].set_index(keys='tag')
-        logging.info(excerpt.to_dict(orient='index'))
+        excerpt = self.__blob.loc[self.__blob['category'] == category, ['tag', 'fpr']].set_index(keys='tag')
+        # logging.info(excerpt.to_dict(orient='dict'))
 
         return self.__cfp.exc(category=category)
 
