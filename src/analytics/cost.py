@@ -9,8 +9,8 @@ import pandas as pd
 import config
 import src.analytics.cfn
 import src.analytics.cfp
-import src.functions.objects
 import src.elements.limits as lm
+import src.functions.objects
 
 
 class Cost:
@@ -90,6 +90,8 @@ class Cost:
         :param definitions: A dict wherein key === category code, value === category code definition
         :return:
         """
+
+        logging.info(self.__limits.error)
 
         categories = list(self.__numbers.index)
         computations = []
