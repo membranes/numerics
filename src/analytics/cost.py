@@ -7,8 +7,8 @@ import numpy as np
 import pandas as pd
 
 import config
-import src.analytics.cost_false_negative_rate as cfn
-import src.analytics.cost_false_positive_rate as cfp
+import src.analytics.cfn
+import src.analytics.cfp
 import src.functions.objects
 
 
@@ -17,15 +17,15 @@ class Cost:
     Class Costs
     """
 
-    def __init__(self, costs: pd.DataFrame, frequencies: pd.DataFrame):
+    def __init__(self, costs: pd.DataFrame, numbers: pd.DataFrame):
         """
 
         :param costs
-        :param frequencies
+        :param numbers
         """
 
         self.__costs = costs
-        self.__frequencies = frequencies
+        self.__numbers = numbers
 
         # Configurations
         self.__configurations = config.Config()
@@ -36,8 +36,8 @@ class Cost:
         self.__rates: np.ndarray = (self.__rates[1:])[..., None]
 
         # Instances
-        self.__cfn = cfn.CostFalseNegativeRate(rates=self.__rates, costs=self.__costs, frequencies=self.__frequencies)
-        self.__cfp = cfp.CostFalsePositiveRate(rates=self.__rates, costs=self.__costs, frequencies=self.__frequencies)
+        self.__cfn = src.analytics.cfn.CFN(rates=self.__rates, costs=self.__costs, numbers=self.__numbers)
+        self.__cfp = src.analytics.cfp.CFP(rates=self.__rates, costs=self.__costs, numbers=self.__numbers)
 
     @dask.delayed
     def __fnr(self, category: str) -> dict:
@@ -46,8 +46,6 @@ class Cost:
         :param category:
         :return:
         """
-
-        # item = cfn.CostFalseNegativeRate(rates=self.__rates, costs=self.__costs, frequencies=self.__frequencies)
 
         return self.__cfn.exc(category=category)
 
@@ -59,40 +57,38 @@ class Cost:
         :return:
         """
 
-        # item = cfp.CostFalsePositiveRate(rates=self.__rates, costs=self.__costs, frequencies=self.__frequencies)
-
         return self.__cfp.exc(category=category)
 
     @dask.delayed
-    def __persist(self, nodes: dict, metric: str, category: str) -> str:
+    def __persist(self, nodes: dict, metric: str, name: str) -> str:
         """
 
         :param nodes: The graph data.
         :param metric: fnr (false negative rate) or fpr (false positive rate)
-        :param category: Category code, e.g., GEO, GPE, etc. (ref. self.definition in config.py)
+        :param name:
         :return:
         """
 
         # The file name, and path; path = directory + file name
-        name = f'{self.__configurations.definition[category]}.json'
-        path = os.path.join(self.__configurations.numerics_, 'cost', metric, name)
+        path = os.path.join(self.__configurations.numerics_, 'cost', metric, f'{name}.json')
 
         return self.__objects.write(nodes=nodes, path=path)
 
-    def exc(self):
+    def exc(self, definitions: dict):
         """
 
+        :param definitions: A dict wherein key === category code, value === category code definition
         :return:
         """
 
-        categories = list(self.__frequencies.index)
+        categories = list(self.__numbers.index)
         computations = []
         for category in categories:
 
             fnr = self.__fnr(category=category)
-            _fnr = self.__persist(nodes=fnr, metric='fnr', category=category)
+            _fnr = self.__persist(nodes=fnr, metric='fnr', name=definitions[category])
             fpr = self.__fpr(category=category)
-            _fpr = self.__persist(nodes=fpr, metric='fpr', category=category)
+            _fpr = self.__persist(nodes=fpr, metric='fpr', name=definitions[category])
 
             computations.append([_fnr, _fpr])
 

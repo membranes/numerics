@@ -1,7 +1,7 @@
 {
     "index": [
-        "B-per",
-        "I-per"
+        "B-PER",
+        "I-PER"
     ],
     "columns": [
         "False Negative Rate",

@@ -1,24 +1,24 @@
-"""Module cost_false_positive_rate.py"""
+"""Module cfp.py"""
 import numpy as np
 import pandas as pd
 
 
-class CostFalsePositiveRate:
+class CFP:
     """
     False Positive Rate Cost
     """
 
-    def __init__(self, rates: np.ndarray, costs: pd.DataFrame, frequencies: pd.DataFrame):
+    def __init__(self, rates: np.ndarray, costs: pd.DataFrame, numbers: pd.DataFrame):
         """
 
         :param rates:
         :param costs:
-        :param frequencies:
+        :param numbers:
         """
 
         self.__rates = rates
         self.__costs = costs
-        self.__frequencies = frequencies
+        self.__numbers = numbers
 
     def __estimates_fpr(self, cost: int, boundaries: np.ndarray) -> np.ndarray:
         """
@@ -45,7 +45,7 @@ class CostFalsePositiveRate:
         cost = self.__costs.loc['fpr', category]
 
         # The approximate minimum & maximum ...
-        boundaries = self.__frequencies.loc[category, :].to_numpy()
+        boundaries = self.__numbers.loc[category, :].to_numpy()
 
         # Hence
         estimates = self.__estimates_fpr(cost=cost, boundaries=boundaries)
@@ -53,6 +53,6 @@ class CostFalsePositiveRate:
         # Nodes
         nodes = pd.DataFrame(data=estimates, columns=['x', 'low', 'high']).to_dict(orient='tight')
         nodes['cost'] = int(cost)
-        nodes['approximate_annual_frequencies'] = boundaries.tolist()
+        nodes['approximate_annual_numbers'] = boundaries.tolist()
 
         return nodes

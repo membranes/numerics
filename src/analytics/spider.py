@@ -2,6 +2,7 @@
 import logging
 import os
 
+import dask
 import pandas as pd
 
 import config
@@ -44,11 +45,31 @@ class Spider:
 
         return message
 
-    def exc(self, blob: pd.DataFrame):
+    @dask.delayed
+    def __build(self, excerpt: pd.DataFrame, name: str):
+        """
+
+        :param excerpt:
+        :param name:
+        :return:
+        """
+
+        excerpt.rename(columns=self.__names, inplace=True)
+
+        # The dictionary of the instances
+        nodes = excerpt.to_dict(orient='tight')
+
+        # Save
+        message = self.__save(nodes=nodes, name=f'{name}.json')
+
+        return message
+
+    def exc(self, blob: pd.DataFrame, definitions: dict):
         """
 
         :param blob: A data frame consisting of error matrix frequencies & metrics, alongside
                      tags & categories identifiers.
+        :param definitions: A dict wherein key === category code, value === category code definition
         :return:
         """
 
@@ -61,19 +82,13 @@ class Spider:
         derivations.set_index(keys=['tag', 'category'], drop=False, inplace=True)
 
         # Hence
+        computations = []
         for category in categories:
 
-            name = self.__configurations.definition[category]
-            logging.info(name)
-
-            # The instances of the category
+            name = definitions[category]
             excerpt: pd.DataFrame = derivations.loc[derivations['category'] == category, self.__names.keys()]
-            excerpt.rename(columns=self.__names, inplace=True)
+            message = self.__build(excerpt=excerpt, name=name)
+            computations.append(message)
 
-            # The dictionary of the instances
-            nodes = excerpt.to_dict(orient='tight')
-            logging.info(nodes)
-
-            # Save
-            message = self.__save(nodes=nodes, name=f'{name}.json')
-            logging.info(message)
+        messages = dask.compute(computations, scheduler='threads')[0]
+        logging.info(messages)
