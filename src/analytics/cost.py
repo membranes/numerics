@@ -52,10 +52,10 @@ class Cost:
         """
 
         excerpt = self.__blob.loc[self.__blob['category'] == category, ['tag', 'fnr']].set_index(keys='tag')
-        estimates = excerpt.to_dict(orient='dict')['fnr']
-        upper = self.__limits.error.loc[category, 'fnr']
+        rates = excerpt.to_dict(orient='dict')['fnr']
+        limit = self.__limits.error.loc[category, 'fnr']
 
-        return self.__cfn.exc(category=category)
+        return self.__cfn.exc(category=category, rates=rates, limit=limit)
 
     @dask.delayed
     def __fpr(self, category: str) -> dict:
@@ -66,8 +66,8 @@ class Cost:
         """
 
         excerpt = self.__blob.loc[self.__blob['category'] == category, ['tag', 'fpr']].set_index(keys='tag')
-        estimates = excerpt.to_dict(orient='dict')['fpr']
-        upper = self.__limits.error.loc[category, 'fpr']
+        rates = excerpt.to_dict(orient='dict')['fpr']
+        limit = self.__limits.error.loc[category, 'fpr']
 
         return self.__cfp.exc(category=category)
 
