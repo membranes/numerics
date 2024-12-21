@@ -64,11 +64,16 @@ function generateChart(fileNameKey) {
                 text: "By false negative rates<br>"
             },
             subtitle: {
+                useHTML: true,
                 text:
-                    '~ # of Missed Entities per Annum: [' + Math.min(...latest).toLocaleString('en') + ', ...]<br>' +
-                    'Cost per Missed Entity: £' + Highcharts.numberFormat(calculations.cost, 2)
+                    '<div style="margin-bottom: -15px;">The approximate # of occurences/annum of </div><br>' +
+                    '<div style="margin-bottom: -15px;">' + fileNameKey + ' words: <b>[' +
+                    Math.min(...latest).toLocaleString('en') + ',  ' +
+                    Math.max(...latest).toLocaleString('en') + '] words</b></div><br>' +
+                    'Cost per missed word: £' + Highcharts.numberFormat(calculations.cost, 2)
             },
             xAxis: {
+
             },
             yAxis: {
                 type: 'logarithmic',
@@ -115,7 +120,11 @@ function generateChart(fileNameKey) {
 
     $.getJSON('../../warehouse/numerics/cost/fpr/' + fileNameKey + '.json', function (calculations) {
 
-        var data = calculations.data;
+        let data = calculations.data;
+        let numbers = calculations.approximate_annual_numbers;
+        let latest = numbers.map(function (value){
+            return parseInt(value);
+        });
 
         Highcharts.chart("container0002", {
             chart: {
@@ -134,9 +143,13 @@ function generateChart(fileNameKey) {
                 text: "By false positive rates<br>"
             },
             subtitle: {
+                useHTML: true,
                 text:
-                    '~ # of Missed Entities per Annum: [..., ...]<br>' +
-                    'Cost per Missed Entity: ...<br>'
+                    '<div style="margin-bottom: -15px;">The approximate # of occurences/annum of </div><br>' +
+                    '<div style="margin-bottom: -15px;">' + fileNameKey + ' words: <b>[' +
+                    Math.min(...latest).toLocaleString('en') + ',  ' +
+                    Math.max(...latest).toLocaleString('en') + '] words</b></div><br>' +
+                    'Cost per missed word: £' + Highcharts.numberFormat(calculations.cost, 2)
             },
             xAxis: {
 
