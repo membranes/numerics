@@ -74,16 +74,22 @@ class Cost:
 
         return self.__objects.write(nodes=nodes, path=path)
 
-    def exc(self, definitions: dict):
+    def exc(self, blob: pd.DataFrame, definitions: dict):
         """
 
+        :param blob: A data frame consisting of error matrix frequencies & metrics, alongside
+                     tags & categories identifiers.
         :param definitions: A dict wherein key === category code, value === category code definition
         :return:
         """
 
+        logging.info(blob)
+
         categories = list(self.__numbers.index)
         computations = []
         for category in categories:
+
+            logging.info(category)
 
             fnr = self.__fnr(category=category)
             _fnr = self.__persist(nodes=fnr, metric='fnr', name=definitions[category])
