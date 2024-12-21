@@ -53,9 +53,9 @@ class Cost:
 
         excerpt = self.__blob.loc[self.__blob['category'] == category, ['tag', 'fnr']].set_index(keys='tag')
         rates = excerpt.to_dict(orient='dict')['fnr']
-        limit = self.__limits.error.loc[category, 'fnr']
+        boundary = self.__limits.error.loc[category, 'fnr']
 
-        return self.__cfn.exc(category=category, rates=rates, limit=limit)
+        return self.__cfn.exc(category=category, rates=rates, boundary=boundary)
 
     @dask.delayed
     def __fpr(self, category: str) -> dict:
@@ -67,9 +67,9 @@ class Cost:
 
         excerpt = self.__blob.loc[self.__blob['category'] == category, ['tag', 'fpr']].set_index(keys='tag')
         rates = excerpt.to_dict(orient='dict')['fpr']
-        limit = self.__limits.error.loc[category, 'fpr']
+        boundary = self.__limits.error.loc[category, 'fpr']
 
-        return self.__cfp.exc(category=category, rates=rates, limit=limit)
+        return self.__cfp.exc(category=category, rates=rates, boundary=boundary)
 
     @dask.delayed
     def __persist(self, nodes: dict, metric: str, name: str) -> str:
