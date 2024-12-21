@@ -618,5 +618,10 @@
     "approximate_annual_numbers": [
         1593.75,
         4250.0
-    ]
+    ],
+    "rates": {
+        "B-GPE": 0.0006816167950378649,
+        "I-GPE": 0.0
+    },
+    "boundary": 0.075
 }
