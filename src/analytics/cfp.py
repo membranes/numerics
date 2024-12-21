@@ -34,13 +34,13 @@ class CFP:
 
         return estimates
 
-    def exc(self, category: str, rates: dict, limit: float) -> dict:
+    def exc(self, category: str, rates: dict, boundary: float) -> dict:
         """
 
         :param category:
         :param rates: The false positive rate estimates of a category; split by
                 annotation type, i.e., I (inside), B (beginning)
-        :param limit: The upper limit of a false positive rate
+        :param boundary: The upper boundary of a false positive rate
         :return:
         """
 
@@ -58,6 +58,6 @@ class CFP:
         nodes['cost'] = int(cost)
         nodes['approximate_annual_numbers'] = boundaries.tolist()
         nodes['rates'] = rates
-        nodes['limit'] = limit
+        nodes['boundary'] = boundary
 
         return nodes
