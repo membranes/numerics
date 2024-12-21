@@ -61,13 +61,13 @@ class CFN:
 
         return nodes
 
-    def exc(self, category: str, rates: dict, limit: float) -> dict:
+    def exc(self, category: str, rates: dict, boundary: float) -> dict:
         """
 
         :param category:
         :param rates: The false negative rate estimates of a category; split by
                 annotation type, i.e., I (inside), B (beginning)
-        :param limit: The upper limit of a false negative rate
+        :param boundary: The upper boundary of a false negative rate
         :return:
         """
 
@@ -83,6 +83,6 @@ class CFN:
         nodes['cost'] = int(cost)
         nodes['approximate_annual_numbers'] = boundaries.to_numpy().tolist()
         nodes['rates'] = rates
-        nodes['limit'] = limit
+        nodes['boundary'] = boundary
 
         return nodes
