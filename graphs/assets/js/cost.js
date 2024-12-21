@@ -41,7 +41,11 @@ function generateChart(fileNameKey) {
 
     $.getJSON('../../warehouse/numerics/cost/fnr/' + fileNameKey + '.json', function (calculations) {
 
-        var data = calculations.data;
+        let data = calculations.data;
+        let numbers = calculations.approximate_annual_numbers;
+        let latest = numbers.map(function (value){
+            return parseInt(value);
+        });
 
         Highcharts.chart("container0001", {
             chart: {
@@ -51,7 +55,9 @@ function generateChart(fileNameKey) {
                 },
                 scrollablePlotArea: {
                     scrollPositionX: 1,
-                }
+                },
+                height: 350,
+                marginBottom: 100
             },
             credits: {
                 enabled: false
@@ -60,17 +66,19 @@ function generateChart(fileNameKey) {
                 text: "By false negative rates<br>"
             },
             subtitle: {
+                useHTML: true,
                 text:
-                    '~ # of Missed Entities per Annum: [..., ...]<br>' +
-                    'Cost per Missed Entity: ...'
+                    'Cost per missed word: £' + Highcharts.numberFormat(calculations.cost, 2)
             },
             xAxis: {
+                min: 0.01
             },
             yAxis: {
                 type: 'logarithmic',
                 title: {
                     text: null,
                 },
+                min: 1000
             },
             tooltip: {
                 crosshairs: true,
@@ -90,10 +98,10 @@ function generateChart(fileNameKey) {
                             x1: 0,
                             x2: 0,
                             y1: 0,
-                            y2: 1,
+                            y2: 0.5,
                         },
                         stops: [
-                            [0, "#ff0000"],
+                            [0, "#F58216"],
                             [1, "#000000"],
                         ],
                     },
@@ -111,7 +119,11 @@ function generateChart(fileNameKey) {
 
     $.getJSON('../../warehouse/numerics/cost/fpr/' + fileNameKey + '.json', function (calculations) {
 
-        var data = calculations.data;
+        let data = calculations.data;
+        let numbers = calculations.approximate_annual_numbers;
+        let latest = numbers.map(function (value){
+            return parseInt(value);
+        });
 
         Highcharts.chart("container0002", {
             chart: {
@@ -122,6 +134,7 @@ function generateChart(fileNameKey) {
                 scrollablePlotArea: {
                     scrollPositionX: 1,
                 },
+                height: 330
             },
             credits: {
                 enabled: false
@@ -130,18 +143,19 @@ function generateChart(fileNameKey) {
                 text: "By false positive rates<br>"
             },
             subtitle: {
+                useHTML: true,
                 text:
-                    '~ # of Missed Entities per Annum: [..., ...]<br>' +
-                    'Cost per Missed Entity: ...<br>'
+                    'Cost per missed word: £' + Highcharts.numberFormat(calculations.cost, 2)
             },
             xAxis: {
-
+                min: 0.01
             },
             yAxis: {
                 type: 'logarithmic',
                 title: {
                     text: null,
                 },
+                min: 1000
             },
             tooltip: {
                 crosshairs: true,
@@ -164,13 +178,22 @@ function generateChart(fileNameKey) {
                             y2: 1,
                         },
                         stops: [
-                            [0, "#ff0000"],
+                            [0, "#F58216"],
                             [1, "#000000"],
                         ],
                     },
                     data: data
                 }
-            ]
+            ],
+            caption: {
+                align: 'center',
+                y: 25,
+                text:
+                    '<div style="margin-bottom: -15px;"><b>NOTES:</b> The approximate # of occurrences/annum of </div>' +
+                    '<div style="margin-bottom: -15px;">' + fileNameKey + ' words: <b>[' +
+                    Math.min(...latest).toLocaleString('en') + ',  ' +
+                    Math.max(...latest).toLocaleString('en') + '] words</b></div><br>'
+            }
         });
 
 

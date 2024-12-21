@@ -54,8 +54,8 @@ class Interface:
         # The boundaries array is a (1 X 2) vector
         boundaries: np.ndarray = limits.dispatches.product(axis=1).values[None, ...]
         numbers = limits.frequencies.copy()
-        numbers['minimum'] = boundaries.min() * numbers['minimum']
-        numbers['maximum'] = boundaries.min() * numbers['maximum']
+        numbers['minimum'] = boundaries.min() * numbers['minimum']/100
+        numbers['maximum'] = boundaries.min() * numbers['maximum']/100
 
         return numbers
 
@@ -91,4 +91,4 @@ class Interface:
         # Spiders
         src.analytics.spider.Spider().exc(blob=derivations, definitions=definitions)
         src.analytics.bullet.Bullet(error=limits.error).exc(blob=derivations, definitions=definitions)
-        src.analytics.cost.Cost(costs=limits.costs, numbers=numbers).exc(definitions=definitions)
+        src.analytics.cost.Cost(limits=limits, numbers=numbers, blob=derivations).exc(definitions=definitions)

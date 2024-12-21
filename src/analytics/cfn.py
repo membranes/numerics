@@ -1,6 +1,8 @@
-"""Module cost_false_negative.py"""
+"""Module cfn.py"""
 import numpy as np
 import pandas as pd
+
+import config
 
 
 class CFN:
@@ -8,21 +10,20 @@ class CFN:
     False Negative Rate Cost
     """
 
-    def __init__(self, rates: np.ndarray, costs: pd.DataFrame, numbers: pd.DataFrame):
+    def __init__(self, costs: pd.DataFrame, numbers: pd.DataFrame):
         """
 
-        :param rates: An array of false negative rate values; (0, 1]<br>
         :param costs: A dataframe of cost per category, and per rate type
               <ul>
                 <li>Categories: Of this project &rarr; <b>GEO</b>: geographic, <b>GPE</b>: geopolitical,
                     <b>ORG</b>: organisation, <b>PER</b>: person, <b>TIM</b>: time, <b>O</b>: miscellaneous</li>
                 <li>Rate Types: false negative rate (fnr), false positive rate (fpr)</li>
               </ul><br>
-        :param numbers:  Per category, and per annum, it summarises the approximate minimum & maximum expected
-                             occurrences of words in the category.<br>
+        :param numbers: Per category, and per annum, it summarises the approximate minimum & maximum expected
+                        occurrences of words in the category.<br>
         """
 
-        self.__rates = rates
+        self.__rates = config.Config().rates
         self.__costs = costs
         self.__numbers = numbers
 
@@ -61,10 +62,13 @@ class CFN:
 
         return nodes
 
-    def exc(self, category: str) -> dict:
+    def exc(self, category: str, rates: dict, boundary: float) -> dict:
         """
 
         :param category:
+        :param rates: The false negative rate estimates of a category; split by
+                annotation type, i.e., I (inside), B (beginning)
+        :param boundary: The upper boundary of a false negative rate
         :return:
         """
 
@@ -79,5 +83,7 @@ class CFN:
         nodes = self.__nodes(estimates=estimates)
         nodes['cost'] = int(cost)
         nodes['approximate_annual_numbers'] = boundaries.to_numpy().tolist()
+        nodes['rates'] = rates
+        nodes['boundary'] = boundary
 
         return nodes
