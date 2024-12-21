@@ -3,7 +3,6 @@ import logging
 import os
 
 import dask
-import numpy as np
 import pandas as pd
 
 import config
@@ -35,13 +34,9 @@ class Cost:
         self.__configurations = config.Config()
         self.__objects = src.functions.objects.Objects()
 
-        # Rates, self.__rates: np.ndarray = self.__rates[..., None]
-        self.__rates: np.ndarray = np.linspace(start=0, stop=1, num=101)
-        self.__rates: np.ndarray = (self.__rates[1:])[..., None]
-
         # Instances
-        self.__cfn = src.analytics.cfn.CFN(rates=self.__rates, costs=self.__limits.costs, numbers=self.__numbers)
-        self.__cfp = src.analytics.cfp.CFP(rates=self.__rates, costs=self.__limits.costs, numbers=self.__numbers)
+        self.__cfn = src.analytics.cfn.CFN(costs=self.__limits.costs, numbers=self.__numbers)
+        self.__cfp = src.analytics.cfp.CFP(costs=self.__limits.costs, numbers=self.__numbers)
 
     @dask.delayed
     def __fnr(self, category: str) -> dict:
