@@ -91,4 +91,4 @@ class Interface:
         # Spiders
         src.analytics.spider.Spider().exc(blob=derivations, definitions=definitions)
         src.analytics.bullet.Bullet(error=limits.error).exc(blob=derivations, definitions=definitions)
-        src.analytics.cost.Cost(costs=limits.costs, numbers=numbers).exc(blob=derivations, definitions=definitions)
+        src.analytics.cost.Cost(costs=limits.costs, numbers=numbers, blob=derivations).exc(definitions=definitions)
