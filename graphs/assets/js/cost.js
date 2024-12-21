@@ -41,7 +41,11 @@ function generateChart(fileNameKey) {
 
     $.getJSON('../../warehouse/numerics/cost/fnr/' + fileNameKey + '.json', function (calculations) {
 
-        var data = calculations.data;
+        let data = calculations.data;
+        let numbers = calculations.approximate_annual_numbers;
+        let latest = numbers.map(function (value){
+            return parseInt(value);
+        });
 
         Highcharts.chart("container0001", {
             chart: {
@@ -61,8 +65,8 @@ function generateChart(fileNameKey) {
             },
             subtitle: {
                 text:
-                    '~ # of Missed Entities per Annum: [..., ...]<br>' +
-                    'Cost per Missed Entity: ...'
+                    '~ # of Missed Entities per Annum: [' + Math.min(...latest).toLocaleString('en') + ', ...]<br>' +
+                    'Cost per Missed Entity: £' + Highcharts.numberFormat(calculations.cost, 2)
             },
             xAxis: {
             },
