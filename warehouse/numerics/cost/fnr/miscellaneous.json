@@ -618,5 +618,9 @@
     "approximate_annual_numbers": [
         2099500.0,
         2114375.0
-    ]
+    ],
+    "rates": {
+        "O": 0.010163082013708302
+    },
+    "boundary": 0.05
 }
