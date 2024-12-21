@@ -17,15 +17,18 @@ class Cost:
     Class Costs
     """
 
-    def __init__(self, costs: pd.DataFrame, numbers: pd.DataFrame):
+    def __init__(self, costs: pd.DataFrame, numbers: pd.DataFrame, blob: pd.DataFrame):
         """
 
         :param costs
         :param numbers
+        :param blob: A data frame consisting of error matrix frequencies & metrics, alongside
+                     tags & categories identifiers.
         """
 
         self.__costs = costs
         self.__numbers = numbers
+        self.__blob = blob
 
         # Configurations
         self.__configurations = config.Config()
@@ -47,6 +50,9 @@ class Cost:
         :return:
         """
 
+        excerpt = self.__blob[self.__blob['category'] == category, ['tag', 'fnr']].set_index(keys='tag')
+        logging.info(excerpt.to_dict(orient='index'))
+
         return self.__cfn.exc(category=category)
 
     @dask.delayed
@@ -56,6 +62,9 @@ class Cost:
         :param category:
         :return:
         """
+
+        excerpt = self.__blob[self.__blob['category'] == category, ['tag', 'fpr']].set_index(keys='tag')
+        logging.info(excerpt.to_dict(orient='index'))
 
         return self.__cfp.exc(category=category)
 
@@ -74,16 +83,12 @@ class Cost:
 
         return self.__objects.write(nodes=nodes, path=path)
 
-    def exc(self, blob: pd.DataFrame, definitions: dict):
+    def exc(self, definitions: dict):
         """
 
-        :param blob: A data frame consisting of error matrix frequencies & metrics, alongside
-                     tags & categories identifiers.
         :param definitions: A dict wherein key === category code, value === category code definition
         :return:
         """
-
-        logging.info(blob)
 
         categories = list(self.__numbers.index)
         computations = []
