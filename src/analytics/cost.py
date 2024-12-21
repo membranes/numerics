@@ -69,7 +69,7 @@ class Cost:
         rates = excerpt.to_dict(orient='dict')['fpr']
         limit = self.__limits.error.loc[category, 'fpr']
 
-        return self.__cfp.exc(category=category)
+        return self.__cfp.exc(category=category, rates=rates, limit=limit)
 
     @dask.delayed
     def __persist(self, nodes: dict, metric: str, name: str) -> str:
@@ -93,13 +93,9 @@ class Cost:
         :return:
         """
 
-        logging.info(self.__limits.error)
-
         categories = list(self.__numbers.index)
         computations = []
         for category in categories:
-
-            logging.info(category)
 
             fnr = self.__fnr(category=category)
             _fnr = self.__persist(nodes=fnr, metric='fnr', name=definitions[category])
