@@ -56,7 +56,7 @@ function generateChart(fileNameKey) {
                 scrollablePlotArea: {
                     scrollPositionX: 1,
                 },
-                height: 330,
+                height: 350,
                 marginBottom: 100
             },
             credits: {
@@ -71,7 +71,7 @@ function generateChart(fileNameKey) {
                     'Cost per missed word: £' + Highcharts.numberFormat(calculations.cost, 2)
             },
             xAxis: {
-
+                min: 0.01
             },
             yAxis: {
                 type: 'logarithmic',
@@ -98,10 +98,10 @@ function generateChart(fileNameKey) {
                             x1: 0,
                             x2: 0,
                             y1: 0,
-                            y2: 1,
+                            y2: 0.5,
                         },
                         stops: [
-                            [0, "#ff0000"],
+                            [0, "#F58216"],
                             [1, "#000000"],
                         ],
                     },
@@ -148,7 +148,7 @@ function generateChart(fileNameKey) {
                     'Cost per missed word: £' + Highcharts.numberFormat(calculations.cost, 2)
             },
             xAxis: {
-
+                min: 0.01
             },
             yAxis: {
                 type: 'logarithmic',
@@ -178,7 +178,7 @@ function generateChart(fileNameKey) {
                             y2: 1,
                         },
                         stops: [
-                            [0, "#ff0000"],
+                            [0, "#F58216"],
                             [1, "#000000"],
                         ],
                     },
