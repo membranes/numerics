@@ -10,6 +10,7 @@ import config
 import src.analytics.cfn
 import src.analytics.cfp
 import src.functions.objects
+import src.elements.limits as lm
 
 
 class Cost:
@@ -17,16 +18,16 @@ class Cost:
     Class Costs
     """
 
-    def __init__(self, costs: pd.DataFrame, numbers: pd.DataFrame, blob: pd.DataFrame):
+    def __init__(self, limits: lm.Limits, numbers: pd.DataFrame, blob: pd.DataFrame):
         """
 
-        :param costs
-        :param numbers
+        :param limits: Refer to src.elements.limits
+        :param numbers:
         :param blob: A data frame consisting of error matrix frequencies & metrics, alongside
                      tags & categories identifiers.
         """
 
-        self.__costs = costs
+        self.__limits = limits
         self.__numbers = numbers
         self.__blob = blob
 
@@ -39,8 +40,8 @@ class Cost:
         self.__rates: np.ndarray = (self.__rates[1:])[..., None]
 
         # Instances
-        self.__cfn = src.analytics.cfn.CFN(rates=self.__rates, costs=self.__costs, numbers=self.__numbers)
-        self.__cfp = src.analytics.cfp.CFP(rates=self.__rates, costs=self.__costs, numbers=self.__numbers)
+        self.__cfn = src.analytics.cfn.CFN(rates=self.__rates, costs=self.__limits.costs, numbers=self.__numbers)
+        self.__cfp = src.analytics.cfp.CFP(rates=self.__rates, costs=self.__limits.costs, numbers=self.__numbers)
 
     @dask.delayed
     def __fnr(self, category: str) -> dict:
