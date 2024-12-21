@@ -150,14 +150,14 @@ inspects complexity.
 
 The categories of the tags, tag = annotation &#x29FA; category, of the excerpt data set 
 
-| code | definition          |
-|:-----|:--------------------|
-| org  | organisation        |
-| per  | person              |
-| tim  | time                |
-| geo  | geographical entity |
-| gpe  | geopolitical entity |
-| O    | miscellaneous       |
+| category | category name      |
+|:---------|:-------------------|
+| org      | organisation       |
+| per      | person             |
+| tim      | time               |
+| geo      | geography          |
+| gpe      | geo-political-term |
+| O        | miscellaneous      |
 
 
 Example:
