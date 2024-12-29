@@ -27,6 +27,9 @@ class Config:
         self.data_: str = os.path.join(os.getcwd(), 'data')
         self.artefacts_: str = os.path.join(self.data_, 'artefacts')
 
+        # Temporary assets
+        self.assets_ = os.path.join(os.getcwd(), 'assets')
+
         # The self.__artefacts_ directory branch for the fundamental error matrix frequencies
         self.branch = os.path.join('prime', 'metrics', 'testing', 'fundamental.json')
 
@@ -43,6 +46,6 @@ class Config:
         self.prime_ = '/prime/'
 
         # Rates, self.__rates: np.ndarray = self.__rates[..., None]
-        # :param rates: An array of rate values; (0, 1]<br>
+        # :param rates: An array of rate values; (0, 1\]<br>
         self.rates: np.ndarray = np.linspace(start=0, stop=1, num=101)
         self.rates: np.ndarray = (self.rates[1:])[..., None]
