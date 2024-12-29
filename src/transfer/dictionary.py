@@ -65,7 +65,7 @@ class Dictionary:
         local: pd.DataFrame = self.__local(path=path, extension=extension)
 
         # Building the Amazon S3 strings
-        frame = local.assign(key=prefix + '/' + local["vertex"])
+        frame = local.assign(key=prefix + local["vertex"])
 
         # The metadata dict strings
         frame['metadata'] = frame['section'].map(self.__metadata)
