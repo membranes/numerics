@@ -33,6 +33,7 @@ def main():
 
     # Analytics
     src.analytics.interface.Interface(s3_parameters=s3_parameters).exc(derivations=model.derivations, tags=tags)
+    src.abstracts.interface.Interface().exc(architecture=model.architecture, tags=tags)
 
     # Transfer
     src.transfer.interface.Interface(service=service, s3_parameters=s3_parameters).exc()
@@ -54,6 +55,7 @@ if __name__ == '__main__':
                         datefmt='%Y-%m-%d %H:%M:%S')
 
     # Classes
+    import src.abstracts.interface
     import src.analytics.interface
     import src.data.interface
     import src.functions.service
