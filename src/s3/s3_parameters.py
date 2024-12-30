@@ -1,6 +1,4 @@
 """Module s3_parameters.py"""
-import logging
-
 import boto3
 import yaml
 
