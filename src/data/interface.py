@@ -1,5 +1,8 @@
 """Module interface.py"""
 import logging
+import sys
+
+import dask
 
 import src.data.artefacts
 import src.elements.s3_parameters as s3p
@@ -35,17 +38,17 @@ class Interface:
                             datefmt='%Y-%m-%d %H:%M:%S')
         self.__logger = logging.getLogger(__name__)
 
-    def __get_assets(self, source_bucket: str, origin: str, target: str):
+    @dask.delayed
+    def __get_assets(self, origin: str, target: str) -> int:
         """
 
-        :param source_bucket:
         :param origin:
         :param target:
         :return:
         """
 
         return self.__directives.synchronise(
-            source_bucket=source_bucket, origin=origin, target=target)
+            source_bucket=self.__s3_parameters.internal, origin=origin, target=target)
 
     def exc(self):
         """
@@ -57,3 +60,15 @@ class Interface:
         strings = src.data.artefacts.Artefacts(
             service=self.__service, s3_parameters=self.__s3_parameters).exc()
         self.__logger.info(strings)
+
+        # Hence, retrieve the artefacts
+        computation = []
+        for origin, target in zip(strings['source'], strings['destination']):
+            code = self.__get_assets(origin=origin, target=target)
+            computation.append(code)
+        executions = dask.compute(computation, scheduler='threads')[0]
+
+        if all(executions) == 0:
+            return True
+
+        sys.exit('Unsuccessful artefacts download attempt.')
