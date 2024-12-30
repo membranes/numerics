@@ -61,7 +61,7 @@ class Best:
     def exc(self, tags: pd.DataFrame) -> bs.Best:
         """
 
-        :param tags: A dta frame summarising the projects tags, alongside each tag's annotation and category details.
+        :param tags: A data frame summarising the projects tags, alongside each tag's annotation and category details.
         :return:
         """
 
