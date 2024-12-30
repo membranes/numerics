@@ -21,15 +21,14 @@ class Spider:
         -------<br>
 
         <ul>
-            <li>self.__configurations</li>
             <li>self.__objects: An instance for reading & writing JSON (JavaScript Object Notation) files.</li>
             <li>self.__path: The directory wherein the data files, for the spider graphs, are stored.</li>
         </ul>
         """
 
-        self.__configurations = config.Config()
+        # Setting-up
         self.__objects = src.functions.objects.Objects()
-        self.__path = os.path.join(self.__configurations.numerics_, 'card', 'spider')
+        self.__path = os.path.join(config.Config().numerics_, 'card', 'spider')
 
         # The metrics in focus
         self.__names = {'precision': "Precision", 'sensitivity': "Sensitivity", 'specificity': 'Specificity',
@@ -63,28 +62,28 @@ class Spider:
         # Save
         return self.__save(nodes=nodes, name=f'{name}.json')
 
-    def exc(self, blob: pd.DataFrame, definitions: dict):
+    def exc(self, derivations: pd.DataFrame, definitions: dict):
         """
 
-        :param blob: A data frame consisting of error matrix frequencies & metrics, alongside
-                     tags & categories identifiers.
+        :param derivations: A data frame consisting of error matrix frequencies & metrics, alongside
+                            tags & categories identifiers.
         :param definitions: A dict wherein key === category code, value === category code definition
         :return:
         """
 
-        derivations = blob.copy()
+        data = derivations.copy()
 
         # The unique tag categories
-        categories = derivations['category'].unique()
+        categories = data['category'].unique()
 
         # The tag & category values are required for data structuring
-        derivations.set_index(keys=['tag', 'category'], drop=False, inplace=True)
+        data.set_index(keys=['tag', 'category'], drop=False, inplace=True)
 
         # Hence
         computations = []
         for category in categories:
             name = definitions[category]
-            excerpt: pd.DataFrame = derivations.loc[derivations['category'] == category, self.__names.keys()]
+            excerpt: pd.DataFrame = data.loc[data['category'] == category, self.__names.keys()]
             message = self.__build(excerpt=excerpt, name=name)
             computations.append(message)
 
