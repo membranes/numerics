@@ -1,12 +1,12 @@
 """
-This is data type Limits
+This is data type Model
 """
 import typing
 
 import pandas as pd
 
 
-class Best(typing.NamedTuple):
+class Model(typing.NamedTuple):
     """
     The data type class ⇾ Best
 
