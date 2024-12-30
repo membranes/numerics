@@ -55,8 +55,6 @@ class S3Parameters:
         except yaml.YAMLError as err:
             raise err from err
 
-        logging.info(data['parameters'])
-
         return data['parameters']
 
     def __build_collection(self, dictionary: dict) -> s3p.S3Parameters:
