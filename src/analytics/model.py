@@ -7,13 +7,13 @@ import pandas as pd
 import config
 import src.analytics.derivations
 import src.data.architecture
-import src.elements.model as bs
+import src.elements.model as ml
 import src.functions.objects
 
 
-class Best:
+class Model:
     """
-    Determines the best model
+    Determines the top model
     """
 
     def __init__(self):
@@ -24,7 +24,7 @@ class Best:
         # Configurations
         self.__configurations = config.Config()
 
-        # The architecture name of the best model, ...
+        # The architecture name of the top model, ...
         self.__architecture: str = src.data.architecture.Architecture().exc()
         logging.info('The best model, named by architecture: %s', self.__architecture)
 
@@ -58,7 +58,7 @@ class Best:
 
         return derivations
 
-    def exc(self, tags: pd.DataFrame) -> bs.Model:
+    def exc(self, tags: pd.DataFrame) -> ml.Model:
         """
 
         :param tags: A data frame summarising the projects tags, alongside each tag's annotation and category details.
@@ -73,4 +73,4 @@ class Best:
         derivations = self.__derivations(cases=cases)
         derivations = derivations.assign(category=derivations['tag'].map(values['category']))
 
-        return bs.Model(architecture=self.__architecture, derivations=derivations)
+        return ml.Model(architecture=self.__architecture, derivations=derivations)
