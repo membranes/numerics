@@ -17,23 +17,26 @@ class Spider:
 
     def __init__(self):
         """
-        Constructor
+        <b>Notes</b><br>
+        -------<br>
+
+        <ul>
+            <li>self.__configurations</li>
+            <li>self.__objects: An instance for reading & writing JSON (JavaScript Object Notation) files.</li>
+            <li>self.__path: The directory wherein the data files, for the spider graphs, are stored.</li>
+        </ul>
         """
 
         self.__configurations = config.Config()
-
-        # The directory wherein the data files, for the spider graphs, are stored.
+        self.__objects = src.functions.objects.Objects()
         self.__path = os.path.join(self.__configurations.numerics_, 'card', 'spider')
 
-        # An instance for reading & writing JSON (JavaScript Object Notation) files.
-        self.__objects = src.functions.objects.Objects()
-
-        # The metrics in focus.
+        # The metrics in focus
         self.__names = {'precision': "Precision", 'sensitivity': "Sensitivity", 'specificity': 'Specificity',
                         'fscore': 'F Score', 'balanced_accuracy': 'Balanced Accuracy',
                         'standard_accuracy': 'Standard Accuracy'}
 
-    def __save(self, nodes: dict, name: str):
+    def __save(self, nodes: dict, name: str) -> str:
         """
 
         :param nodes: The dictionary of values for the spider graph
@@ -41,12 +44,10 @@ class Spider:
         :return:
         """
 
-        message = self.__objects.write(nodes=nodes, path=os.path.join(self.__path, name))
-
-        return message
+        return self.__objects.write(nodes=nodes, path=os.path.join(self.__path, name))
 
     @dask.delayed
-    def __build(self, excerpt: pd.DataFrame, name: str):
+    def __build(self, excerpt: pd.DataFrame, name: str) -> str:
         """
 
         :param excerpt:
@@ -60,9 +61,7 @@ class Spider:
         nodes = excerpt.to_dict(orient='tight')
 
         # Save
-        message = self.__save(nodes=nodes, name=f'{name}.json')
-
-        return message
+        return self.__save(nodes=nodes, name=f'{name}.json')
 
     def exc(self, blob: pd.DataFrame, definitions: dict):
         """
@@ -84,7 +83,6 @@ class Spider:
         # Hence
         computations = []
         for category in categories:
-
             name = definitions[category]
             excerpt: pd.DataFrame = derivations.loc[derivations['category'] == category, self.__names.keys()]
             message = self.__build(excerpt=excerpt, name=name)
