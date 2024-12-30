@@ -3,6 +3,7 @@ import logging
 import sys
 
 import dask
+import pandas as pd
 
 import src.data.artefacts
 import src.elements.s3_parameters as s3p
@@ -50,16 +51,12 @@ class Interface:
         return self.__directives.synchronise(
             source_bucket=self.__s3_parameters.internal, origin=origin, target=target)
 
-    def exc(self):
+    def __data(self, strings: pd.DataFrame) -> None:
         """
 
+        :param strings:
         :return:
         """
-
-        # Get the artefacts metadata
-        strings = src.data.artefacts.Artefacts(
-            service=self.__service, s3_parameters=self.__s3_parameters).exc()
-        self.__logger.info(strings)
 
         # Hence, retrieve the artefacts
         computation = []
@@ -69,6 +66,19 @@ class Interface:
         executions = dask.compute(computation, scheduler='threads')[0]
 
         if all(executions) == 0:
-            return True
+            self.__logger.info('Artefacts of models retrieved.')
 
         sys.exit('Unsuccessful artefacts download attempt.')
+
+    def exc(self) -> None:
+        """
+
+        :return:
+        """
+
+        # Get the artefacts metadata
+        strings = src.data.artefacts.Artefacts(
+            service=self.__service, s3_parameters=self.__s3_parameters).exc()
+
+        # The artefacts
+        self.__data(strings=strings)
