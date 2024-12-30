@@ -35,10 +35,11 @@ class Directives:
         # Create the destination directory
         self.__directories.create(path=target)
 
-        # Hence
+        # Destination & Source
         destination = target.replace(os.getcwd() + os.path.sep, '')
-
         source = f"s3://{source_bucket}/{origin}"
+
+        # Hence
         state = subprocess.run(f"aws s3 sync {source} {destination}", shell=True, check=True)
 
         return state.returncode
