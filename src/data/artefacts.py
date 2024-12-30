@@ -2,13 +2,13 @@
 import logging
 import os
 
-import pandas as pd
 import numpy as np
+import pandas as pd
 
 import config
 import src.elements.s3_parameters as s3p
 import src.elements.service as sr
-import src.s3.prefix
+import src.s3.keys
 
 
 class Artefacts:
@@ -27,7 +27,6 @@ class Artefacts:
         self.__s3_parameters = s3_parameters
 
         self.__configurations = config.Config()
-        self.__prefix = self.__s3_parameters.path_internal_artefacts
 
         # Logging
         logging.basicConfig(level=logging.INFO,
@@ -41,22 +40,23 @@ class Artefacts:
         :return:
         """
 
-        listings: list = src.s3.prefix.Prefix(
-            service=self.__service, bucket_name=self.__s3_parameters.internal).objects(prefix=self.__prefix)
+        listings = src.s3.keys.Keys(service=self.__service, bucket_name=self.__s3_parameters.internal).excerpt(
+            prefix=self.__s3_parameters.path_internal_artefacts, delimiter='/')
 
         return listings
 
-    def __excerpt(self, keys: list) -> list:
+    @staticmethod
+    def __excerpt(keys: list) -> list:
         """
-        Extracts the keys within prime/model directory
 
         :param keys:
         :return:
         """
 
-        listings: list = [k for k in keys if
-                          k.__contains__(self.__configurations.prime_ + 'model') |
-                          k.__contains__(self.__configurations.prime_ + 'metrics')]
+        listings = [[prefix + partition]
+                    for partition in ['data', 'prime/model', 'prime/metrics']
+                    for prefix in keys]
+        listings = sum(listings, [])
 
         return listings
 
@@ -78,7 +78,7 @@ class Artefacts:
 
         return frame
 
-    def exc(self) -> pd.DataFrame:
+    def exc(self):
         """
         Determining the unique segments of fine-tuned models
 
@@ -92,12 +92,9 @@ class Artefacts:
         keys = self.__excerpt(keys=keys)
 
         # Hence, the distinct model & metrics sources/paths
-        sources = np.array([os.path.dirname(k) for k in keys])
-        sources = np.unique(sources)
-        self.__logger.info(sources)
+        sources = np.array(keys)
 
         # Source & Destination
         strings = self.__strings(sources=sources)
-        self.__logger.info(strings)
 
         return strings
