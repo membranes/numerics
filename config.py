@@ -17,18 +17,12 @@ class Config:
         excluded for names such as warehouse, storage, depository, etc.<br><br>
         """
 
-        # Limits
-        self.limitations_ = os.path.join(os.getcwd(), 'limitations')
-
         # Template
         self.s3_parameters_key = 's3_parameters.yaml'
 
         # Temporary storage area for the artefacts
         self.data_: str = os.path.join(os.getcwd(), 'data')
         self.artefacts_: str = os.path.join(self.data_, 'artefacts')
-
-        # Temporary assets
-        self.assets_ = os.path.join(os.getcwd(), 'assets')
 
         # The self.__artefacts_ directory branch for the fundamental error matrix frequencies
         self.branch = os.path.join('prime', 'metrics', 'testing', 'fundamental.json')
@@ -40,10 +34,8 @@ class Config:
                         os.path.join(self.numerics_, 'card', 'bullet'),
                         os.path.join(self.numerics_, 'card', 'spider'),
                         os.path.join(self.numerics_, 'cost', 'fnr'),
-                        os.path.join(self.numerics_, 'cost', 'fpr')]
-
-        # Each architecture's prime artefacts are within the {architecture}/prime/ path
-        self.prime_ = '/prime/'
+                        os.path.join(self.numerics_, 'cost', 'fpr'),
+                        os.path.join(self.numerics_, 'abstracts')]
 
         # Rates, self.__rates: np.ndarray = self.__rates[..., None]
         # :param rates: An array of rate values; (0, 1\]<br>
