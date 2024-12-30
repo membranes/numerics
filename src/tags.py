@@ -3,10 +3,9 @@ import logging
 
 import pandas as pd
 
+import src.elements.s3_parameters as s3p
 import src.elements.text_attributes as txa
 import src.functions.streams
-
-import src.elements.s3_parameters as s3p
 
 
 class Tags:
