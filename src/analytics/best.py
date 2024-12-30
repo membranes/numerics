@@ -1,4 +1,4 @@
-"""Module best.py"""
+"""Module model.py"""
 import logging
 import os
 
@@ -7,7 +7,7 @@ import pandas as pd
 import config
 import src.analytics.derivations
 import src.data.architecture
-import src.elements.best as bs
+import src.elements.model as bs
 import src.functions.objects
 
 
@@ -58,7 +58,7 @@ class Best:
 
         return derivations
 
-    def exc(self, tags: pd.DataFrame) -> bs.Best:
+    def exc(self, tags: pd.DataFrame) -> bs.Model:
         """
 
         :param tags: A data frame summarising the projects tags, alongside each tag's annotation and category details.
@@ -73,4 +73,4 @@ class Best:
         derivations = self.__derivations(cases=cases)
         derivations = derivations.assign(category=derivations['tag'].map(values['category']))
 
-        return bs.Best(architecture=self.__architecture, derivations=derivations)
+        return bs.Model(architecture=self.__architecture, derivations=derivations)
