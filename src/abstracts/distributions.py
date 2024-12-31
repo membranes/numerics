@@ -73,17 +73,17 @@ class Distributions:
 
         return node
 
-    def __persist(self, blob: pd.DataFrame, name: str):
+    def __persist(self, nodes:dict, name: str):
         """
         For drawing a tree.
 
-        :param blob: The drawing data, being saved as structurally required
+        :param nodes: The tree drawing data, as structurally required
         :param name:
         :return:
         """
 
         src.functions.objects.Objects().write(
-            nodes=blob.to_dict(orient='dict'),
+            nodes=nodes,
             path=os.path.join(self.__configurations.numerics_, 'abstracts', f'{name }.json'))
 
     def exc(self):
@@ -106,3 +106,5 @@ class Distributions:
         nodes = dict(computation)
 
         logging.info(nodes)
+
+        self.__persist(nodes=nodes, name='distributions')
