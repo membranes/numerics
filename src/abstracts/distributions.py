@@ -3,6 +3,7 @@ import logging
 import collections
 import os
 import glob
+import pathlib
 
 import pandas as pd
 
@@ -60,16 +61,17 @@ class Distributions:
 
         return frame
 
-    def __restructuring(self, frequencies: pd.DataFrame):
+    @staticmethod
+    def __restructuring(frequencies: pd.DataFrame) -> dict:
 
         excerpt = frequencies.loc[frequencies['tag'] != 'O', :]
         frame: pd.DataFrame = excerpt.pivot(index='group', columns='annotation_name', values='frequency')
         node = frame.to_dict(orient='index')
-        logging.info(node)
 
         miscellaneous = frequencies.loc[frequencies['tag'] == 'O', 'frequency'].values[0]
         node['Miscellaneous'] = {'miscellaneous': int(miscellaneous)}
-        logging.info(node)
+
+        return node
 
     def __persist(self, blob: pd.DataFrame, name: str):
         """
@@ -93,8 +95,14 @@ class Distributions:
         # The data
         uri_ = glob.glob(pathname=os.path.join(self.__configurations.artefacts_, self.__architecture, 'data', '*.csv'))
 
-        computation = []
+        computation = collections.ChainMap()
+
         for uri in uri_:
+            stem = pathlib.Path(uri).stem
             data = self.__data(uri=uri)
             frequencies = self.__frequencies(data=data)
-            self.__restructuring(frequencies=frequencies)
+            node = self.__restructuring(frequencies=frequencies)
+            computation.update({f'{stem}': node})
+        nodes = dict(computation)
+
+        logging.info(nodes)
