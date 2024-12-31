@@ -45,7 +45,8 @@ class Interface:
         uri_ = glob.glob(pathname=os.path.join(self.__configurations.artefacts_, architecture, 'data', '*.csv'))
 
         # An approximate spread of strings
-        src.abstracts.text.Text(architecture=architecture, tags=tags, m_config=m_config).exc(uri_=uri_)
+        codes = [m_config['label2id'][key] for key in ['B-geo', 'I-geo']]
+        src.abstracts.text.Text(architecture=architecture, tags=tags).exc(uri_=uri_, codes=codes)
 
         # Distributions of tags.
         src.abstracts.distributions.Distributions(architecture=architecture, tags=tags).exc(uri_=uri_)
