@@ -1,6 +1,5 @@
 """Module distributions.py"""
 import collections
-import logging
 import os
 import pathlib
 
@@ -62,6 +61,11 @@ class Distributions:
 
     @staticmethod
     def __restructuring(frequencies: pd.DataFrame) -> dict:
+        """
+
+        :param frequencies:
+        :return:
+        """
 
         excerpt = frequencies.loc[frequencies['tag'] != 'O', :]
         frame: pd.DataFrame = excerpt.pivot(index='group', columns='annotation_name', values='frequency')
@@ -99,7 +103,5 @@ class Distributions:
             node = self.__restructuring(frequencies=frequencies)
             computation.update({f'{stem}': node})
         nodes = dict(computation)
-
-        logging.info(nodes)
 
         self.__persist(nodes=nodes, name='distributions')
