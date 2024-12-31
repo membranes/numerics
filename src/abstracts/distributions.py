@@ -50,15 +50,15 @@ class Distributions:
         """
 
         # Tags: tag/annotation/annotation_name/category/category_name
-        descriptions = self.__tags[['tag', 'name']].set_index('tag').to_dict()['name']
+        descriptions = self.__tags[['tag', 'group']].set_index('tag').to_dict()['group']
 
         # The frequencies
         frequencies = data['tagstr'].str.upper().str.split(pat=',', n=-1, expand=False).map(collections.Counter).sum()
         items = [[k, frequencies[k], descriptions[k]] for k, v in frequencies.items()]
 
         # Hence
-        frame = pd.DataFrame(data=items, columns=['tag', 'frequency', 'name'])
-        frame.rename(columns={'tag': 'id', 'frequency': 'value'}, inplace=True)
+        frame = pd.DataFrame(data=items, columns=['tag', 'frequency', 'group'])
+        logging.info(frame)
 
         return frame
 
