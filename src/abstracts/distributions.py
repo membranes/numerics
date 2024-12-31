@@ -31,14 +31,13 @@ class Distributions:
         self.__configurations = config.Config()
         self.__streams = src.functions.streams.Streams()
 
-    def __data(self, name: str) -> pd.DataFrame:
+    def __data(self, uri: str) -> pd.DataFrame:
         """
 
-        :param name:
+        :param uri:
         :return:
         """
 
-        uri = os.path.join(self.__configurations.artefacts_, self.__architecture, 'data', name)
         text = txa.TextAttributes(uri=uri, header=0)
 
         return self.__streams.read(text=text)
@@ -85,14 +84,14 @@ class Distributions:
         """
 
         # The data
-        listings = glob.glob(pathname=os.path.join(self.__configurations.artefacts_, self.__architecture, 'data', '*.csv'))
-        logging.info(listings)
+        uri_ = glob.glob(pathname=os.path.join(self.__configurations.artefacts_, self.__architecture, 'data', '*.csv'))
+        logging.info(uri_)
 
+        computation = []
+        for uri in uri_:
 
-        data = self.__data(name='training.csv')
-        logging.info(data.head())
+            data = self.__data(uri=uri)
 
-        frequencies = self.__frequencies(data=data)
-        logging.info(frequencies.head())
+            frequencies = self.__frequencies(data=data)
 
-        self.__persist(blob=frequencies, name='training')
+            computation.append(frequencies.to_dict(orient='tight'))
