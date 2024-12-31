@@ -95,3 +95,5 @@ class Distributions:
             frequencies = self.__frequencies(data=data)
 
             computation.append(frequencies.to_dict(orient='tight'))
+
+        logging.info(computation)
