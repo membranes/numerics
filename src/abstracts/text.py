@@ -100,6 +100,8 @@ class Text:
             data: pd.DataFrame = self.__string(data=data)
             data['elements'] = data[['sentence', 'code_per_tag']].apply(self.__elements, codes=codes, axis=1)
 
-            frequencies = data['elements'].str.upper().str.split(pat=',', n=-1, expand=False).map(collections.Counter).sum()
+            frequencies: dict = data['elements'].str.upper().str.split(pat=',', n=-1, expand=False).map(collections.Counter).sum()
 
-            logging.info('%s\n%s', stem, dict(frequencies))
+            dictionary = [{'name': key, 'weight': value} for key, value in frequencies.items() if value != '']
+
+            logging.info('%s\n%s', stem, dictionary)
