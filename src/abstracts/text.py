@@ -1,4 +1,4 @@
-"""Module schema.py"""
+"""Module text.py"""
 import logging
 import os
 
@@ -11,7 +11,7 @@ import src.functions.objects
 import src.functions.streams
 
 
-class Schema:
+class Text:
     """
     Schema
     """
