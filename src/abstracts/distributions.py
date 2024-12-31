@@ -75,7 +75,6 @@ class Distributions:
 
     def __persist(self, nodes:dict, name: str):
         """
-        For drawing a tree.
 
         :param nodes: The tree drawing data, as structurally required
         :param name:
@@ -86,14 +85,11 @@ class Distributions:
             nodes=nodes,
             path=os.path.join(self.__configurations.numerics_, 'abstracts', f'{name }.json'))
 
-    def exc(self):
+    def exc(self, uri_: list):
         """
 
         :return:
         """
-
-        # The data
-        uri_ = glob.glob(pathname=os.path.join(self.__configurations.artefacts_, self.__architecture, 'data', '*.csv'))
 
         computation = collections.ChainMap()
 
