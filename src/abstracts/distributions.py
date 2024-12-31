@@ -63,9 +63,10 @@ class Distributions:
     def __restructuring(self, frequencies: pd.DataFrame):
 
         excerpt = frequencies.loc[frequencies['tag'] != 'O', :]
-        frame = excerpt.pivot(index='group', columns='annotation_name', values='frequency')
+        frame: pd.DataFrame = excerpt.pivot(index='group', columns='annotation_name', values='frequency')
+        node = frame.to_dict(orient='index')
 
-        logging.info(frame)
+        logging.info(node)
 
     def __persist(self, blob: pd.DataFrame, name: str):
         """
