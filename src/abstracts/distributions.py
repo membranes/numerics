@@ -2,6 +2,7 @@
 import logging
 import collections
 import os
+import glob
 
 import pandas as pd
 
@@ -84,6 +85,10 @@ class Distributions:
         """
 
         # The data
+        listings = glob.glob(pathname=os.path.join(self.__configurations.artefacts_, self.__architecture, 'data', '*.csv'))
+        logging.info(listings)
+
+
         data = self.__data(name='training.csv')
         logging.info(data.head())
 
