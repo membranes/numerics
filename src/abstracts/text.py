@@ -2,6 +2,7 @@
 import logging
 import os
 
+import numpy as np
 import pandas as pd
 
 import config
@@ -16,13 +17,17 @@ class Text:
     Text
     """
 
-    def __init__(self, architecture: str):
+    def __init__(self, architecture: str, tags: pd.DataFrame, m_config: dict):
         """
 
         :param architecture:
+        :param tags:
+        :param m_config:
         """
 
         self.__architecture = architecture
+        self.__tags = tags
+        self.__m_config = m_config
 
         # Instances
         self.__configurations = config.Config()
@@ -44,13 +49,24 @@ class Text:
 
         return self.__streams.read(text=text)
 
-    def __string(self, data: pd.DataFrame, focus: str):
+    @staticmethod
+    def __string(data: pd.DataFrame) -> pd.DataFrame:
 
         frame = data.copy()
 
-        frame['why'] = frame['sentence'].str.split().map(','.join)
+        frame['string'] = frame['sentence'].str.split().map(','.join)
 
-        self.__logger.info(frame)
+        return frame
+
+    @staticmethod
+    def __elements(instance, code: int):
+
+        frame = pd.DataFrame(
+            data={'element': instance[0].split(maxsplit=-1),
+                  'code': instance[1].split(',', maxsplit=-1)})
+        frame['code'] = frame['code'].astype(dtype=int)
+            
+        logging.info(frame.loc[frame['code'] == code, :])
 
     def __persist(self, nodes: dict, name: str) -> str:
         """
@@ -71,5 +87,7 @@ class Text:
         """
 
         for uri in uri_:
+
             data: pd.DataFrame = self.__data(uri=uri)
-            self.__string(data=data, focus='B-geo')
+            data: pd.DataFrame = self.__string(data=data)
+            np.apply_along_axis(func1d=self.__elements, axis=1, arr=data[['sentence', 'code_per_tag']], code=0)
