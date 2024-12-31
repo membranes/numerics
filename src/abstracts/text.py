@@ -2,7 +2,6 @@
 import logging
 import os
 
-import numpy as np
 import pandas as pd
 
 import config
@@ -51,22 +50,36 @@ class Text:
 
     @staticmethod
     def __string(data: pd.DataFrame) -> pd.DataFrame:
+        """
+
+        :param data:
+        :return:
+        """
 
         frame = data.copy()
-
         frame['string'] = frame['sentence'].str.split().map(','.join)
 
         return frame
 
     @staticmethod
-    def __elements(instance, code: int):
+    def __elements(instance: pd.Series, codes: list) -> str:
+        """
+
+        :param instance: The parts are 'sentence' & 'code_per_tag'
+        :param codes:
+        :return:
+        """
 
         frame = pd.DataFrame(
-            data={'element': instance[0].split(maxsplit=-1),
-                  'code': instance[1].split(',', maxsplit=-1)})
+            data={'element': instance['sentence'].split(maxsplit=-1),
+                  'code': instance['code_per_tag'].split(',', maxsplit=-1)})
         frame['code'] = frame['code'].astype(dtype=int)
-            
-        logging.info(frame.loc[frame['code'] == code, :])
+
+        # The elements associated with the tags in focus
+        frame: pd.DataFrame = frame.copy().loc[frame['code'].isin(codes), :]
+        elements = ','.join(frame['element'].to_list())
+
+        return elements
 
     def __persist(self, nodes: dict, name: str) -> str:
         """
@@ -86,8 +99,12 @@ class Text:
         :return:
         """
 
+        codes = [self.__m_config['label2id'][key] for key in ['B-geo', 'I-geo']]
+
         for uri in uri_:
 
             data: pd.DataFrame = self.__data(uri=uri)
             data: pd.DataFrame = self.__string(data=data)
-            np.apply_along_axis(func1d=self.__elements, axis=1, arr=data[['sentence', 'code_per_tag']], code=0)
+            data['elements'] = data[['sentence', 'code_per_tag']].apply(self.__elements, codes=codes, axis=1)
+
+            logging.info(data)
