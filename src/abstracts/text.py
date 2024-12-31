@@ -99,13 +99,11 @@ class Text:
 
         for uri in uri_:
 
-            # stem = pathlib.Path(uri).stem
+            stem = pathlib.Path(uri).stem
             data: pd.DataFrame = self.__data(uri=uri)
             data: pd.DataFrame = self.__string(data=data)
             data['elements'] = data[['sentence', 'code_per_tag']].apply(self.__elements, codes=codes, axis=1)
 
-            logging.info(data)
+            frequencies = data['elements'].str.upper().str.split(pat=',', n=-1, expand=False).map(collections.Counter).sum()
 
-            # frequencies = data['elements'].str.upper().str.split(pat=',', n=-1, expand=False).map(collections.Counter).sum()
-
-            # logging.info('%s\n%s', stem, frequencies)
+            logging.info('%s\n%s', stem, dict(frequencies))
