@@ -65,7 +65,10 @@ class Distributions:
         excerpt = frequencies.loc[frequencies['tag'] != 'O', :]
         frame: pd.DataFrame = excerpt.pivot(index='group', columns='annotation_name', values='frequency')
         node = frame.to_dict(orient='index')
+        logging.info(node)
 
+        miscellaneous = frequencies.loc[frequencies['tag'] == 'O', 'frequency'].values[0]
+        node['Miscellaneous'] = {'miscellaneous': int(miscellaneous)}
         logging.info(node)
 
     def __persist(self, blob: pd.DataFrame, name: str):
