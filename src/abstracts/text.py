@@ -1,8 +1,8 @@
 """Module text.py"""
+import collections
 import logging
 import os
 import pathlib
-import collections
 
 import pandas as pd
 
@@ -18,17 +18,15 @@ class Text:
     Text
     """
 
-    def __init__(self, architecture: str, tags: pd.DataFrame, m_config: dict):
+    def __init__(self, architecture: str, tags: pd.DataFrame):
         """
 
         :param architecture:
         :param tags:
-        :param m_config:
         """
 
         self.__architecture = architecture
         self.__tags = tags
-        self.__m_config = m_config
 
         # Instances
         self.__configurations = config.Config()
@@ -58,7 +56,7 @@ class Text:
         return frame
 
     @staticmethod
-    def __elements(instance: pd.Series, codes: list) -> str:
+    def __elements(instance: pd.Series, codes: list[int]) -> str:
         """
 
         :param instance: The parts are 'sentence' & 'code_per_tag'
@@ -89,13 +87,11 @@ class Text:
             nodes=nodes,
             path=os.path.join(self.__configurations.numerics_, 'abstracts', f'{name}.json'))
 
-    def exc(self, uri_: list):
+    def exc(self, uri_: list[str], codes: list[int]):
         """
 
         :return:
         """
-
-        codes = [self.__m_config['label2id'][key] for key in ['B-geo', 'I-geo']]
 
         for uri in uri_:
 
