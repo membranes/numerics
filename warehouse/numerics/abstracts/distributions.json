@@ -1,0 +1,77 @@
+{
+    "testing": {
+        "Geography": {
+            "beginning": 525,
+            "inside": 114
+        },
+        "Geopolitical Term": {
+            "beginning": 236,
+            "inside": 4
+        },
+        "Organisation": {
+            "beginning": 291,
+            "inside": 228
+        },
+        "Person": {
+            "beginning": 237,
+            "inside": 226
+        },
+        "Time": {
+            "beginning": 269,
+            "inside": 84
+        },
+        "Miscellaneous": {
+            "miscellaneous": 12693
+        }
+    },
+    "training": {
+        "Geography": {
+            "beginning": 22049,
+            "inside": 4339
+        },
+        "Geopolitical Term": {
+            "beginning": 9105,
+            "inside": 108
+        },
+        "Organisation": {
+            "beginning": 11825,
+            "inside": 9973
+        },
+        "Person": {
+            "beginning": 9984,
+            "inside": 10134
+        },
+        "Time": {
+            "beginning": 11983,
+            "inside": 3851
+        },
+        "Miscellaneous": {
+            "miscellaneous": 520258
+        }
+    },
+    "validating": {
+        "Geography": {
+            "beginning": 4966,
+            "inside": 975
+        },
+        "Geopolitical Term": {
+            "beginning": 2099,
+            "inside": 23
+        },
+        "Organisation": {
+            "beginning": 2630,
+            "inside": 2198
+        },
+        "Person": {
+            "beginning": 2247,
+            "inside": 2317
+        },
+        "Time": {
+            "beginning": 2610,
+            "inside": 847
+        },
+        "Miscellaneous": {
+            "miscellaneous": 117105
+        }
+    }
+}
