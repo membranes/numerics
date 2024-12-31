@@ -1,6 +1,7 @@
 """Module text.py"""
 import logging
 import os
+import glob
 
 import pandas as pd
 
@@ -13,20 +14,21 @@ import src.functions.streams
 
 class Text:
     """
-    Schema
+    Text
     """
 
-    def __init__(self, s3_parameters: s3p.S3Parameters):
+    def __init__(self, architecture: str):
         """
 
-        :param s3_parameters:
+        :param architecture:
         """
+
+        self.__architecture = architecture
 
         # Configurations
         self.__configurations = config.Config()
 
-        # The data file
-        self.__filepath = f"s3://{s3_parameters.configurations}/projects/schema.csv"
+
 
         # Logging
         logging.basicConfig(level=logging.INFO,
@@ -34,39 +36,41 @@ class Text:
                             datefmt='%Y-%m-%d %H:%M:%S')
         self.__logger = logging.getLogger(__name__)
 
-    def __read(self) -> pd.DataFrame:
+    def __data(self, uri: str) -> pd.DataFrame:
         """
 
         :return:
         """
 
-        text = src.elements.text_attributes.TextAttributes(uri=self.__filepath, header=0)
+        text = src.elements.text_attributes.TextAttributes(uri=uri, header=0)
 
         return src.functions.streams.Streams().api(text=text)
 
-    def __persist(self, blob: pd.DataFrame, name: str) -> str:
-        """
-        For drawing a network graph of the project scoping schema
+    def __string(self, data: pd.DataFrame, focus: str):
+        pass
 
-        :param blob: The drawing data, being saved as structurally required.
+
+    def __persist(self, nodes: dict, name: str) -> str:
+        """
+
+        :param nodes: The strings cloud drawing data, as structurally required.
         :param name:
         :return:
         """
 
         return src.functions.objects.Objects().write(
-            nodes=blob.to_dict(orient='tight'),
+            nodes=nodes,
             path=os.path.join(self.__configurations.numerics_, 'abstracts', f'{name}.json'))
 
-    def exc(self):
+    def exc(self, uri_: list):
         """
 
         :return:
         """
 
-        # The data
-        data: pd.DataFrame = self.__read()
-        self.__logger.info(data.head())
+        for uri in uri_:
 
-        # Dictionary
-        message = self.__persist(blob=data, name='schema')
-        self.__logger.info(message)
+            data: pd.DataFrame = self.__data(uri=uri)
+            self.__logger.info(data.head())
+
+
