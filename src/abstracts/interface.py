@@ -6,6 +6,7 @@ import pandas as pd
 
 import config
 import src.abstracts.distributions
+import src.abstracts.text
 
 
 class Interface:
@@ -29,6 +30,9 @@ class Interface:
         """
 
         uri_ = glob.glob(pathname=os.path.join(self.__configurations.artefacts_, architecture, 'data', '*.csv'))
+
+        # An approximate spread of strings
+        src.abstracts.text.Text(architecture=architecture).exc(uri_=uri_)
 
         # Distributions of tags.
         src.abstracts.distributions.Distributions(architecture=architecture, tags=tags).exc(uri_=uri_)
