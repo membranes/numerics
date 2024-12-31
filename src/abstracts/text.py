@@ -1,7 +1,6 @@
 """Module text.py"""
 import logging
 import os
-import glob
 
 import pandas as pd
 
@@ -25,10 +24,9 @@ class Text:
 
         self.__architecture = architecture
 
-        # Configurations
+        # Instances
         self.__configurations = config.Config()
-
-
+        self.__streams = src.functions.streams.Streams()
 
         # Logging
         logging.basicConfig(level=logging.INFO,
@@ -44,11 +42,15 @@ class Text:
 
         text = src.elements.text_attributes.TextAttributes(uri=uri, header=0)
 
-        return src.functions.streams.Streams().api(text=text)
+        return self.__streams.read(text=text)
 
     def __string(self, data: pd.DataFrame, focus: str):
-        pass
 
+        frame = data.copy()
+
+        frame['why'] = frame['sentence'].str.split()
+
+        self.__logger.info(frame)
 
     def __persist(self, nodes: dict, name: str) -> str:
         """
@@ -69,8 +71,6 @@ class Text:
         """
 
         for uri in uri_:
-
             data: pd.DataFrame = self.__data(uri=uri)
+            self.__string(data=data, focus='B-geo')
             self.__logger.info(data.head())
-
-
