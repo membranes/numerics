@@ -51,16 +51,21 @@ class Distributions:
 
         # Tags: tag/annotation/annotation_name/category/category_name
         descriptions = self.__tags[['tag', 'group']].set_index('tag').to_dict()['group']
-
-        # The frequencies
         frequencies = data['tagstr'].str.upper().str.split(pat=',', n=-1, expand=False).map(collections.Counter).sum()
         items = [[k, frequencies[k], descriptions[k]] for k, v in frequencies.items()]
 
-        # Hence
+        # As a data frame
         frame = pd.DataFrame(data=items, columns=['tag', 'frequency', 'group'])
-        logging.info(frame)
+        frame = frame.copy().merge(self.__tags[['tag', 'annotation_name']], on='tag', how='left')
 
         return frame
+
+    def __restructuring(self, frequencies: pd.DataFrame):
+
+        excerpt = frequencies.loc[frequencies['tag'] != 'O', :]
+        frame = excerpt.pivot(index='group', columns='annotation_name', values='frequency')
+
+        logging.info(frame)
 
     def __persist(self, blob: pd.DataFrame, name: str):
         """
@@ -71,10 +76,8 @@ class Distributions:
         :return:
         """
 
-        nodes = blob.to_dict(orient='dict')
-
         src.functions.objects.Objects().write(
-            nodes=nodes,
+            nodes=blob.to_dict(orient='dict'),
             path=os.path.join(self.__configurations.numerics_, 'abstracts', f'{name }.json'))
 
     def exc(self):
@@ -85,15 +88,9 @@ class Distributions:
 
         # The data
         uri_ = glob.glob(pathname=os.path.join(self.__configurations.artefacts_, self.__architecture, 'data', '*.csv'))
-        logging.info(uri_)
 
         computation = []
         for uri in uri_:
-
             data = self.__data(uri=uri)
-
             frequencies = self.__frequencies(data=data)
-
-            computation.append(frequencies.to_dict(orient='tight'))
-
-        logging.info(computation)
+            self.__restructuring(frequencies=frequencies)
