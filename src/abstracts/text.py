@@ -48,7 +48,7 @@ class Text:
 
         frame = data.copy()
 
-        frame['why'] = frame['sentence'].str.split()
+        frame['why'] = frame['sentence'].str.split().map(','.join)
 
         self.__logger.info(frame)
 
@@ -73,4 +73,3 @@ class Text:
         for uri in uri_:
             data: pd.DataFrame = self.__data(uri=uri)
             self.__string(data=data, focus='B-geo')
-            self.__logger.info(data.head())
