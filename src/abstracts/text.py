@@ -81,7 +81,7 @@ class Text:
         """
 
         frequencies: dict = data['elements'].str.upper().str.split(pat=',', n=-1, expand=False).map(collections.Counter).sum()
-        dictionary = [{'name': key, 'weight': value} for key, value in frequencies.items() if value != '']
+        dictionary = [{'name': key, 'weight': value} for key, value in frequencies.items() if key != '']
 
         return dictionary
 
