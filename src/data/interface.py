@@ -67,8 +67,8 @@ class Interface:
 
         if all(executions) == 0:
             self.__logger.info('Artefacts of models retrieved.')
-
-        sys.exit('Unsuccessful artefacts download attempt.')
+        else:
+            sys.exit('Unsuccessful artefacts download attempt.')
 
     def exc(self) -> None:
         """
