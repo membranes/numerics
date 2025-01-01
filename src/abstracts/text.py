@@ -8,7 +8,6 @@ import pandas as pd
 
 import config
 import src.abstracts.tce
-import src.elements.s3_parameters as s3p
 import src.elements.text_attributes
 import src.functions.objects
 import src.functions.streams
@@ -19,15 +18,10 @@ class Text:
     Text
     """
 
-    def __init__(self, architecture: str, tags: pd.DataFrame):
+    def __init__(self):
         """
-
-        :param architecture: The underlying model's name/architecture
-        :param tags: A frame of classification tag details
+        Constructor
         """
-
-        self.__architecture = architecture
-        self.__tags = tags
 
         # Instances
         self.__configurations = config.Config()
