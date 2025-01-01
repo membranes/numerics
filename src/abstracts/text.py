@@ -4,9 +4,11 @@ import logging
 import os
 import pathlib
 
+import dask
 import pandas as pd
 
 import config
+import src.abstracts.tce
 import src.elements.s3_parameters as s3p
 import src.elements.text_attributes
 import src.functions.objects
@@ -31,7 +33,9 @@ class Text:
         # Instances
         self.__configurations = config.Config()
         self.__streams = src.functions.streams.Streams()
+        self.__tce = src.abstracts.tce.TCE()
 
+    @dask.delayed
     def __data(self, uri: str) -> pd.DataFrame:
         """
 
@@ -42,8 +46,8 @@ class Text:
 
         return self.__streams.read(text=text)
 
-    @staticmethod
-    def __string(data: pd.DataFrame) -> pd.DataFrame:
+    @dask.delayed
+    def __string(self, data: pd.DataFrame) -> pd.DataFrame:
         """
 
         :param data:
@@ -55,25 +59,29 @@ class Text:
 
         return frame
 
-    @staticmethod
-    def __elements(instance: pd.Series, codes: list[int]) -> str:
+    @dask.delayed
+    def __elements(self, data: pd.DataFrame, codes: list[int]) -> pd.DataFrame:
         """
 
-        :param instance: The parts are 'sentence' & 'code_per_tag'
+        :param data:
         :param codes:
         :return:
         """
 
-        frame = pd.DataFrame(
-            data={'element': instance['sentence'].split(maxsplit=-1),
-                  'code': instance['code_per_tag'].split(',', maxsplit=-1)})
-        frame['code'] = frame['code'].astype(dtype=int)
+        return self.__tce.exc(data=data, codes=codes)
 
-        # The elements associated with the tags in focus
-        frame: pd.DataFrame = frame.copy().loc[frame['code'].isin(codes), :]
-        elements = ','.join(frame['element'].to_list())
+    @dask.delayed
+    def __dictionary(self, data: pd.DataFrame) -> list:
+        """
 
-        return elements
+        :param data:
+        :return:
+        """
+
+        frequencies: dict = data['elements'].str.upper().str.split(pat=',', n=-1, expand=False).map(collections.Counter).sum()
+        dictionary = [{'name': key, 'weight': value} for key, value in frequencies.items() if value != '']
+
+        return dictionary
 
     def __persist(self, nodes: dict, name: str) -> str:
         """
@@ -93,15 +101,15 @@ class Text:
         :return:
         """
 
+        computation = []
         for uri in uri_:
-
             stem = pathlib.Path(uri).stem
             data: pd.DataFrame = self.__data(uri=uri)
             data: pd.DataFrame = self.__string(data=data)
-            data['elements'] = data[['sentence', 'code_per_tag']].apply(self.__elements, codes=codes, axis=1)
+            data: pd.DataFrame = self.__elements(data=data, codes=codes)
+            dictionary = self.__dictionary(data=data)
 
-            frequencies: dict = data['elements'].str.upper().str.split(pat=',', n=-1, expand=False).map(collections.Counter).sum()
+            computation.append({f'{stem}': {'data': dictionary}})
 
-            dictionary = [{'name': key, 'weight': value} for key, value in frequencies.items() if value != '']
-
-            logging.info('%s\n%s', stem, dictionary)
+        calculations = dask.compute(computation, scheduler='threads')[0]
+        logging.info(calculations)
