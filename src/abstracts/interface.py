@@ -46,7 +46,7 @@ class Interface:
 
         # An approximate spread of strings
         codes = [m_config['label2id'][key] for key in ['B-geo', 'I-geo']]
-        src.abstracts.text.Text(architecture=architecture, tags=tags).exc(uri_=uri_, codes=codes)
+        src.abstracts.text.Text().exc(uri_=uri_, codes=codes)
 
         # Distributions of tags.
-        src.abstracts.distributions.Distributions(architecture=architecture, tags=tags).exc(uri_=uri_)
+        src.abstracts.distributions.Distributions(tags=tags).exc(uri_=uri_)
