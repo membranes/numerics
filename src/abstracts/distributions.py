@@ -16,14 +16,12 @@ class Distributions:
     Class Distributions
     """
 
-    def __init__(self, architecture: str, tags: pd.DataFrame):
+    def __init__(self, tags: pd.DataFrame):
         """
 
-        :param architecture:
         :param tags:
         """
 
-        self.__architecture = architecture
         self.__tags = tags
 
         # Instances
