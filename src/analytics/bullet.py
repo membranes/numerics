@@ -19,24 +19,27 @@ class Bullet:
 
     def __init__(self, error: pd.DataFrame):
         """
+        <b>Notes</b><br>
+        -------<br>
 
-        :param error:
+        <ul>
+            <li>self.__objects: An instance for reading & writing JSON (JavaScript Object Notation) files.</li>
+            <li>self.__path: The directory wherein the data files, for the bullet graphs, are stored.</li>
+        </ul>
+
+        :param error: A data frame of false negative rate & false positive rate limits per
+                      category; and implicitly per tag associated with a category.
         """
 
         # The metrics in focus.
         self.__names = {'fnr': 'False Negative Rate', 'fpr': 'False Positive Rate'}
-
-        # Hence, error values
         error = error[self.__names.keys()]
         error.rename(columns=self.__names, inplace=True)
         self.__error = error
 
-        # Configurations.  The directory wherein the data files, for the spider graphs, are stored.
-        self.__configurations = config.Config()
-        self.__path = os.path.join(self.__configurations.numerics_, 'card', 'bullet')
-
-        # An instance for reading & writing JSON (JavaScript Object Notation) files.
+        # Setting-up
         self.__objects = src.functions.objects.Objects()
+        self.__path = os.path.join(config.Config().numerics_, 'card', 'bullet')
 
     def __save(self, nodes: dict, name: str) -> str:
         """
@@ -46,12 +49,10 @@ class Bullet:
         :return:
         """
 
-        message = self.__objects.write(nodes=nodes, path=os.path.join(self.__path, name))
-
-        return message
+        return self.__objects.write(nodes=nodes, path=os.path.join(self.__path, name))
 
     @dask.delayed
-    def __build(self, excerpt: pd.DataFrame, name: str, category: str):
+    def __build(self, excerpt: pd.DataFrame, name: str, category: str) -> str:
         """
 
         :param excerpt:
@@ -67,33 +68,30 @@ class Bullet:
         nodes['target'] = self.__error.loc[category, nodes['columns']].to_list()
 
         # Save
-        message = self.__save(nodes=nodes, name=f'{name}.json')
+        return self.__save(nodes=nodes, name=f'{name}.json')
 
-        return message
-
-    def exc(self, blob: pd.DataFrame, definitions: dict):
+    def exc(self, derivations: pd.DataFrame, definitions: dict):
         """
 
-        :param blob: A data frame consisting of error matrix frequencies & metrics, alongside
-                     tags & categories identifiers.
+        :param derivations: A data frame consisting of error matrix frequencies & metrics, alongside
+                            tags & categories identifiers.
         :param definitions: A dict wherein key === category code, value === category code definition
         :return:
         """
 
-        derivations = blob.copy()
+        data = derivations.copy()
 
         # The unique tag categories
-        categories = derivations['category'].unique()
+        categories = data['category'].unique()
 
         # The tag & category values are required for data structuring
-        derivations.set_index(keys=['tag'], drop=False, inplace=True)
+        data.set_index(keys=['tag'], drop=False, inplace=True)
 
         # Hence
         computations = []
         for category in categories:
-
             name = definitions[category]
-            excerpt: pd.DataFrame = derivations.loc[derivations['category'] == category, self.__names.keys()]
+            excerpt: pd.DataFrame = data.loc[data['category'] == category, self.__names.keys()]
             message = self.__build(excerpt=excerpt, name=name, category=category)
             computations.append(message)
 

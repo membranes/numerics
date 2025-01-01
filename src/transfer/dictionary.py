@@ -21,6 +21,7 @@ class Dictionary:
 
         # Metadata
         self.__metadata = {
+            'abstracts': {'desc': 'A frequency metrics of the model development data.'},
             'best': {'desc': 'The architecture name of the best model.'},
             'model': {'desc': 'The details of the best model; for inference.'},
             'bullet': {'desc': 'A metrics data set for false negative rate and false positive rate bullet graphs.'},
@@ -65,7 +66,7 @@ class Dictionary:
         local: pd.DataFrame = self.__local(path=path, extension=extension)
 
         # Building the Amazon S3 strings
-        frame = local.assign(key=prefix + '/' + local["vertex"])
+        frame = local.assign(key=prefix + local["vertex"])
 
         # The metadata dict strings
         frame['metadata'] = frame['section'].map(self.__metadata)

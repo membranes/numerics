@@ -1,37 +1,56 @@
 """Module directives.py"""
 import os
 import subprocess
-import sys
 
-import dask
-import pandas as pd
-
-import src.elements.s3_parameters as s3p
 import src.functions.directories
 
 
 class Directives:
     """
-    Class Directives
+    <b>Data Retrieval Directives</b><br>
+    -------------------------<br>
+
+    From Amazon S3 (Simple Storage Service) <b>to</b> local destination.
     """
 
-    def __init__(self, s3_parameters: s3p.S3Parameters):
+    def __init__(self):
         """
 
-        :param s3_parameters:
+        Constructor
         """
-
-        self.__s3_parameters = s3_parameters
 
         # Directories instances
         self.__directories = src.functions.directories.Directories()
 
-    @dask.delayed
-    def __unload(self, origin: str, target: str) -> int:
+    def synchronise(self, source_bucket: str, origin: str, target: str) -> int:
         """
 
-        :param origin:
-        :param target:
+        :param source_bucket: An Amazon S3 (Simple Storage Service)
+        :param origin: The prefix between the source bucket & one or more key names; starts and
+                       ends without a stroke, i.e., /.
+        :param target: A local directory
+        :return:
+        """
+
+        # Create the destination directory
+        self.__directories.create(path=target)
+
+        # Destination & Source
+        destination = target.replace(os.getcwd() + os.path.sep, '')
+        source = f"s3://{source_bucket}/{origin}"
+
+        # Hence
+        state = subprocess.run(f"aws s3 sync {source} {destination}", shell=True, check=True)
+
+        return state.returncode
+
+    def unload(self, source_bucket: str, origin: str, target: str) -> int:
+        """
+
+        :param source_bucket: An Amazon S3 (Simple Storage Service)
+        :param origin: The prefix between the source bucket & one or more key names; starts and
+                       ends without a stroke, i.e., /.
+        :param target: A local directory
         :return:
         """
 
@@ -40,26 +59,7 @@ class Directives:
 
         # Hence
         destination = target.replace(os.getcwd() + os.path.sep, '')
-        source = f"s3://{self.__s3_parameters.internal}/{origin}/"
+        source = f"s3://{source_bucket}/{origin}/"
         state = subprocess.run(f"aws s3 cp {source} {destination}/ --recursive", shell=True, check=True)
 
         return state.returncode
-
-    def exc(self, source: pd.Series, destination: pd.Series):
-        """
-
-        :param source:
-        :param destination:
-        :return:
-        """
-
-        computation = []
-        for origin, target in zip(source, destination):
-            state = self.__unload(origin=origin, target=target)
-            computation.append(state)
-        executions: list[int] = dask.compute(computation, scheduler='threads')[0]
-
-        if all(executions) == 0:
-            return True
-
-        sys.exit('Artefacts download step failure.')

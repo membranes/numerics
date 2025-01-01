@@ -17,18 +17,18 @@ class Cost:
     Class Costs
     """
 
-    def __init__(self, limits: lm.Limits, numbers: pd.DataFrame, blob: pd.DataFrame):
+    def __init__(self, limits: lm.Limits, numbers: pd.DataFrame, derivations: pd.DataFrame):
         """
 
         :param limits: Refer to src.elements.limits
         :param numbers:
-        :param blob: A data frame consisting of error matrix frequencies & metrics, alongside
+        :param derivations: A data frame consisting of error matrix frequencies & metrics, alongside
                      tags & categories identifiers.
         """
 
         self.__limits = limits
         self.__numbers = numbers
-        self.__blob = blob
+        self.__derivations = derivations
 
         # Configurations
         self.__configurations = config.Config()
@@ -46,7 +46,7 @@ class Cost:
         :return:
         """
 
-        excerpt = self.__blob.loc[self.__blob['category'] == category, ['tag', 'fnr']].set_index(keys='tag')
+        excerpt = self.__derivations.loc[self.__derivations['category'] == category, ['tag', 'fnr']].set_index(keys='tag')
         rates = excerpt.to_dict(orient='dict')['fnr']
         boundary = self.__limits.error.loc[category, 'fnr']
 
@@ -60,7 +60,7 @@ class Cost:
         :return:
         """
 
-        excerpt = self.__blob.loc[self.__blob['category'] == category, ['tag', 'fpr']].set_index(keys='tag')
+        excerpt = self.__derivations.loc[self.__derivations['category'] == category, ['tag', 'fpr']].set_index(keys='tag')
         rates = excerpt.to_dict(orient='dict')['fpr']
         boundary = self.__limits.error.loc[category, 'fpr']
 

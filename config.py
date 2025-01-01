@@ -17,9 +17,6 @@ class Config:
         excluded for names such as warehouse, storage, depository, etc.<br><br>
         """
 
-        # Limits
-        self.limitations_ = os.path.join(os.getcwd(), 'limitations')
-
         # Template
         self.s3_parameters_key = 's3_parameters.yaml'
 
@@ -37,12 +34,10 @@ class Config:
                         os.path.join(self.numerics_, 'card', 'bullet'),
                         os.path.join(self.numerics_, 'card', 'spider'),
                         os.path.join(self.numerics_, 'cost', 'fnr'),
-                        os.path.join(self.numerics_, 'cost', 'fpr')]
-
-        # Each architecture's prime artefacts are within the {architecture}/prime/ path
-        self.prime_ = '/prime/'
+                        os.path.join(self.numerics_, 'cost', 'fpr'),
+                        os.path.join(self.numerics_, 'abstracts')]
 
         # Rates, self.__rates: np.ndarray = self.__rates[..., None]
-        # :param rates: An array of rate values; (0, 1]<br>
+        # :param rates: An array of rate values; (0, 1\]<br>
         self.rates: np.ndarray = np.linspace(start=0, stop=1, num=101)
         self.rates: np.ndarray = (self.rates[1:])[..., None]

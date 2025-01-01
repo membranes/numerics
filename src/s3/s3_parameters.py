@@ -1,6 +1,4 @@
 """Module s3_parameters.py"""
-import logging
-
 import boto3
 import yaml
 
@@ -54,8 +52,6 @@ class S3Parameters:
             data: dict = yaml.load(stream=buffer, Loader=yaml.CLoader)
         except yaml.YAMLError as err:
             raise err from err
-
-        logging.info(data['parameters'])
 
         return data['parameters']
 

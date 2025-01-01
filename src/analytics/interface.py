@@ -89,6 +89,6 @@ class Interface:
         definitions = self.__definitions(tags=tags)
 
         # Spiders
-        src.analytics.spider.Spider().exc(blob=derivations, definitions=definitions)
-        src.analytics.bullet.Bullet(error=limits.error).exc(blob=derivations, definitions=definitions)
-        src.analytics.cost.Cost(limits=limits, numbers=numbers, blob=derivations).exc(definitions=definitions)
+        src.analytics.spider.Spider().exc(derivations=derivations, definitions=definitions)
+        src.analytics.bullet.Bullet(error=limits.error).exc(derivations=derivations, definitions=definitions)
+        src.analytics.cost.Cost(limits=limits, numbers=numbers, derivations=derivations).exc(definitions=definitions)

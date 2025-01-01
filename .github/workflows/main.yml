@@ -14,7 +14,7 @@ jobs:
       max-parallel: 4
       fail-fast: false
       matrix:
-        python-version: ['3.11']
+        python-version: ['3.12']
 
     steps:
       - uses: actions/checkout@v4
@@ -35,11 +35,13 @@ jobs:
           echo "============================= flake8 session starts =============================="
           printf "\n"
           
-          
           # stop the build if there are Python syntax errors or undefined names
           printf "\n"
           echo "Issues in relation to logic (F7), syntax (Python E9, Flake F7), mathematical
           formulae symbols (F63), undefined variable names (F82):"
+          
+          printf "\n src/abstracts "
+          flake8 --count --select=E9,F63,F7,F82 --show-source --statistics src/abstracts
           
           printf "\n src/analytics "
           flake8 --count --select=E9,F63,F7,F82 --show-source --statistics src/analytics
@@ -64,6 +66,9 @@ jobs:
           printf "\n\n"
           echo "Complexity issues:"
           
+          printf "\n src/abstracts "
+          flake8 --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics src/abstracts
+          
           printf "\n src/analytics "
           flake8 --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics src/analytics
           
@@ -87,6 +92,9 @@ jobs:
         run: |
           printf "\n"
           echo "============================= pylint session starts =============================="
+          
+          printf "\n Package src/abstracts"
+          pylint --rcfile .pylintrc src/abstracts
           
           printf "\n Package src/analytics"
           pylint --rcfile .pylintrc src/analytics
@@ -125,7 +133,7 @@ jobs:
   packages:
     name: GitHub Packages Container Registry
     needs: build
-    if: ${{ true }}
+    if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
 
     permissions:
@@ -161,6 +169,14 @@ jobs:
         run: |
           docker build . --file Dockerfile --tag "$REGISTRY/$REPOSITORY:$IMAGE_TAG"
           docker push ${{ env.REGISTRY }}/${{ env.REPOSITORY }}:${{ env.IMAGE_TAG }}
+
+      - name: Delete Packages
+        uses: actions/delete-package-versions@v5
+        with:
+          package-name: ${{ github.event.repository.name }}
+          package-type: 'container'
+          min-versions-to-keep: 1
+          delete-only-untagged-versions: 'true'
 
   ecr:
     name: Amazon Elastic Container Registry
