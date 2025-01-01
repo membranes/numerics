@@ -22,8 +22,8 @@ class Text:
     def __init__(self, architecture: str, tags: pd.DataFrame):
         """
 
-        :param architecture:
-        :param tags:
+        :param architecture: The underlying model's name/architecture
+        :param tags: A frame of classification tag details
         """
 
         self.__architecture = architecture
@@ -38,7 +38,10 @@ class Text:
     def __data(self, uri: str) -> pd.DataFrame:
         """
 
+        :param uri: A list of uniform resource identifiers, i.e., local <path> + <file name & extension> strings.
         :return:
+            A training, validating, or testing data set, which includes a field of sentences alongside a field of
+            each sentence's tags & tag codes.
         """
 
         text = src.elements.text_attributes.TextAttributes(uri=uri, header=0)
@@ -96,9 +99,9 @@ class Text:
 
     def exc(self, uri_: list[str], codes: list[int]):
         """
-        
-        :param uri_:
-        :param codes:
+
+        :param uri_: A list of uniform resource identifiers, i.e., local <path> + <file name & extension> strings.
+        :param codes: The tag codes in focus; normally tag codes associated with the same category.
         :return:
         """
 
