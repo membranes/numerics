@@ -109,7 +109,10 @@ class Text:
             data: pd.DataFrame = self.__elements(data=data, codes=codes)
             dictionary = self.__dictionary(data=data)
 
-            computation.append({f'{stem}': {'data': dictionary}})
+            computation.append({f'{stem}': dictionary})
 
-        calculations = dask.compute(computation, scheduler='threads')[0]
-        logging.info(calculations)
+        sections: list[dict] = dask.compute(computation, scheduler='threads')[0]
+
+        nodes = {key: {'data': value} for section in sections for key, value in section.items()}
+
+        logging.info(nodes)
