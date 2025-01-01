@@ -1,6 +1,5 @@
 """Module text.py"""
 import collections
-import logging
 import os
 import pathlib
 
@@ -97,7 +96,9 @@ class Text:
 
     def exc(self, uri_: list[str], codes: list[int]):
         """
-
+        
+        :param uri_:
+        :param codes:
         :return:
         """
 
@@ -115,4 +116,4 @@ class Text:
 
         nodes = {key: {'data': value} for section in sections for key, value in section.items()}
 
-        logging.info(nodes)
+        self.__persist(nodes=nodes, name='text')
