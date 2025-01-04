@@ -26,7 +26,7 @@ RUN groupadd --system automata --gid $GID && \
     pip install --upgrade pip && \
     pip install --requirement /app/requirements.txt --no-cache-dir && \
     mkdir /app/warehouse && mkdir /app/data && \
-	chown -R automaton:automata /app/warehouse && chown -R automaton:automata /app/data
+    chown -R automaton:automata /app/warehouse && chown -R automaton:automata /app/data
 
 
 # Specific COPY
