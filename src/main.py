@@ -27,7 +27,7 @@ def main():
     src.data.interface.Interface(service=service, s3_parameters=s3_parameters).exc()
 
     # Tags
-    tags = src.tags.Tags(s3_parameters=s3_parameters).exc()
+    tags = src.model.tags.Tags(s3_parameters=s3_parameters).exc()
 
     # The best model/architecture
     architecture: str = src.model.architecture.Architecture().exc()
@@ -70,7 +70,7 @@ if __name__ == '__main__':
     import src.model.determine
     import src.s3.s3_parameters
     import src.setup
-    import src.tags
+    import src.model.tags
     import src.transfer.interface
 
     # S3 S3Parameters, Service Instance
