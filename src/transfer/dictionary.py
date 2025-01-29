@@ -22,7 +22,7 @@ class Dictionary:
         # Metadata
         self.__metadata = {
             'abstracts': {'desc': 'A frequency metrics of the model development data.'},
-            'best': {'desc': 'The architecture name of the best model.'},
+            'best': {'desc': 'The (a) architecture name of the best model, architecture.json, and (b) the timestamp of the model, latest.json.'},
             'model': {'desc': 'The details of the best model; for inference.'},
             'bullet': {'desc': 'A metrics data set for false negative rate and false positive rate bullet graphs.'},
             'spider': {'desc': _spider},
