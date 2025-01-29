@@ -1,4 +1,5 @@
 """Module limits.py"""
+import logging
 import pandas as pd
 
 import src.elements.limits as lm
@@ -36,6 +37,7 @@ class Limits:
             frame = pd.read_json(path_or_buf=(self.__path + filename), orient=orient)
         except FileNotFoundError as err:
             raise err from err
+        logging.info(frame)
 
         return frame
 
