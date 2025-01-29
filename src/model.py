@@ -1,12 +1,10 @@
 """Module model.py"""
-import logging
 import os
 
 import pandas as pd
 
 import config
 import src.analytics.derivations
-import src.data.architecture
 import src.elements.model as ml
 import src.functions.objects
 
@@ -16,17 +14,16 @@ class Model:
     Determines the top model
     """
 
-    def __init__(self):
+    def __init__(self, architecture: str):
         """
-        Constructor
+
+        :param architecture: The best model/architecture
         """
+
+        self.__architecture = architecture
 
         # Configurations
         self.__configurations = config.Config()
-
-        # The architecture name of the top model, ...
-        self.__architecture: str = src.data.architecture.Architecture().exc()
-        logging.info('The best model, named by architecture: %s', self.__architecture)
 
     def __cases(self) -> pd.DataFrame:
         """
