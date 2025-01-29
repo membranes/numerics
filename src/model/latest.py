@@ -1,10 +1,8 @@
 """Module latest.py"""
-import datetime
+import glob
 import logging
 import os
-import sys
 import time
-import glob
 
 import config
 import src.functions.objects
