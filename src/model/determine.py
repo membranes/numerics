@@ -4,9 +4,9 @@ import os
 import pandas as pd
 
 import config
-import src.analytics.derivations
 import src.elements.model as ml
 import src.functions.objects
+import src.model.derivations
 
 
 class Determine:
@@ -48,7 +48,7 @@ class Determine:
         :return:
         """
 
-        derivations = src.analytics.derivations.Derivations(cases=cases).exc()
+        derivations = src.model.derivations.Derivations(cases=cases).exc()
         derivations.reset_index(drop=False, inplace=True)
         derivations.rename(columns={'index': 'tag'}, inplace=True)
         derivations['tag'] = derivations['tag'].str.upper()
