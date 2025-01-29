@@ -3,20 +3,24 @@ import glob
 import logging
 import os
 import time
+import sys
 
 import config
 import src.functions.objects
 
 
 class Latest:
-    
+    """
+    Retrieves the timestamp of the latest/best model
+    """
+
     def __init__(self):
         """
         Constructor
         """
-        
+
         self.__configurations = config.Config()
-        
+
         # The path to the latest best model ...
         self.__latest_ = os.path.join(self.__configurations.numerics_, 'best')
 
@@ -52,7 +56,7 @@ class Latest:
             nodes=nodes, path=os.path.join(self.__latest_, 'latest.json'))
 
         return message
-    
+
     def exc(self):
         """
         
@@ -67,4 +71,5 @@ class Latest:
             message = self.__persist(nodes={"time": text})
             self.__logger.info(message)
         else:
-            raise f'A *.safetensors model file was not found in {self.__latest_}{os.sep}model{os.sep}'
+            self.__logger.info('A *.safetensors model file was not found in %s', self.__latest_ + os.sep + 'model' + os.sep)
+            sys.exit(1)
