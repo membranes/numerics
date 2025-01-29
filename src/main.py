@@ -64,13 +64,15 @@ if __name__ == '__main__':
     import src.abstracts.interface
     import src.analytics.interface
     import src.data.interface
-    import src.model.architecture
+
     import src.functions.service
     import src.functions.cache
+    import src.model.architecture
     import src.model.determine
+    import src.model.tags
+
     import src.s3.s3_parameters
     import src.setup
-    import src.model.tags
     import src.transfer.interface
 
     # S3 S3Parameters, Service Instance
