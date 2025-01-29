@@ -26,14 +26,25 @@ def main():
     # Data
     src.data.interface.Interface(service=service, s3_parameters=s3_parameters).exc()
 
-    # Model
-    tags = src.tags.Tags(s3_parameters=s3_parameters).exc()
-    model = src.model.Model().exc(tags=tags)
-    logger.info(model.derivations)
+    # Tags
+    tags = src.model.tags.Tags(s3_parameters=s3_parameters).exc()
+
+    # The best model/architecture
+    architecture: str = src.model.architecture.Architecture().exc()
+    logger.info('The best model/architecture: %s', architecture)
+
+    # Time
+    src.model.latest.Latest().exc()
+
+    # The error measures & metrics of the model
+    properties = src.model.properties.Properties(architecture=architecture).exc(tags=tags)
+    logger.info(properties.derivations)
 
     # Analytics
-    src.analytics.interface.Interface(s3_parameters=s3_parameters).exc(derivations=model.derivations, tags=tags)
-    src.abstracts.interface.Interface().exc(architecture=model.architecture, tags=tags)
+    src.analytics.interface.Interface(s3_parameters=s3_parameters).exc(derivations=properties.derivations, tags=tags)
+
+    # Abstracts
+    src.abstracts.interface.Interface().exc(architecture=properties.architecture, tags=tags)
 
     # Transfer
     src.transfer.interface.Interface(service=service, s3_parameters=s3_parameters).exc()
@@ -58,12 +69,16 @@ if __name__ == '__main__':
     import src.abstracts.interface
     import src.analytics.interface
     import src.data.interface
+
     import src.functions.service
     import src.functions.cache
-    import src.model
+    import src.model.architecture
+    import src.model.properties
+    import src.model.latest
+    import src.model.tags
+
     import src.s3.s3_parameters
     import src.setup
-    import src.tags
     import src.transfer.interface
 
     # S3 S3Parameters, Service Instance

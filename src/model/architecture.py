@@ -7,8 +7,8 @@ import shutil
 import pandas as pd
 
 import config
-import src.analytics.derivations
 import src.functions.objects
+import src.model.derivations
 
 
 class Architecture:
@@ -50,7 +50,7 @@ class Architecture:
         :return:
         """
 
-        matthews: pd.Series = src.analytics.derivations.Derivations(cases=cases).matthews()
+        matthews: pd.Series = src.model.derivations.Derivations(cases=cases).matthews()
 
         return matthews.median()
 

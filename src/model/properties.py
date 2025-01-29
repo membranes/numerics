@@ -1,32 +1,29 @@
-"""Module model.py"""
-import logging
+"""Module properties.py"""
 import os
 
 import pandas as pd
 
 import config
-import src.analytics.derivations
-import src.data.architecture
 import src.elements.model as ml
 import src.functions.objects
+import src.model.derivations
 
 
-class Model:
+class Properties:
     """
-    Determines the top model
+    Determines the error measures & metrics of a model
     """
 
-    def __init__(self):
+    def __init__(self, architecture: str):
         """
-        Constructor
+
+        :param architecture: The best model/architecture
         """
+
+        self.__architecture = architecture
 
         # Configurations
         self.__configurations = config.Config()
-
-        # The architecture name of the top model, ...
-        self.__architecture: str = src.data.architecture.Architecture().exc()
-        logging.info('The best model, named by architecture: %s', self.__architecture)
 
     def __cases(self) -> pd.DataFrame:
         """
@@ -51,7 +48,7 @@ class Model:
         :return:
         """
 
-        derivations = src.analytics.derivations.Derivations(cases=cases).exc()
+        derivations = src.model.derivations.Derivations(cases=cases).exc()
         derivations.reset_index(drop=False, inplace=True)
         derivations.rename(columns={'index': 'tag'}, inplace=True)
         derivations['tag'] = derivations['tag'].str.upper()

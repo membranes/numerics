@@ -1,11 +1,12 @@
 """Module interface.py"""
+import logging
+
 import numpy as np
 import pandas as pd
 
 import config
 import src.analytics.bullet
 import src.analytics.cost
-import src.analytics.derivations
 import src.analytics.spider
 import src.data.limits
 import src.elements.limits as lm
@@ -44,7 +45,7 @@ class Interface:
             directories.create(value)
 
     @staticmethod
-    def __numbers(limits: lm.Limits):
+    def __numbers(limits: lm.Limits) -> pd.DataFrame:
         """
 
         :param limits:
@@ -55,7 +56,8 @@ class Interface:
         boundaries: np.ndarray = limits.dispatches.product(axis=1).values[None, ...]
         numbers = limits.frequencies.copy()
         numbers['minimum'] = boundaries.min() * numbers['minimum']/100
-        numbers['maximum'] = boundaries.min() * numbers['maximum']/100
+        numbers['maximum'] = boundaries.max() * numbers['maximum']/100
+        logging.info(numbers)
 
         return numbers
 
@@ -88,7 +90,8 @@ class Interface:
         # Definitions: Whereby key === category code, value === category code definition
         definitions = self.__definitions(tags=tags)
 
-        # Spiders
+        # For (a) spider graphs of error metrics, (b) bullet graphs of false negative rates & false positive
+        # rates, (c) cost curves
         src.analytics.spider.Spider().exc(derivations=derivations, definitions=definitions)
         src.analytics.bullet.Bullet(error=limits.error).exc(derivations=derivations, definitions=definitions)
         src.analytics.cost.Cost(limits=limits, numbers=numbers, derivations=derivations).exc(definitions=definitions)
