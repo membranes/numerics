@@ -32,7 +32,7 @@ class Latest:
     def __get_time(pathstr: str) -> str:
         """
 
-        :param pathstr:
+        :param pathstr: The {directory} + {file name} + {extension} of a file.
         :return:
         """
 
@@ -42,6 +42,18 @@ class Latest:
         text: str = time.strftime('%Y-%m-%d %H:%M:%S', structure)
 
         return text
+
+    def __persist(self, nodes: dict) -> str:
+        """
+
+        :param nodes: A dict encoding the time the model was saved.
+        :return:
+        """
+
+        message = src.functions.objects.Objects().write(
+            nodes=nodes, path=os.path.join(self.__latest_, 'latest.json'))
+
+        return message
     
     def exc(self):
         """
@@ -53,16 +65,8 @@ class Latest:
 
         # Asset time stamp; determining a file's modification or creation/re-creation date & time stamp
         if len(listing) == 1:
-    
             text = self.__get_time(pathstr=listing[0])
-    
-            nodes = {"time": text}
-            message = src.functions.objects.Objects().write(
-                nodes=nodes, path=os.path.join(self.__latest_, 'latest.json'))
+            message = self.__persist(nodes={"time": text})
             self.__logger.info(message)
-            
         else:
-            
             raise f'A *.safetensors model file was not found in {self.__latest_}{os.sep}model{os.sep}'
-    
-    
