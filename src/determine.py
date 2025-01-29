@@ -9,7 +9,7 @@ import src.elements.model as ml
 import src.functions.objects
 
 
-class Model:
+class Determine:
     """
     Determines the top model
     """
