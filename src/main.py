@@ -37,12 +37,14 @@ def main():
     src.model.latest.Latest().exc()
 
     # The error measures & metrics of the model
-    model = src.model.determine.Determine(architecture=architecture).exc(tags=tags)
-    logger.info(model.derivations)
+    properties = src.model.properties.Properties(architecture=architecture).exc(tags=tags)
+    logger.info(properties.derivations)
 
     # Analytics
-    src.analytics.interface.Interface(s3_parameters=s3_parameters).exc(derivations=model.derivations, tags=tags)
-    src.abstracts.interface.Interface().exc(architecture=model.architecture, tags=tags)
+    src.analytics.interface.Interface(s3_parameters=s3_parameters).exc(derivations=properties.derivations, tags=tags)
+
+    # Abstracts
+    src.abstracts.interface.Interface().exc(architecture=properties.architecture, tags=tags)
 
     # Transfer
     src.transfer.interface.Interface(service=service, s3_parameters=s3_parameters).exc()
@@ -71,7 +73,7 @@ if __name__ == '__main__':
     import src.functions.service
     import src.functions.cache
     import src.model.architecture
-    import src.model.determine
+    import src.model.properties
     import src.model.latest
     import src.model.tags
 
