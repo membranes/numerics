@@ -26,9 +26,15 @@ def main():
     # Data
     src.data.interface.Interface(service=service, s3_parameters=s3_parameters).exc()
 
-    # Model
+    # Tags
     tags = src.tags.Tags(s3_parameters=s3_parameters).exc()
-    model = src.model.Model().exc(tags=tags)
+
+    # The best model/architecture
+    architecture: str = src.data.architecture.Architecture().exc()
+    logger.info('The best model/architecture: %s', architecture)
+
+    # The error measures & metrics of the model
+    model = src.model.Model(architecture=architecture).exc(tags=tags)
     logger.info(model.derivations)
 
     # Analytics
@@ -58,6 +64,7 @@ if __name__ == '__main__':
     import src.abstracts.interface
     import src.analytics.interface
     import src.data.interface
+    import src.data.architecture
     import src.functions.service
     import src.functions.cache
     import src.model
