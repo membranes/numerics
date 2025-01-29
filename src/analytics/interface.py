@@ -55,7 +55,7 @@ class Interface:
         boundaries: np.ndarray = limits.dispatches.product(axis=1).values[None, ...]
         numbers = limits.frequencies.copy()
         numbers['minimum'] = boundaries.min() * numbers['minimum']/100
-        numbers['maximum'] = boundaries.min() * numbers['maximum']/100
+        numbers['maximum'] = boundaries.max() * numbers['maximum']/100
 
         return numbers
 
