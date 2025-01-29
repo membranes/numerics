@@ -1,12 +1,12 @@
 """Module interface.py"""
 import logging
+
 import numpy as np
 import pandas as pd
 
 import config
 import src.analytics.bullet
 import src.analytics.cost
-import src.analytics.derivations
 import src.analytics.spider
 import src.data.limits
 import src.elements.limits as lm
