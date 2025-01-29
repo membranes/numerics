@@ -57,7 +57,6 @@ class Interface:
         numbers = limits.frequencies.copy()
         numbers['minimum'] = boundaries.min() * numbers['minimum']/100
         numbers['maximum'] = boundaries.max() * numbers['maximum']/100
-
         logging.info(numbers)
 
         return numbers
