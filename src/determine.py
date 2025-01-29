@@ -1,4 +1,4 @@
-"""Module model.py"""
+"""Module determine.py"""
 import os
 
 import pandas as pd
