@@ -34,7 +34,7 @@ def main():
     logger.info('The best model/architecture: %s', architecture)
 
     # The error measures & metrics of the model
-    model = src.model.Model(architecture=architecture).exc(tags=tags)
+    model = src.determine.Determine(architecture=architecture).exc(tags=tags)
     logger.info(model.derivations)
 
     # Analytics
@@ -67,7 +67,7 @@ if __name__ == '__main__':
     import src.data.architecture
     import src.functions.service
     import src.functions.cache
-    import src.model
+    import src.determine
     import src.s3.s3_parameters
     import src.setup
     import src.tags
