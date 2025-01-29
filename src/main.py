@@ -30,7 +30,7 @@ def main():
     tags = src.tags.Tags(s3_parameters=s3_parameters).exc()
 
     # The best model/architecture
-    architecture: str = src.data.architecture.Architecture().exc()
+    architecture: str = src.model.architecture.Architecture().exc()
     logger.info('The best model/architecture: %s', architecture)
 
     # The error measures & metrics of the model
@@ -64,7 +64,7 @@ if __name__ == '__main__':
     import src.abstracts.interface
     import src.analytics.interface
     import src.data.interface
-    import src.data.architecture
+    import src.model.architecture
     import src.functions.service
     import src.functions.cache
     import src.model.determine
