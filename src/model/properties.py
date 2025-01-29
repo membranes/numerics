@@ -1,4 +1,4 @@
-"""Module determine.py"""
+"""Module properties.py"""
 import os
 
 import pandas as pd
@@ -9,7 +9,7 @@ import src.functions.objects
 import src.model.derivations
 
 
-class Determine:
+class Properties:
     """
     Determines the error measures & metrics of a model
     """
