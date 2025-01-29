@@ -27,6 +27,21 @@ class Latest:
                             format='\n\n%(message)s\n%(asctime)s.%(msecs)03d',
                             datefmt='%Y-%m-%d %H:%M:%S')
         self.__logger = logging.getLogger(__name__)
+
+    @staticmethod
+    def __get_time(pathstr: str) -> str:
+        """
+
+        :param pathstr:
+        :return:
+        """
+
+        seconds: float = os.path.getmtime(pathstr)
+        stamp: str = time.ctime(seconds)
+        structure: time.struct_time = time.strptime(stamp)
+        text: str = time.strftime('%Y-%m-%d %H:%M:%S', structure)
+
+        return text
     
     def exc(self):
         """
@@ -39,11 +54,7 @@ class Latest:
         # Asset time stamp; determining a file's modification or creation/re-creation date & time stamp
         if len(listing) == 1:
     
-            seconds: float = os.path.getmtime(listing[0])
-            stamp: str = time.ctime(seconds)
-            structure: time.struct_time = time.strptime(stamp)
-            text: str = time.strftime('%Y-%m-%d %H:%M:%S', structure)
-            self.__logger.info(text)
+            text = self.__get_time(pathstr=listing[0])
     
             nodes = {"time": text}
             message = src.functions.objects.Objects().write(
