@@ -11,7 +11,7 @@ import src.functions.objects
 
 class Determine:
     """
-    Determines the top model
+    Determines the error measures & metrics of a model
     """
 
     def __init__(self, architecture: str):
