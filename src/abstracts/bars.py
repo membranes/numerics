@@ -2,6 +2,7 @@ import collections
 import glob
 import logging
 import os
+import pathlib
 
 import pandas as pd
 
@@ -30,7 +31,7 @@ class Bars:
 
         return self.__streams.read(text=text)
 
-    def __frequencies(self, data: pd.DataFrame):
+    def __frequencies(self, data: pd.DataFrame, stem: str):
         """
 
         :param data:
@@ -38,13 +39,17 @@ class Bars:
         """
 
         # Tags: tag/annotation/annotation_name/category/category_name
-        descriptions = self.__tags[['tag', 'group']].set_index('tag').to_dict()['group']
+        # descriptions = self.__tags[['tag', 'group']].set_index('tag').to_dict()['group']
         frequencies = data['tagstr'].str.upper().str.split(pat=',', n=-1, expand=False).map(collections.Counter).sum()
-        items = [[k, frequencies[k], descriptions[k]] for k, v in frequencies.items()]
+
+        items = [[k, frequencies[k]] for k, v in frequencies.items()]
+        # items = [[k, frequencies[k], descriptions[k]] for k, v in frequencies.items()]
 
         # As a data frame
-        frame = pd.DataFrame(data=items, columns=['tag', 'frequency', 'group'])
-        frame = frame.copy().merge(self.__tags[['tag', 'annotation_name']], on='tag', how='left')
+        frame = pd.DataFrame(data=items, columns=['tag', 'frequency'])
+        # frame = pd.DataFrame(data=items, columns=['tag', 'frequency', 'group'])
+        # frame = frame.copy().merge(self.__tags[['tag', 'annotation_name']], on='tag', how='left')
+        frame.rename(columns={'frequency': stem}, inplace=True)
 
         return frame
 
@@ -55,5 +60,8 @@ class Bars:
 
         for uri in uri_:
             data = self.__data(uri=uri)
-            frequencies = self.__frequencies(data=data)
+            frequencies = self.__frequencies(data=data, stem=pathlib.Path(uri).stem)
             logging.info(frequencies)
+
+
+        logging.info(self.__tags)
