@@ -3,6 +3,7 @@ import glob
 import logging
 import os
 import pathlib
+import json
 
 import pandas as pd
 
@@ -19,6 +20,10 @@ class Bars:
 
         self.__configurations = config.Config()
         self.__streams = src.functions.streams.Streams()
+
+
+        # Graphing categories
+        self.__categories = ['training', 'validating', 'testing']
 
     def __data(self, uri: str) -> pd.DataFrame:
         """
@@ -50,6 +55,7 @@ class Bars:
         # frame = pd.DataFrame(data=items, columns=['tag', 'frequency', 'group'])
         # frame = frame.copy().merge(self.__tags[['tag', 'annotation_name']], on='tag', how='left')
         frame.rename(columns={'frequency': stem}, inplace=True)
+        frame.set_index(keys='tag', drop=True, inplace=True)
 
         return frame
 
@@ -58,10 +64,24 @@ class Bars:
 
         uri_ = glob.glob(pathname=os.path.join(self.__configurations.artefacts_, architecture, 'data', '*.csv'))
 
+        computations = []
         for uri in uri_:
             data = self.__data(uri=uri)
             frequencies = self.__frequencies(data=data, stem=pathlib.Path(uri).stem)
             logging.info(frequencies)
+            computations.append(frequencies)
+        frame = pd.concat(computations, axis=1, ignore_index=False)
+        frame.reset_index(drop=False, inplace=True)
+
+        data = frame.copy().merge(self.__tags.copy()[['tag', 'annotation_name', 'group']], how='left', on='tag')
+        logging.info(data)
+        data.info()
+
+        for i in range(data.shape[0]):
+
+            x = data.loc[i, self.__categories].to_json(orient='split')
+            y = json.loads(x)
+            logging.info(y)
 
 
-        logging.info(self.__tags)
+
