@@ -70,7 +70,7 @@ class Distributions:
         node = frame.to_dict(orient='index')
 
         miscellaneous = frequencies.loc[frequencies['tag'] == 'O', 'frequency'].values[0]
-        node['Miscellaneous'] = {'miscellaneous': int(miscellaneous)}
+        node['Miscellaneous'] = {'beginning': int(miscellaneous), 'inside': 0}
 
         return node
 
