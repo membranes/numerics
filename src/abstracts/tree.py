@@ -1,4 +1,4 @@
-"""Module distributions.py"""
+"""Module tree.py"""
 import collections
 import os
 import pathlib
@@ -11,7 +11,7 @@ import src.functions.objects
 import src.functions.streams
 
 
-class Distributions:
+class Tree:
     """
     Class Distributions
     """
@@ -102,4 +102,4 @@ class Distributions:
             computation.update({f'{stem}': node})
         nodes = dict(computation)
 
-        self.__persist(nodes=nodes, name='distributions')
+        self.__persist(nodes=nodes, name='tree')
