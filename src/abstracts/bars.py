@@ -25,7 +25,6 @@ class Bars:
         self.__configurations = config.Config()
         self.__streams = src.functions.streams.Streams()
 
-
         # Graphing categories
         self.__categories = ['training', 'validating', 'testing']
 
@@ -79,6 +78,20 @@ class Bars:
 
         return section
 
+    def __structure(self, computations: list[pd.DataFrame]) -> pd.DataFrame:
+        """
+
+        :param computations:
+        :return:
+        """
+
+        frame = pd.concat(computations, axis=1, ignore_index=False)
+        frame.reset_index(drop=False, inplace=True)
+        data = frame.copy().merge(self.__tags.copy()[['tag', 'annotation_name', 'group']], how='left', on='tag')
+        data.set_index(keys='tag', drop=True, inplace=True)
+
+        return data
+
     def exc(self, architecture: str):
         """
 
@@ -86,31 +99,24 @@ class Bars:
         :return:
         """
 
+        # The file strings of the training, validating, and testing data
         uri_ = glob.glob(pathname=os.path.join(self.__configurations.artefacts_, architecture, 'data', '*.csv'))
 
+        # Determining frequencies of tags per data set
         computations = []
         for uri in uri_:
             data = self.__data(uri=uri)
             frequencies = self.__frequencies(data=data, stem=pathlib.Path(uri).stem)
             computations.append(frequencies)
-        frame = pd.concat(computations, axis=1, ignore_index=False)
-        frame.reset_index(drop=False, inplace=True)
+        frame = self.__structure(computations=computations)
 
-        data = frame.copy().merge(self.__tags.copy()[['tag', 'annotation_name', 'group']], how='left', on='tag')
-        data.set_index(keys='tag', drop=True, inplace=True)
-
+        # Convert each row into a dict of values vis-à-vis an annotation scheme
         sections = []
-        for i in range(data.shape[0]):
-            values: pd.Series = data.loc[data.index[i], :]
+        for i in range(frame.shape[0]):
+            values: pd.Series = frame.loc[frame.index[i], :]
             sections.append(self.__get_section(values=values.copy()))
 
-        nodes = {
-            'categories': self.__categories,
-            'series': sections
-        }
-
+        # Persist
+        nodes = {'categories': self.__categories, 'series': sections}
         src.functions.objects.Objects().write(
-            nodes=nodes,
-            path=os.path.join(self.__configurations.numerics_, 'abstracts', 'bars.json'))
-
-
+            nodes=nodes, path=os.path.join(self.__configurations.numerics_, 'abstracts', 'bars.json'))
