@@ -1,3 +1,4 @@
+"""Module bars.py"""
 import collections
 import json
 import os
