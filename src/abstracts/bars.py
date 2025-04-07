@@ -71,7 +71,7 @@ class Bars:
         section.pop('index', None)
 
         if section['name'] == 'O':
-            section['stack'] = 'O'
+            section['stack'] = 'other/miscellaneous'
             section['visible'] = False
         else:
             section['stack'] = values['annotation_name']
