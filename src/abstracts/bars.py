@@ -1,20 +1,24 @@
 import collections
 import glob
-import logging
+import json
 import os
 import pathlib
-import json
 
 import pandas as pd
 
 import config
 import src.elements.text_attributes as txa
+import src.functions.objects
 import src.functions.streams
 
 
 class Bars:
 
     def __init__(self, tags: pd.DataFrame):
+        """
+
+        :param tags:
+        """
 
         self.__tags = tags
 
@@ -36,7 +40,8 @@ class Bars:
 
         return self.__streams.read(text=text)
 
-    def __frequencies(self, data: pd.DataFrame, stem: str):
+    @staticmethod
+    def __frequencies(data: pd.DataFrame, stem: str):
         """
 
         :param data:
@@ -44,23 +49,42 @@ class Bars:
         """
 
         # Tags: tag/annotation/annotation_name/category/category_name
-        # descriptions = self.__tags[['tag', 'group']].set_index('tag').to_dict()['group']
         frequencies = data['tagstr'].str.upper().str.split(pat=',', n=-1, expand=False).map(collections.Counter).sum()
-
         items = [[k, frequencies[k]] for k, v in frequencies.items()]
-        # items = [[k, frequencies[k], descriptions[k]] for k, v in frequencies.items()]
 
         # As a data frame
         frame = pd.DataFrame(data=items, columns=['tag', 'frequency'])
-        # frame = pd.DataFrame(data=items, columns=['tag', 'frequency', 'group'])
-        # frame = frame.copy().merge(self.__tags[['tag', 'annotation_name']], on='tag', how='left')
         frame.rename(columns={'frequency': stem}, inplace=True)
         frame.set_index(keys='tag', drop=True, inplace=True)
 
         return frame
 
+    def __get_section(self, values: pd.Series):
+        """
+
+        :param values:
+        :return:
+        """
+
+        string = values[self.__categories].to_json(orient='split')
+        section = json.loads(string)
+        section.pop('index', None)
+
+        if section['name'] == 'O':
+            section['stack'] = 'O'
+            section['visible'] = False
+        else:
+            section['stack'] = values['annotation_name']
+            section['visible'] = True
+
+        return section
 
     def exc(self, architecture: str):
+        """
+
+        :param architecture:
+        :return:
+        """
 
         uri_ = glob.glob(pathname=os.path.join(self.__configurations.artefacts_, architecture, 'data', '*.csv'))
 
@@ -68,20 +92,25 @@ class Bars:
         for uri in uri_:
             data = self.__data(uri=uri)
             frequencies = self.__frequencies(data=data, stem=pathlib.Path(uri).stem)
-            logging.info(frequencies)
             computations.append(frequencies)
         frame = pd.concat(computations, axis=1, ignore_index=False)
         frame.reset_index(drop=False, inplace=True)
 
         data = frame.copy().merge(self.__tags.copy()[['tag', 'annotation_name', 'group']], how='left', on='tag')
-        logging.info(data)
-        data.info()
+        data.set_index(keys='tag', drop=True, inplace=True)
 
+        sections = []
         for i in range(data.shape[0]):
+            values: pd.Series = data.loc[data.index[i], :]
+            sections.append(self.__get_section(values=values.copy()))
 
-            x = data.loc[i, self.__categories].to_json(orient='split')
-            y = json.loads(x)
-            logging.info(y)
+        nodes = {
+            'categories': self.__categories,
+            'series': sections
+        }
 
+        src.functions.objects.Objects().write(
+            nodes=nodes,
+            path=os.path.join(self.__configurations.numerics_, 'abstracts', 'bars.json'))
 
 
