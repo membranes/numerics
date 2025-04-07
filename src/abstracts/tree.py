@@ -1,4 +1,4 @@
-"""Module distributions.py"""
+"""Module tree.py"""
 import collections
 import os
 import pathlib
@@ -11,7 +11,7 @@ import src.functions.objects
 import src.functions.streams
 
 
-class Distributions:
+class Tree:
     """
     Class Distributions
     """
@@ -70,7 +70,7 @@ class Distributions:
         node = frame.to_dict(orient='index')
 
         miscellaneous = frequencies.loc[frequencies['tag'] == 'O', 'frequency'].values[0]
-        node['Miscellaneous'] = {'miscellaneous': int(miscellaneous)}
+        node['Miscellaneous'] = {'beginning': int(miscellaneous), 'inside': 0}
 
         return node
 
@@ -102,4 +102,4 @@ class Distributions:
             computation.update({f'{stem}': node})
         nodes = dict(computation)
 
-        self.__persist(nodes=nodes, name='distributions')
+        self.__persist(nodes=nodes, name='tree')

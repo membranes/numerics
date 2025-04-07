@@ -5,8 +5,9 @@ import os
 import pandas as pd
 
 import config
-import src.abstracts.distributions
+import src.abstracts.tree
 import src.abstracts.text
+import src.abstracts.bars
 import src.functions.objects
 
 
@@ -49,4 +50,5 @@ class Interface:
         src.abstracts.text.Text().exc(uri_=uri_, codes=codes)
 
         # Distributions of tags.
-        src.abstracts.distributions.Distributions(tags=tags).exc(uri_=uri_)
+        src.abstracts.tree.Tree(tags=tags).exc(uri_=uri_)
+        src.abstracts.bars.Bars(tags=tags).exc(uri_=uri_)
