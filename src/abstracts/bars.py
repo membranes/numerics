@@ -1,5 +1,4 @@
 import collections
-import glob
 import json
 import os
 import pathlib
@@ -13,6 +12,9 @@ import src.functions.streams
 
 
 class Bars:
+    """
+    Creates the data structure for drawing grouped & stacked bar graphs
+    """
 
     def __init__(self, tags: pd.DataFrame):
         """
@@ -22,6 +24,7 @@ class Bars:
 
         self.__tags = tags
 
+        # Instances
         self.__configurations = config.Config()
         self.__streams = src.functions.streams.Streams()
 
@@ -92,15 +95,12 @@ class Bars:
 
         return data
 
-    def exc(self, architecture: str):
+    def exc(self, uri_: list):
         """
 
-        :param architecture:
+        :param uri_:
         :return:
         """
-
-        # The file strings of the training, validating, and testing data
-        uri_ = glob.glob(pathname=os.path.join(self.__configurations.artefacts_, architecture, 'data', '*.csv'))
 
         # Determining frequencies of tags per data set
         computations = []
